@@ -28,30 +28,38 @@ jobs:
             const issueBody = (issue.body || '').toLowerCase();
             const labels = [];
 
-            // Priority Labels
+            // Priority Labels (using org emoji labels)
             if (issueName.includes('critical') || issueName.includes('urgent') || issueBody.includes('critical')) {
-              labels.push('priority:critical');
+              labels.push('🚨Priority:CRITICAL');
             } else if (issueName.includes('high priority') || issueBody.includes('high priority')) {
-              labels.push('priority:high');
+              labels.push('🔴Priority:HIGH');
             } else if (issueName.includes('low priority') || issueBody.includes('low priority')) {
-              labels.push('priority:low');
+              labels.push('🟢Priority:LOW');
             } else {
-              labels.push('priority:medium');
+              labels.push('🟠Priority:MEDIUM');
             }
 
             // Type Labels
             if (issueName.includes('bug') || issueName.includes('fix') || issueName.includes('error')) {
-              labels.push('type:bug');
-            } else if (issueName.includes('feature') || issueName.includes('add')) {
-              labels.push('type:feature');
+              labels.push('bug');
+            } else if (issueName.includes('feature') || issueName.includes('add') || issueName.includes('feat')) {
+              labels.push('✨FEATURE');
             } else if (issueName.includes('docs') || issueName.includes('documentation')) {
-              labels.push('type:documentation');
+              labels.push('documentation');
             } else if (issueName.includes('refactor') || issueName.includes('cleanup')) {
-              labels.push('type:refactor');
+              labels.push('♻️REFACTOR');
             } else if (issueName.includes('test') || issueName.includes('testing')) {
-              labels.push('type:testing');
-            } else if (issueName.includes('chore') || issueName.includes('maintenance')) {
-              labels.push('type:chore');
+              labels.push('🧪TESTING');
+            }
+
+            // Hotfix detection
+            if (issueName.includes('hotfix') || issueBody.includes('hotfix') || issueName.includes('urgent fix')) {
+              labels.push('🔥HOTFIX');
+            }
+
+            // Breaking changes
+            if (issueName.includes('breaking') || issueBody.includes('breaking change')) {
+              labels.push('💥BREAKING-CHANGE');
             }
 
             // Component Labels
@@ -71,34 +79,40 @@ jobs:
               labels.push('component:build');
             }
 
-            // Status Labels
+            // Status Labels (using org emoji labels)
             if (context.payload.pull_request) {
               if (context.payload.pull_request.draft) {
-                labels.push('status:wip');
+                labels.push('🎯IN-PROGRESS');
               } else {
-                labels.push('status:ready-for-review');
+                labels.push('👀NEEDS-REVIEW');
               }
             }
 
-            // Area Labels
+            // Area Labels (using org emoji labels)
             if (issueName.includes('security') || issueBody.includes('security') || issueBody.includes('vulnerability')) {
-              labels.push('area:security');
+              labels.push('🔒SECURITY');
             }
             if (issueName.includes('performance') || issueBody.includes('performance') || issueName.includes('optimize')) {
-              labels.push('area:performance');
+              labels.push('📈IMPROVEMENT');
             }
             if (issueName.includes('accessibility') || issueName.includes('a11y') || issueBody.includes('accessibility')) {
               labels.push('area:accessibility');
             }
-            if (issueName.includes('dx') || issueName.includes('developer experience') || issueBody.includes('developer experience')) {
-              labels.push('area:dx');
+
+            // Additional area detection
+            if (issueName.includes('design') || issueBody.includes('design')) {
+              labels.push('🎨DESIGN');
+            }
+            if (issueName.includes('compliance') || issueBody.includes('compliance') || issueBody.includes('regulatory')) {
+              labels.push('🔐COMPLIANCE');
+            }
+            if (issueName.includes('audit') || issueBody.includes('audit')) {
+              labels.push('🛡️AUDIT');
             }
 
-            // Difficulty Labels
-            if (issueName.includes('good first issue') || issueBody.includes('good first issue')) {
-              labels.push('difficulty:beginner');
-            } else if (issueName.includes('complex') || issueBody.includes('complex')) {
-              labels.push('difficulty:advanced');
+            // Good First Issue
+            if (issueName.includes('good first issue') || issueBody.includes('good first issue') || issueName.includes('beginner')) {
+              labels.push('good first issue');
             }
 
             // Blackjack-specific Labels
@@ -161,6 +175,7 @@ jobs:
             // Check for specific file patterns
             if (filenames.some(f => f.startsWith('src/components/'))) {
               labels.push('component:ui');
+              labels.push('front-end');
             }
             if (filenames.some(f => f.startsWith('src/engine/'))) {
               labels.push('component:engine');
@@ -169,30 +184,41 @@ jobs:
               labels.push('component:state');
             }
             if (filenames.some(f => f.startsWith('tests/') || f.includes('.test.') || f.includes('.spec.'))) {
-              labels.push('type:testing');
+              labels.push('🧪TESTING');
             }
             if (filenames.some(f => f.startsWith('docs/') || f.endsWith('.md'))) {
-              labels.push('type:documentation');
+              labels.push('documentation');
             }
-            if (filenames.some(f => f.includes('package.json') || f.includes('package-lock.json'))) {
+            if (filenames.some(f => f.includes('package.json') || f.includes('package-lock.json') || f.includes('yarn.lock'))) {
               labels.push('dependencies');
             }
             if (filenames.some(f => f.includes('vite.config') || f.includes('tsconfig') || f.includes('.github/'))) {
               labels.push('component:build');
+              labels.push('devops');
             }
 
-            // Size labels based on changes
+            // DevOps and tooling detection
+            if (filenames.some(f => f.includes('.github/workflows/') || f.includes('Dockerfile') || f.includes('docker-compose'))) {
+              labels.push('💉DEVOPS');
+            }
+
+            // Security file detection
+            if (filenames.some(f => f.includes('security') || f.includes('.env') || f.includes('secrets'))) {
+              labels.push('🔒SECURITY');
+            }
+
+            // Size labels based on changes (using org Size labels)
             const totalChanges = files.reduce((sum, f) => sum + f.changes, 0);
             if (totalChanges < 10) {
-              labels.push('size:xs');
+              labels.push('size: XS');
             } else if (totalChanges < 50) {
-              labels.push('size:s');
+              labels.push('size: S');
             } else if (totalChanges < 200) {
-              labels.push('size:m');
+              labels.push('size: M');
             } else if (totalChanges < 500) {
-              labels.push('size:l');
+              labels.push('size: L');
             } else {
-              labels.push('size:xl');
+              labels.push('size: XL');
             }
 
             // Remove duplicates
