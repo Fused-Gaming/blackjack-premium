@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { evaluateHand, canSplit, canDouble, shouldDealerHit, createHand } from '../hand';
-import type { Card, Hand } from '../../types';
+import type { Card, Hand, Rank, Suit } from '../../types';
 
 const createCard = (rank: string, suit: string = '♠'): Card => ({
-  rank: rank as any,
-  suit: suit as any,
+  rank: rank as Rank,
+  suit: suit as Suit,
   faceUp: true,
 });
 

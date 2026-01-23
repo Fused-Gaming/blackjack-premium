@@ -1,8 +1,17 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { performance } from 'perf_hooks';
+import { describe, it, expect } from 'vitest';
 import { createShoe, shuffleDeck, dealCards } from '../engine/deck';
 import { evaluateHand, createHand, addCardToHand, compareHands } from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
+import type { HandValue } from '../types';
+
+// Extend Performance type for memory API (Chrome-specific)
+interface PerformanceWithMemory extends Performance {
+  memory?: {
+    usedJSHeapSize: number;
+    jsHeapSizeLimit: number;
+    totalJSHeapSize: number;
+  };
+}
 
 /**
  * Performance Benchmark Test Suite
@@ -123,13 +132,14 @@ describe('Performance Benchmarks', () => {
   describe('Memory Benchmarks', () => {
     it('should not leak memory over 100 shuffle operations', () => {
       const deck = createShoe(6);
-      const initialMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const perfWithMemory = performance as PerformanceWithMemory;
+      const initialMemory = perfWithMemory.memory?.usedJSHeapSize || 0;
 
       for (let i = 0; i < 100; i++) {
         shuffleDeck(deck);
       }
 
-      const finalMemory = (performance as any).memory?.usedJSHeapSize || 0;
+      const finalMemory = perfWithMemory.memory?.usedJSHeapSize || 0;
       const memoryIncrease = finalMemory - initialMemory;
 
       console.log(`  💾  Memory increase after 100 shuffles: ${(memoryIncrease / 1024 / 1024).toFixed(2)}MB`);
@@ -142,7 +152,7 @@ describe('Performance Benchmarks', () => {
 
     it('should handle 1000 hand evaluations without excessive memory', () => {
       const deck = createShoe(6);
-      const hands: any[] = [];
+      const hands: HandValue[] = [];
 
       for (let i = 0; i < 1000; i++) {
         const { cards } = dealCards(deck, 2);
