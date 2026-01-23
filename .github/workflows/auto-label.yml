@@ -11,6 +11,7 @@ permissions:
   issues: write
   pull-requests: write
   contents: read
+  checks: write
 
 jobs:
   auto-label:
@@ -18,6 +19,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Create status check (PR only)
+        if: github.event_name == 'pull_request'
+        id: status-check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: check } = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Auto Label',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'in_progress',
+              output: {
+                title: 'Auto Label',
+                summary: 'Analyzing PR and applying labels...'
+              }
+            });
+            core.setOutput('check_run_id', check.id);
+            return check.id;
 
       - name: Auto-label based on content
         uses: actions/github-script@v7
@@ -235,3 +256,39 @@ jobs:
 
               console.log(`Applied file-based labels: ${uniqueLabels.join(', ')}`);
             }
+
+      - name: Update status check - Success
+        if: github.event_name == 'pull_request' && success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const checkRunId = ${{ steps.status-check.outputs.check_run_id }};
+            await github.rest.checks.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              check_run_id: checkRunId,
+              status: 'completed',
+              conclusion: 'success',
+              output: {
+                title: 'Auto Label - Success',
+                summary: 'Labels have been successfully applied to this PR'
+              }
+            });
+
+      - name: Update status check - Failure
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const checkRunId = ${{ steps.status-check.outputs.check_run_id }};
+            await github.rest.checks.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              check_run_id: checkRunId,
+              status: 'completed',
+              conclusion: 'failure',
+              output: {
+                title: 'Auto Label - Failed',
+                summary: 'Failed to apply labels to this PR. Check workflow logs for details.'
+              }
+            });
