@@ -1,0 +1,149 @@
+name: Branch Protection Check
+
+on:
+  pull_request:
+    branches:
+      - master
+      - development
+  push:
+    branches:
+      - master
+      - development
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  check-branch-protection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if push is directly to protected branch
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+            const protectedBranches = ['master', 'development'];
+
+            if (protectedBranches.includes(branch)) {
+              // Check if this is a merge commit from a PR
+              const commit = await github.rest.repos.getCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: context.sha
+              });
+
+              const commitMessage = commit.data.commit.message;
+              const isMergeCommit = commit.data.parents.length > 1;
+
+              // Allow merges from PRs, but warn about direct commits
+              if (!isMergeCommit) {
+                core.warning(`⚠️ Direct commit detected to protected branch '${branch}'!`);
+                core.warning('Best practice: Create feature branches from development and submit PRs');
+                core.warning('Branch naming: feature/*, fix/*, docs/*, refactor/*, etc.');
+              }
+            }
+
+      - name: Validate PR source branch
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const baseBranch = context.payload.pull_request.base.ref;
+            const headBranch = context.payload.pull_request.head.ref;
+
+            const protectedBranches = ['master', 'development'];
+            const validPrefixes = ['feature/', 'fix/', 'hotfix/', 'docs/', 'refactor/', 'test/', 'chore/'];
+
+            let warnings = [];
+            let recommendations = [];
+
+            // Check 1: PRs to master should come from development or hotfix branches
+            if (baseBranch === 'master') {
+              if (headBranch !== 'development' && !headBranch.startsWith('hotfix/')) {
+                warnings.push(`⚠️ PR to 'master' should typically come from 'development' or 'hotfix/*' branches`);
+                recommendations.push(`Current source: ${headBranch}`);
+                recommendations.push(`Recommended workflow: feature/* → development → master`);
+              }
+            }
+
+            // Check 2: PRs to development should come from feature branches
+            if (baseBranch === 'development') {
+              const hasValidPrefix = validPrefixes.some(prefix => headBranch.startsWith(prefix));
+
+              if (protectedBranches.includes(headBranch)) {
+                core.setFailed(`❌ Cannot create PR from protected branch '${headBranch}' to '${baseBranch}'`);
+                return;
+              }
+
+              if (!hasValidPrefix) {
+                warnings.push(`⚠️ Branch '${headBranch}' doesn't follow naming convention`);
+                recommendations.push(`Use prefixes: ${validPrefixes.join(', ')}`);
+                recommendations.push(`Example: feature/add-card-animation, fix/dealer-logic-bug`);
+              }
+            }
+
+            // Post warnings and recommendations as PR comment if needed
+            if (warnings.length > 0 || recommendations.length > 0) {
+              let commentBody = '## 🔍 Branch Protection Check\n\n';
+
+              if (warnings.length > 0) {
+                commentBody += '### Warnings\n';
+                warnings.forEach(w => commentBody += `- ${w}\n`);
+                commentBody += '\n';
+              }
+
+              if (recommendations.length > 0) {
+                commentBody += '### Recommendations\n';
+                recommendations.forEach(r => commentBody += `- ${r}\n`);
+                commentBody += '\n';
+              }
+
+              commentBody += '### Best Practices\n';
+              commentBody += '1. **NEVER** commit directly to `master` or `development`\n';
+              commentBody += '2. **ALWAYS** create feature branches from `development`\n';
+              commentBody += '3. **ALWAYS** update `development` with remote before creating branches\n';
+              commentBody += '\n### Workflow\n';
+              commentBody += '```bash\n';
+              commentBody += 'git checkout development\n';
+              commentBody += 'git pull origin development\n';
+              commentBody += 'git checkout -b feature/your-feature-name\n';
+              commentBody += '# ... make changes ...\n';
+              commentBody += 'git push -u origin feature/your-feature-name\n';
+              commentBody += '# Create PR: feature/your-feature-name → development\n';
+              commentBody += '```\n';
+
+              // Try to find existing comment and update it
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number
+              });
+
+              const botComment = comments.find(comment =>
+                comment.user.type === 'Bot' &&
+                comment.body.includes('Branch Protection Check')
+              );
+
+              if (botComment) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: commentBody
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  body: commentBody
+                });
+              }
+
+              // Log warnings but don't fail the workflow
+              warnings.forEach(w => core.warning(w));
+            } else {
+              core.info('✅ Branch naming and workflow follows best practices!');
+            }

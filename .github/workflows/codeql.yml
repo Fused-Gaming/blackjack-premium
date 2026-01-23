@@ -99,11 +99,7 @@ jobs:
         category: "/language:${{matrix.language}}"
 
     - name: Node Package Verify Action
-  # You may pin to the exact commit or the version.
-  # uses: vbilltran68-devops/node-pkg-verify-action@c34e1ad03083a5129327285fecbdadb16c8ce933
       uses: vbilltran68-devops/node-pkg-verify-action@v1
       with:
-    # Package manager to use (npm, yarn, or pnpm)
-        package-manager: pnpm # optional, default is npm
-    # Node.js version to use (must be >= 18.0.0)
-        node-version: # optional, default is lts/*
+        package-manager: pnpm
+        node-version: lts/*
