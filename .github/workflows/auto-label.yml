@@ -1,0 +1,211 @@
+name: Auto Label Issues and PRs
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Auto-label based on content
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue || context.payload.pull_request;
+            const issueName = issue.title.toLowerCase();
+            const issueBody = (issue.body || '').toLowerCase();
+            const labels = [];
+
+            // Priority Labels
+            if (issueName.includes('critical') || issueName.includes('urgent') || issueBody.includes('critical')) {
+              labels.push('priority:critical');
+            } else if (issueName.includes('high priority') || issueBody.includes('high priority')) {
+              labels.push('priority:high');
+            } else if (issueName.includes('low priority') || issueBody.includes('low priority')) {
+              labels.push('priority:low');
+            } else {
+              labels.push('priority:medium');
+            }
+
+            // Type Labels
+            if (issueName.includes('bug') || issueName.includes('fix') || issueName.includes('error')) {
+              labels.push('type:bug');
+            } else if (issueName.includes('feature') || issueName.includes('add')) {
+              labels.push('type:feature');
+            } else if (issueName.includes('docs') || issueName.includes('documentation')) {
+              labels.push('type:documentation');
+            } else if (issueName.includes('refactor') || issueName.includes('cleanup')) {
+              labels.push('type:refactor');
+            } else if (issueName.includes('test') || issueName.includes('testing')) {
+              labels.push('type:testing');
+            } else if (issueName.includes('chore') || issueName.includes('maintenance')) {
+              labels.push('type:chore');
+            }
+
+            // Component Labels
+            if (issueName.includes('ui') || issueName.includes('component') || issueBody.includes('component')) {
+              labels.push('component:ui');
+            }
+            if (issueName.includes('engine') || issueName.includes('game logic') || issueBody.includes('game logic')) {
+              labels.push('component:engine');
+            }
+            if (issueName.includes('animation') || issueBody.includes('animation')) {
+              labels.push('component:animation');
+            }
+            if (issueName.includes('state') || issueName.includes('store') || issueBody.includes('zustand')) {
+              labels.push('component:state');
+            }
+            if (issueName.includes('build') || issueName.includes('vite') || issueName.includes('config')) {
+              labels.push('component:build');
+            }
+
+            // Status Labels
+            if (context.payload.pull_request) {
+              if (context.payload.pull_request.draft) {
+                labels.push('status:wip');
+              } else {
+                labels.push('status:ready-for-review');
+              }
+            }
+
+            // Area Labels
+            if (issueName.includes('security') || issueBody.includes('security') || issueBody.includes('vulnerability')) {
+              labels.push('area:security');
+            }
+            if (issueName.includes('performance') || issueBody.includes('performance') || issueName.includes('optimize')) {
+              labels.push('area:performance');
+            }
+            if (issueName.includes('accessibility') || issueName.includes('a11y') || issueBody.includes('accessibility')) {
+              labels.push('area:accessibility');
+            }
+            if (issueName.includes('dx') || issueName.includes('developer experience') || issueBody.includes('developer experience')) {
+              labels.push('area:dx');
+            }
+
+            // Difficulty Labels
+            if (issueName.includes('good first issue') || issueBody.includes('good first issue')) {
+              labels.push('difficulty:beginner');
+            } else if (issueName.includes('complex') || issueBody.includes('complex')) {
+              labels.push('difficulty:advanced');
+            }
+
+            // Blackjack-specific Labels
+            if (issueName.includes('card') || issueName.includes('deck') || issueBody.includes('card')) {
+              labels.push('game:cards');
+            }
+            if (issueName.includes('bet') || issueName.includes('chip') || issueBody.includes('betting')) {
+              labels.push('game:betting');
+            }
+            if (issueName.includes('dealer') || issueBody.includes('dealer')) {
+              labels.push('game:dealer');
+            }
+            if (issueName.includes('split') || issueName.includes('double') || issueBody.includes('split') || issueBody.includes('double down')) {
+              labels.push('game:actions');
+            }
+
+            // Dependencies
+            if (issueName.includes('dependency') || issueName.includes('upgrade') || issueName.includes('update package')) {
+              labels.push('dependencies');
+            }
+
+            // Remove duplicates
+            const uniqueLabels = [...new Set(labels)];
+
+            // Apply labels
+            if (uniqueLabels.length > 0) {
+              if (context.payload.issue) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  labels: uniqueLabels
+                });
+              } else if (context.payload.pull_request) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  labels: uniqueLabels
+                });
+              }
+
+              console.log(`Applied labels: ${uniqueLabels.join(', ')}`);
+            }
+
+      - name: Label based on file changes (PRs only)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+
+            const labels = [];
+            const filenames = files.map(f => f.filename);
+
+            // Check for specific file patterns
+            if (filenames.some(f => f.startsWith('src/components/'))) {
+              labels.push('component:ui');
+            }
+            if (filenames.some(f => f.startsWith('src/engine/'))) {
+              labels.push('component:engine');
+            }
+            if (filenames.some(f => f.startsWith('src/store/'))) {
+              labels.push('component:state');
+            }
+            if (filenames.some(f => f.startsWith('tests/') || f.includes('.test.') || f.includes('.spec.'))) {
+              labels.push('type:testing');
+            }
+            if (filenames.some(f => f.startsWith('docs/') || f.endsWith('.md'))) {
+              labels.push('type:documentation');
+            }
+            if (filenames.some(f => f.includes('package.json') || f.includes('package-lock.json'))) {
+              labels.push('dependencies');
+            }
+            if (filenames.some(f => f.includes('vite.config') || f.includes('tsconfig') || f.includes('.github/'))) {
+              labels.push('component:build');
+            }
+
+            // Size labels based on changes
+            const totalChanges = files.reduce((sum, f) => sum + f.changes, 0);
+            if (totalChanges < 10) {
+              labels.push('size:xs');
+            } else if (totalChanges < 50) {
+              labels.push('size:s');
+            } else if (totalChanges < 200) {
+              labels.push('size:m');
+            } else if (totalChanges < 500) {
+              labels.push('size:l');
+            } else {
+              labels.push('size:xl');
+            }
+
+            // Remove duplicates
+            const uniqueLabels = [...new Set(labels)];
+
+            // Apply labels
+            if (uniqueLabels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: uniqueLabels
+              });
+
+              console.log(`Applied file-based labels: ${uniqueLabels.join(', ')}`);
+            }
