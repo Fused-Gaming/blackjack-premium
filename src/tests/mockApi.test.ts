@@ -346,7 +346,8 @@ describe('Mock API Integration Tests', () => {
       // Create multiple sessions with different balances
       const session1 = await api.createSession('player1', 1000);
       const session2 = await api.createSession('player2', 1000);
-      const session3 = await api.createSession('player3', 1000);
+      // Create third player for leaderboard (no need to store reference)
+      await api.createSession('player3', 1000);
 
       // Player 1 wins big
       await api.placeBet(session1.data!.sessionId, 100);

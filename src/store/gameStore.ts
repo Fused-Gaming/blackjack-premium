@@ -1,11 +1,11 @@
 import { create } from 'zustand';
-import type { GameState, Card, Hand, PlayerSeat, GamePhase } from '../types';
+import type { GameState, Card } from '../types';
 import { createShoe, shuffleDeck, dealCard } from '../engine/deck';
 import { createHand, addCardToHand, evaluateHand, compareHands, splitHand, doubleDownHand } from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
 
 interface GameStore extends GameState {
-  // Actions
+  // Public Actions
   placeBet: (seatId: string, amount: number) => void;
   startGame: () => void;
   hit: () => void;
@@ -15,6 +15,12 @@ interface GameStore extends GameState {
   placeInsurance: (seatId: string) => void;
   resetGame: () => void;
   setMessage: (message: string) => void;
+
+  // Internal Helper Methods
+  checkForBlackjacks: () => void;
+  settleBets: () => void;
+  moveToNextHand: () => void;
+  playDealerTurn: () => void;
 }
 
 const INITIAL_BALANCE = 10000;
@@ -343,7 +349,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const state = get();
     let totalPayout = 0;
 
-    for (const [seatId, seat] of Object.entries(state.playerSeats)) {
+    for (const seat of Object.values(state.playerSeats)) {
       if (!seat.active) continue;
 
       for (const hand of seat.hands) {
@@ -360,7 +366,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   resetGame: () => {
-    const state = get();
     set({
       phase: 'idle',
       deck: [],
