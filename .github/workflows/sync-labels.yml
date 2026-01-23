@@ -1,0 +1,125 @@
+name: Sync Labels Across Organization
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync organization labels
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Define the master label configuration
+            const masterLabels = [
+              // Priority Labels
+              { name: 'priority:critical', color: 'b60205', description: 'Critical priority - immediate attention required' },
+              { name: 'priority:high', color: 'd93f0b', description: 'High priority - should be addressed soon' },
+              { name: 'priority:medium', color: 'fbca04', description: 'Medium priority - normal queue' },
+              { name: 'priority:low', color: '0e8a16', description: 'Low priority - can be deferred' },
+
+              // Type Labels
+              { name: 'type:bug', color: 'd73a4a', description: 'Something is not working' },
+              { name: 'type:feature', color: 'a2eeef', description: 'New feature or request' },
+              { name: 'type:documentation', color: '0075ca', description: 'Documentation improvements' },
+              { name: 'type:refactor', color: 'e99695', description: 'Code refactoring' },
+              { name: 'type:testing', color: 'f9d0c4', description: 'Testing related' },
+              { name: 'type:chore', color: 'fef2c0', description: 'Maintenance and chores' },
+
+              // Component Labels
+              { name: 'component:ui', color: '1d76db', description: 'UI components and styling' },
+              { name: 'component:engine', color: '5319e7', description: 'Game engine and logic' },
+              { name: 'component:animation', color: 'c5def5', description: 'Animations and transitions' },
+              { name: 'component:state', color: 'bfdadc', description: 'State management' },
+              { name: 'component:build', color: '444444', description: 'Build system and configuration' },
+
+              // Status Labels
+              { name: 'status:wip', color: 'ededed', description: 'Work in progress' },
+              { name: 'status:ready-for-review', color: '0e8a16', description: 'Ready for review' },
+              { name: 'status:blocked', color: 'b60205', description: 'Blocked by dependencies' },
+              { name: 'status:on-hold', color: 'fbca04', description: 'On hold' },
+
+              // Area Labels
+              { name: 'area:security', color: 'ee0701', description: 'Security related' },
+              { name: 'area:performance', color: 'f9d0c4', description: 'Performance improvements' },
+              { name: 'area:accessibility', color: '7057ff', description: 'Accessibility improvements' },
+              { name: 'area:dx', color: 'c2e0c6', description: 'Developer experience' },
+
+              // Difficulty Labels
+              { name: 'difficulty:beginner', color: '7057ff', description: 'Good for newcomers' },
+              { name: 'difficulty:intermediate', color: 'a2eeef', description: 'Requires some experience' },
+              { name: 'difficulty:advanced', color: 'd93f0b', description: 'Requires significant expertise' },
+
+              // Size Labels (for PRs)
+              { name: 'size:xs', color: '00ff00', description: 'Extra small PR (< 10 changes)' },
+              { name: 'size:s', color: '77ff00', description: 'Small PR (10-49 changes)' },
+              { name: 'size:m', color: 'ffff00', description: 'Medium PR (50-199 changes)' },
+              { name: 'size:l', color: 'ff7700', description: 'Large PR (200-499 changes)' },
+              { name: 'size:xl', color: 'ff0000', description: 'Extra large PR (500+ changes)' },
+
+              // Game-specific Labels
+              { name: 'game:cards', color: '0052cc', description: 'Card and deck related' },
+              { name: 'game:betting', color: 'c2e0c6', description: 'Betting system' },
+              { name: 'game:dealer', color: '5319e7', description: 'Dealer logic' },
+              { name: 'game:actions', color: '1d76db', description: 'Player actions (hit, stand, split, etc.)' },
+
+              // Special Labels
+              { name: 'dependencies', color: '0366d6', description: 'Pull requests that update a dependency' },
+              { name: 'good first issue', color: '7057ff', description: 'Good for newcomers' },
+              { name: 'help wanted', color: '008672', description: 'Extra attention is needed' },
+              { name: 'question', color: 'd876e3', description: 'Further information is requested' },
+              { name: 'duplicate', color: 'cfd3d7', description: 'This issue or PR already exists' },
+              { name: 'wontfix', color: 'ffffff', description: 'This will not be worked on' },
+              { name: 'invalid', color: 'e4e669', description: 'This does not seem right' }
+            ];
+
+            // Get current labels in the repository
+            const { data: currentLabels } = await github.rest.issues.listLabelsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            const currentLabelNames = currentLabels.map(l => l.name);
+
+            // Create or update labels
+            for (const label of masterLabels) {
+              try {
+                if (currentLabelNames.includes(label.name)) {
+                  // Update existing label
+                  await github.rest.issues.updateLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description
+                  });
+                  console.log(`Updated label: ${label.name}`);
+                } else {
+                  // Create new label
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description
+                  });
+                  console.log(`Created label: ${label.name}`);
+                }
+              } catch (error) {
+                console.error(`Error processing label ${label.name}:`, error.message);
+              }
+            }
+
+            console.log('Label sync completed!');
