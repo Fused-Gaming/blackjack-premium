@@ -22,7 +22,7 @@ permissions:
 jobs:
   # Job for workflow_dispatch - initialize all feat branches
   init-all-branches:
-    if: github.event_name == 'workflow_dispatch' && inputs.create_for_all_feat_branches
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       matrix:
