@@ -34,7 +34,7 @@ jobs:
               conclusion: hasMilestone ? 'success' : 'failure',
               output: {
                 title: hasMilestone ? 'Milestone Assigned' : 'No Milestone Assigned',
-                summary: hasMilestone
+                summary: hasMilestone && pr.milestone
                   ? 'This PR is assigned to milestone: ' + pr.milestone.title
                   : 'This PR must be assigned to a milestone before merging. The auto-label workflow should assign this automatically, but you can also assign it manually.'
               }
