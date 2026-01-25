@@ -1,0 +1,165 @@
+name: Auto Create PR
+
+on:
+  push:
+    branches:
+      - 'feat/**'
+      - 'feature/**'
+      - 'fix/**'
+      - 'claude/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for existing PR
+        id: check-pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+
+            // Check if a PR already exists for this branch
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${branch}`,
+              state: 'open'
+            });
+
+            if (prs.length > 0) {
+              console.log(`PR #${prs[0].number} already exists for branch ${branch}`);
+              core.setOutput('pr_exists', 'true');
+              core.setOutput('pr_number', prs[0].number);
+              return;
+            }
+
+            core.setOutput('pr_exists', 'false');
+            console.log(`No existing PR found for branch ${branch}`);
+
+      - name: Generate PR details
+        if: steps.check-pr.outputs.pr_exists == 'false'
+        id: pr-details
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+
+            // Parse branch name to generate title
+            // Examples: feat/M2-T3-Hand-Evaluation-Logic -> M2-T3: Hand Evaluation Logic
+            //           fix/login-bug -> fix: Login Bug
+            //           claude/some-feature -> Claude: Some Feature
+
+            let title = branch;
+            let body = '';
+
+            // Handle M2-T pattern (Milestone 2 Tasks)
+            const m2tMatch = branch.match(/M2-T(\d+)-(.+)/i);
+            if (m2tMatch) {
+              const taskNum = m2tMatch[1];
+              const taskName = m2tMatch[2].replace(/-/g, ' ');
+              title = `M2-T${taskNum}: ${taskName}`;
+
+              // Generate body based on task
+              const taskDescriptions = {
+                '1': 'Implement Card and Deck models with comprehensive utilities',
+                '2': 'Implement ProbablyFair Shuffle Algorithm with PF-VL-1.0',
+                '3': 'Implement Hand Evaluation Logic for blackjack scoring',
+                '4': 'Implement Dealer AI Logic with configurable rules',
+                '5': 'Implement Betting System with validation',
+                '6': 'Implement Insurance Logic for dealer ace scenarios',
+                '7': 'Implement Split Hand Logic for pair splitting',
+                '8': 'Implement Double Down Logic',
+                '9': 'Implement Payout Calculations for all outcomes',
+                '10': 'Implement comprehensive Unit Tests for game engine'
+              };
+
+              body = `## Summary\n${taskDescriptions[taskNum] || 'Milestone 2 task implementation'}\n\n## Checklist\n- [ ] Implementation complete\n- [ ] Tests written\n- [ ] Documentation updated\n- [ ] CI/CD passing\n\n## Test Plan\n- [ ] Unit tests pass\n- [ ] Integration tests pass\n- [ ] Manual verification complete`;
+            } else {
+              // Generic branch naming
+              const parts = branch.split('/');
+              const prefix = parts[0];
+              const rest = parts.slice(1).join('/').replace(/-/g, ' ').replace(/_/g, ' ');
+
+              if (prefix === 'feat' || prefix === 'feature') {
+                title = `feat: ${rest}`;
+              } else if (prefix === 'fix') {
+                title = `fix: ${rest}`;
+              } else if (prefix === 'claude') {
+                title = `Claude: ${rest}`;
+              } else {
+                title = rest || branch;
+              }
+
+              body = `## Summary\nAutomatically created PR for branch \`${branch}\`\n\n## Checklist\n- [ ] Implementation complete\n- [ ] Tests written\n- [ ] CI/CD passing`;
+            }
+
+            // Capitalize first letter of each word in title
+            title = title.replace(/\b\w/g, l => l.toUpperCase());
+
+            core.setOutput('title', title);
+            core.setOutput('body', body);
+            core.setOutput('branch', branch);
+
+      - name: Determine base branch
+        if: steps.check-pr.outputs.pr_exists == 'false'
+        id: base-branch
+        run: |
+          # Check if development branch exists
+          if git ls-remote --exit-code origin development > /dev/null 2>&1; then
+            echo "base=development" >> $GITHUB_OUTPUT
+          elif git ls-remote --exit-code origin main > /dev/null 2>&1; then
+            echo "base=main" >> $GITHUB_OUTPUT
+          else
+            echo "base=master" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Draft PR
+        if: steps.check-pr.outputs.pr_exists == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = '${{ steps.pr-details.outputs.branch }}';
+            const base = '${{ steps.base-branch.outputs.base }}';
+            const title = `${{ steps.pr-details.outputs.title }}`;
+            const body = `${{ steps.pr-details.outputs.body }}`;
+
+            try {
+              const { data: pr } = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                head: branch,
+                base: base,
+                draft: true
+              });
+
+              console.log(`Created draft PR #${pr.number}: ${pr.html_url}`);
+
+              // Add initial labels
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: ['🎯IN-PROGRESS']
+              });
+
+            } catch (error) {
+              if (error.message.includes('pull request already exists')) {
+                console.log('PR already exists, skipping creation');
+              } else if (error.message.includes('No commits between')) {
+                console.log('No commits between branches, PR not needed yet');
+              } else {
+                throw error;
+              }
+            }
