@@ -146,12 +146,26 @@ export function doubleDownHand(hand: Hand): Hand {
 
 /**
  * Compare player hand to dealer hand and determine outcome
+ *
+ * @param playerCards - Player's cards (Card[]) or full Hand object
+ * @param dealerCards - Dealer's cards
+ * @returns Outcome of the comparison
+ *
+ * @example
+ * // Using Card arrays
+ * const result = compareHands(playerCards, dealerCards);
+ *
+ * @example
+ * // Using Hand object
+ * const result = compareHands(playerHand.cards, dealerCards);
  */
 export function compareHands(
-  playerHand: Hand,
+  playerCards: Card[] | Hand,
   dealerCards: Card[]
 ): 'win' | 'loss' | 'push' | 'blackjack' {
-  const playerValue = evaluateHand(playerHand.cards);
+  // Handle both Card[] and Hand inputs
+  const playerCardArray = Array.isArray(playerCards) ? playerCards : playerCards.cards;
+  const playerValue = evaluateHand(playerCardArray);
   const dealerValue = evaluateHand(dealerCards);
 
   // Player bust always loses
