@@ -2,6 +2,8 @@ import type { Card, Hand, HandValue } from '../types';
 
 /**
  * Get the numeric value of a card rank
+ * @param rank - The card rank
+ * @returns The numeric value of the card
  */
 export function getCardValue(rank: string): number {
   if (rank === 'A') return 11;
@@ -11,8 +13,11 @@ export function getCardValue(rank: string): number {
 
 /**
  * Evaluate a hand and return its value, considering soft/hard aces
+ * @param cards - Array of cards in the hand
+ * @param isSplitHand - Whether this hand came from a split (affects blackjack detection)
+ * @returns HandValue object containing value, soft/hard status, blackjack, and bust status
  */
-export function evaluateHand(cards: Card[]): HandValue {
+export function evaluateHand(cards: Card[], isSplitHand: boolean = false): HandValue {
   let value = 0;
   let aces = 0;
 
@@ -32,7 +37,8 @@ export function evaluateHand(cards: Card[]): HandValue {
   }
 
   const isSoft = aces > 0; // Has an ace counted as 11
-  const isBlackjack = cards.length === 2 && value === 21;
+  // Blackjack only on original 2-card hands, not after splits
+  const isBlackjack = cards.length === 2 && value === 21 && !isSplitHand;
   const isBust = value > 21;
 
   return {
@@ -45,31 +51,75 @@ export function evaluateHand(cards: Card[]): HandValue {
 
 /**
  * Check if a hand can be split (pair of same rank)
+ * @param hand - The hand to check
+ * @param currentHandCount - Current number of hands (to enforce max limit)
+ * @param maxHands - Maximum number of hands allowed (default: 4)
+ * @param allowResplitAces - Whether Aces can be re-split (default: false)
+ * @returns True if the hand can be split
  */
-export function canSplit(hand: Hand): boolean {
+export function canSplit(
+  hand: Hand,
+  currentHandCount: number = 1,
+  maxHands: number = 4,
+  allowResplitAces: boolean = false
+): boolean {
+  // Must have exactly 2 cards
   if (hand.cards.length !== 2) return false;
-  if (hand.isSplit) return false; // Only allow one split per original hand
 
-  return hand.cards[0].rank === hand.cards[1].rank;
+  // Cards must be the same rank
+  if (hand.cards[0].rank !== hand.cards[1].rank) return false;
+
+  // Cannot exceed max hands
+  if (currentHandCount >= maxHands) return false;
+
+  // Split Aces typically cannot be re-split
+  if (hand.splitFromAces && !allowResplitAces) return false;
+
+  // Cannot split Aces that were already split (unless house rules allow)
+  if (hand.isSplit && hand.cards[0].rank === 'A' && !allowResplitAces) return false;
+
+  return true;
 }
 
 /**
  * Check if a hand can double down
+ * @param hand - The hand to check
+ * @param allowDoubleAfterSplit - Whether doubling is allowed after split (default: true)
+ * @returns True if the hand can be doubled down
  */
-export function canDouble(hand: Hand): boolean {
-  return hand.cards.length === 2 && !hand.isDouble && !hand.isSplit;
+export function canDouble(hand: Hand, allowDoubleAfterSplit: boolean = true): boolean {
+  if (hand.cards.length !== 2) return false;
+  if (hand.isDouble) return false;
+  if (hand.isSplit && !allowDoubleAfterSplit) return false;
+
+  return true;
+}
+
+/**
+ * Check if a hand can hit (receive another card)
+ * @param hand - The hand to check
+ * @returns True if the hand can hit
+ */
+export function canHit(hand: Hand): boolean {
+  if (hand.status !== 'playing') return false;
+  if (!hand.canHit) return false; // Split Aces cannot hit
+  return true;
 }
 
 /**
  * Check if dealer should hit (hits on 16 or less, stands on 17+)
+ * @param cards - The dealer's cards
+ * @returns True if the dealer should hit
  */
 export function shouldDealerHit(cards: Card[]): boolean {
-  const handValue = evaluateHand(cards);
+  const handValue = evaluateHand(cards, false);
   return handValue.value < 17;
 }
 
 /**
  * Create a new empty hand
+ * @param bet - Initial bet amount (default: 0)
+ * @returns A new Hand object
  */
 export function createHand(bet: number = 0): Hand {
   return {
@@ -78,11 +128,16 @@ export function createHand(bet: number = 0): Hand {
     status: 'playing',
     isDouble: false,
     isSplit: false,
+    splitFromAces: false,
+    canHit: true,
   };
 }
 
 /**
  * Add a card to a hand
+ * @param hand - The hand to add the card to
+ * @param card - The card to add
+ * @returns A new Hand object with the card added
  */
 export function addCardToHand(hand: Hand, card: Card): Hand {
   const newHand = {
@@ -90,8 +145,8 @@ export function addCardToHand(hand: Hand, card: Card): Hand {
     cards: [...hand.cards, card],
   };
 
-  // Auto-update status if bust
-  const handValue = evaluateHand(newHand.cards);
+  // Auto-update status if bust or blackjack
+  const handValue = evaluateHand(newHand.cards, newHand.isSplit);
   if (handValue.isBust) {
     newHand.status = 'bust';
   } else if (handValue.isBlackjack && newHand.cards.length === 2) {
@@ -103,13 +158,24 @@ export function addCardToHand(hand: Hand, card: Card): Hand {
 
 /**
  * Split a hand into two hands
+ * @param hand - The hand to split
+ * @param currentHandCount - Current number of hands (for validation)
+ * @param maxHands - Maximum allowed hands (default: 4)
+ * @param allowResplitAces - Whether Aces can be re-split (default: false)
+ * @returns Object containing the two new hands
  */
-export function splitHand(hand: Hand): { hand1: Hand; hand2: Hand } {
-  if (!canSplit(hand)) {
+export function splitHand(
+  hand: Hand,
+  currentHandCount: number = 1,
+  maxHands: number = 4,
+  allowResplitAces: boolean = false
+): { hand1: Hand; hand2: Hand } {
+  if (!canSplit(hand, currentHandCount, maxHands, allowResplitAces)) {
     throw new Error('Cannot split this hand');
   }
 
   const [card1, card2] = hand.cards;
+  const isSplittingAces = card1.rank === 'A';
 
   return {
     hand1: {
@@ -118,6 +184,8 @@ export function splitHand(hand: Hand): { hand1: Hand; hand2: Hand } {
       status: 'playing',
       isDouble: false,
       isSplit: true,
+      splitFromAces: isSplittingAces,
+      canHit: !isSplittingAces, // Split Aces can only receive one card
     },
     hand2: {
       cards: [card2],
@@ -125,15 +193,20 @@ export function splitHand(hand: Hand): { hand1: Hand; hand2: Hand } {
       status: 'playing',
       isDouble: false,
       isSplit: true,
+      splitFromAces: isSplittingAces,
+      canHit: !isSplittingAces, // Split Aces can only receive one card
     },
   };
 }
 
 /**
  * Double down a hand (double bet, will receive exactly one more card)
+ * @param hand - The hand to double down
+ * @param allowDoubleAfterSplit - Whether doubling is allowed after split (default: true)
+ * @returns A new Hand object with doubled bet
  */
-export function doubleDownHand(hand: Hand): Hand {
-  if (!canDouble(hand)) {
+export function doubleDownHand(hand: Hand, allowDoubleAfterSplit: boolean = true): Hand {
+  if (!canDouble(hand, allowDoubleAfterSplit)) {
     throw new Error('Cannot double down this hand');
   }
 
@@ -146,27 +219,16 @@ export function doubleDownHand(hand: Hand): Hand {
 
 /**
  * Compare player hand to dealer hand and determine outcome
- *
- * @param playerCards - Player's cards (Card[]) or full Hand object
- * @param dealerCards - Dealer's cards
- * @returns Outcome of the comparison
- *
- * @example
- * // Using Card arrays
- * const result = compareHands(playerCards, dealerCards);
- *
- * @example
- * // Using Hand object
- * const result = compareHands(playerHand.cards, dealerCards);
+ * @param playerHand - The player's hand
+ * @param dealerCards - The dealer's cards
+ * @returns The outcome of the comparison
  */
 export function compareHands(
   playerCards: Card[] | Hand,
   dealerCards: Card[]
 ): 'win' | 'loss' | 'push' | 'blackjack' {
-  // Handle both Card[] and Hand inputs
-  const playerCardArray = Array.isArray(playerCards) ? playerCards : playerCards.cards;
-  const playerValue = evaluateHand(playerCardArray);
-  const dealerValue = evaluateHand(dealerCards);
+  const playerValue = evaluateHand(playerHand.cards, playerHand.isSplit);
+  const dealerValue = evaluateHand(dealerCards, false); // Dealer never splits
 
   // Player bust always loses
   if (playerValue.isBust) {
@@ -178,7 +240,7 @@ export function compareHands(
     return 'win';
   }
 
-  // Player blackjack
+  // Player blackjack (only possible on non-split hands)
   if (playerValue.isBlackjack) {
     if (dealerValue.isBlackjack) {
       return 'push';
