@@ -7,13 +7,141 @@ on:
       - 'feature/**'
       - 'fix/**'
       - 'claude/**'
+  workflow_dispatch:
+    inputs:
+      create_for_all_feat_branches:
+        description: 'Create PRs for all feat/* branches that need them'
+        required: false
+        default: 'true'
+        type: boolean
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
+  # Job for workflow_dispatch - initialize all feat branches
+  init-all-branches:
+    if: github.event_name == 'workflow_dispatch' && inputs.create_for_all_feat_branches
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch:
+          - feat/M2-T3-Hand-Evaluation-Logic
+          - feat/M2-T4-Dealer-AI-Logic
+          - feat/M2-T5-Betting-System
+          - feat/M2-T6-Insurance-Logic
+          - feat/M2-T7-Split-Hand-Logic
+          - feat/M2-T8-Double-Down-Logic
+          - feat/M2-T9-Payout-Calculations
+          - feat/M2-T10-Unit-Tests
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Check if branch needs initialization
+        id: check-commits
+        run: |
+          git fetch origin development
+          COMMITS_AHEAD=$(git rev-list --count origin/development..${{ matrix.branch }} 2>/dev/null || echo "0")
+          echo "commits_ahead=$COMMITS_AHEAD" >> $GITHUB_OUTPUT
+          if [ "$COMMITS_AHEAD" = "0" ]; then
+            echo "needs_init=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_init=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Rebase on development
+        if: steps.check-commits.outputs.needs_init == 'true'
+        run: |
+          git fetch origin development
+          git rebase origin/development
+
+      - name: Create initialization commit
+        if: steps.check-commits.outputs.needs_init == 'true'
+        run: |
+          TASK_NAME=$(echo "${{ matrix.branch }}" | sed 's/feat\/M2-T[0-9]*-//' | sed 's/-/ /g')
+          git commit --allow-empty -m "chore: initialize PR for $TASK_NAME"
+          git push origin ${{ matrix.branch }} --force
+
+      - name: Check for existing PR
+        id: check-pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = '${{ matrix.branch }}';
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${branch}`,
+              state: 'open'
+            });
+
+            if (prs.length > 0) {
+              console.log(`PR #${prs[0].number} already exists`);
+              core.setOutput('pr_exists', 'true');
+              return;
+            }
+            core.setOutput('pr_exists', 'false');
+
+      - name: Create PR
+        if: steps.check-pr.outputs.pr_exists == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = '${{ matrix.branch }}';
+            const m2tMatch = branch.match(/M2-T(\d+)-(.+)/i);
+
+            const taskDescriptions = {
+              '3': 'Implement Hand Evaluation Logic for blackjack scoring',
+              '4': 'Implement Dealer AI Logic with configurable rules',
+              '5': 'Implement Betting System with validation',
+              '6': 'Implement Insurance Logic for dealer ace scenarios',
+              '7': 'Implement Split Hand Logic for pair splitting',
+              '8': 'Implement Double Down Logic',
+              '9': 'Implement Payout Calculations for all outcomes',
+              '10': 'Implement comprehensive Unit Tests for game engine'
+            };
+
+            const taskNum = m2tMatch[1];
+            const taskName = m2tMatch[2].replace(/-/g, ' ');
+            const title = `M2-T${taskNum}: ${taskName.replace(/\b\w/g, l => l.toUpperCase())}`;
+            const body = `## Summary\n${taskDescriptions[taskNum] || 'Milestone 2 task implementation'}\n\n## Checklist\n- [ ] Implementation complete\n- [ ] Tests written\n- [ ] Documentation updated\n- [ ] CI/CD passing\n\n## Test Plan\n- [ ] Unit tests pass\n- [ ] Integration tests pass\n- [ ] Manual verification complete`;
+
+            try {
+              const { data: pr } = await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                head: branch,
+                base: 'development',
+                draft: true
+              });
+
+              console.log(`Created PR #${pr.number}: ${pr.html_url}`);
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: ['🎯IN-PROGRESS']
+              });
+            } catch (error) {
+              console.log(`Error: ${error.message}`);
+            }
+
+  # Job for push events - create PR for the pushed branch
   auto-create-pr:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
