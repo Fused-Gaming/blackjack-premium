@@ -34,9 +34,9 @@ jobs:
               conclusion: hasMilestone ? 'success' : 'failure',
               output: {
                 title: hasMilestone ? 'Milestone Assigned' : 'No Milestone Assigned',
-                summary: hasMilestone
-                  ? `✅ This PR is assigned to milestone: **${pr.milestone.title}**`
-                  : '❌ This PR must be assigned to a milestone before merging.\n\n**Available milestones:**\n- Milestone 1: Foundation\n- Milestone 2: Game Engine\n- Milestone 3: Core UI Components\n- Milestone 4: Game Interface\n- Milestone 5: State Management\n- Milestone 6: Animations & Polish\n- Milestone 7: Audio & Accessibility\n- Milestone 8: Testing & QA\n- Milestone 9: Documentation & Deployment\n\nThe auto-label workflow should assign this automatically, but you can also assign it manually.'
+                summary: hasMilestone && pr.milestone
+                  ? 'This PR is assigned to milestone: ' + pr.milestone.title
+                  : 'This PR must be assigned to a milestone before merging. The auto-label workflow should assign this automatically, but you can also assign it manually.'
               }
             });
 

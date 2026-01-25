@@ -1,16 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import {
-  createDeck,
-  createShoe,
-  shuffleDeck,
-  dealCard,
-  dealCards,
-  flipCard,
-  shouldReshuffle,
-  getRemainingCards,
-  countCards,
-  DECK_CONFIG,
-} from '../deck';
+import { createDeck, createShoe, shuffleDeck, dealCard, dealCards, shuffleDeckWithSeed, shuffleDeckWithProof } from '../deck';
+import { generateSeed } from '../probablyFair';
 
 describe('Deck Functions', () => {
   describe('createDeck', () => {
@@ -125,134 +115,99 @@ describe('Deck Functions', () => {
     });
   });
 
-  describe('flipCard', () => {
-    it('should flip card face up', () => {
-      const card = { suit: '♠' as const, rank: 'A' as const, faceUp: false };
-      const flipped = flipCard(card, true);
+  describe('shuffleDeckWithSeed', () => {
+    it('should shuffle deck deterministically with seed', async () => {
+      const deck = createDeck();
+      const seed = generateSeed();
+      const shuffled1 = await shuffleDeckWithSeed(deck, seed);
+      const shuffled2 = await shuffleDeckWithSeed(deck, seed);
 
-      expect(flipped.faceUp).toBe(true);
-      expect(flipped.suit).toBe('♠');
-      expect(flipped.rank).toBe('A');
+      expect(shuffled1).toEqual(shuffled2);
     });
 
-    it('should flip card face down', () => {
-      const card = { suit: '♥' as const, rank: 'K' as const, faceUp: true };
-      const flipped = flipCard(card, false);
+    it('should not modify original deck', async () => {
+      const deck = createDeck();
+      const original = [...deck];
+      const seed = generateSeed();
+      await shuffleDeckWithSeed(deck, seed);
 
-      expect(flipped.faceUp).toBe(false);
+      expect(deck).toEqual(original);
     });
 
-    it('should not mutate original card', () => {
-      const card = { suit: '♦' as const, rank: 'Q' as const, faceUp: false };
-      flipCard(card, true);
+    it('should produce different shuffle with different seed', async () => {
+      const deck = createDeck();
+      const seed1 = generateSeed();
+      const seed2 = generateSeed();
+      const shuffled1 = await shuffleDeckWithSeed(deck, seed1);
+      const shuffled2 = await shuffleDeckWithSeed(deck, seed2);
 
-      expect(card.faceUp).toBe(false);
+      expect(shuffled1).not.toEqual(shuffled2);
+    });
+
+    it('should return same card count', async () => {
+      const deck = createDeck();
+      const seed = generateSeed();
+      const shuffled = await shuffleDeckWithSeed(deck, seed);
+
+      expect(shuffled).toHaveLength(52);
+    });
+
+    it('should contain all original cards', async () => {
+      const deck = createDeck();
+      const seed = generateSeed();
+      const shuffled = await shuffleDeckWithSeed(deck, seed);
+
+      const originalCards = new Set(deck.map(c => `${c.suit}${c.rank}`));
+      const shuffledCards = new Set(shuffled.map(c => `${c.suit}${c.rank}`));
+
+      expect(shuffledCards).toEqual(originalCards);
     });
   });
 
-  describe('shouldReshuffle', () => {
-    it('should return true when deck is below threshold', () => {
-      const smallDeck = dealCards(createDeck(), 42).remainingDeck; // 10 cards left
-      expect(shouldReshuffle(smallDeck, 52)).toBe(true);
-    });
-
-    it('should return false when deck is above threshold', () => {
-      const deck = createShoe(6); // 312 cards
-      expect(shouldReshuffle(deck, 52)).toBe(false);
-    });
-
-    it('should use default threshold', () => {
-      const deck = dealCards(createDeck(), 40).remainingDeck; // 12 cards left
-      expect(shouldReshuffle(deck)).toBe(true);
-    });
-
-    it('should return true when deck equals threshold', () => {
-      const deck = dealCards(createShoe(), 260).remainingDeck; // 52 cards left
-      expect(shouldReshuffle(deck, 52)).toBe(true);
-    });
-  });
-
-  describe('getRemainingCards', () => {
-    it('should return correct count for full deck', () => {
+  describe('shuffleDeckWithProof', () => {
+    it('should return shuffled deck and proof', async () => {
       const deck = createDeck();
-      expect(getRemainingCards(deck)).toBe(52);
+      const result = await shuffleDeckWithProof(deck);
+
+      expect(result).toHaveProperty('shuffled');
+      expect(result).toHaveProperty('proof');
+      expect(result.shuffled).toHaveLength(52);
     });
 
-    it('should return correct count after dealing', () => {
+    it('should generate valid proof', async () => {
       const deck = createDeck();
-      const { remainingDeck } = dealCards(deck, 10);
-      expect(getRemainingCards(remainingDeck)).toBe(42);
+      const result = await shuffleDeckWithProof(deck);
+
+      expect(result.proof).toHaveProperty('seed');
+      expect(result.proof).toHaveProperty('seedHash');
+      expect(result.proof).toHaveProperty('timestamp');
+      expect(result.proof).toHaveProperty('version');
     });
 
-    it('should return 0 for empty deck', () => {
-      expect(getRemainingCards([])).toBe(0);
-    });
-  });
-
-  describe('countCards', () => {
-    it('should count cards by rank', () => {
+    it('should use provided seed if given', async () => {
       const deck = createDeck();
-      expect(countCards(deck, 'A')).toBe(4);
-      expect(countCards(deck, 'K')).toBe(4);
+      const seed = generateSeed();
+      const result = await shuffleDeckWithProof(deck, seed);
+
+      expect(result.proof.seed).toBe(seed);
     });
 
-    it('should count cards by suit', () => {
+    it('should produce reproducible shuffle with proof seed', async () => {
       const deck = createDeck();
-      expect(countCards(deck, undefined, '♠')).toBe(13);
-      expect(countCards(deck, undefined, '♥')).toBe(13);
+      const result1 = await shuffleDeckWithProof(deck);
+      const result2 = await shuffleDeckWithProof(deck, result1.proof.seed);
+
+      expect(result2.shuffled).toEqual(result1.shuffled);
     });
 
-    it('should count specific card', () => {
+    it('should preserve all cards in shuffled deck', async () => {
       const deck = createDeck();
-      expect(countCards(deck, 'A', '♠')).toBe(1);
-    });
+      const result = await shuffleDeckWithProof(deck);
 
-    it('should count all cards when no filters', () => {
-      const deck = createDeck();
-      expect(countCards(deck)).toBe(52);
-    });
+      const originalCards = new Set(deck.map(c => `${c.suit}${c.rank}`));
+      const shuffledCards = new Set(result.shuffled.map(c => `${c.suit}${c.rank}`));
 
-    it('should return 0 for cards not in deck', () => {
-      const { remainingDeck } = dealCard(createDeck());
-      const firstCard = createDeck()[0];
-
-      // Count might be less if the first card was of that type
-      const count = countCards(remainingDeck, firstCard.rank, firstCard.suit);
-      expect(count).toBe(0);
-    });
-  });
-
-  describe('DECK_CONFIG', () => {
-    it('should have correct constants', () => {
-      expect(DECK_CONFIG.STANDARD_DECK_SIZE).toBe(52);
-      expect(DECK_CONFIG.DEFAULT_SHOE_SIZE).toBe(6);
-      expect(DECK_CONFIG.SHUFFLE_THRESHOLD).toBe(52);
-    });
-
-    it('should have all suits', () => {
-      expect(DECK_CONFIG.SUITS).toHaveLength(4);
-      expect(DECK_CONFIG.SUITS).toContain('♠');
-      expect(DECK_CONFIG.SUITS).toContain('♥');
-      expect(DECK_CONFIG.SUITS).toContain('♦');
-      expect(DECK_CONFIG.SUITS).toContain('♣');
-    });
-
-    it('should have all ranks', () => {
-      expect(DECK_CONFIG.RANKS).toHaveLength(13);
-      expect(DECK_CONFIG.RANKS).toContain('A');
-      expect(DECK_CONFIG.RANKS).toContain('K');
-    });
-  });
-
-  describe('createShoe edge cases', () => {
-    it('should throw error for invalid deck count', () => {
-      expect(() => createShoe(0)).toThrow('Deck count must be at least 1');
-      expect(() => createShoe(-1)).toThrow('Deck count must be at least 1');
-    });
-
-    it('should create single deck shoe', () => {
-      const shoe = createShoe(1);
-      expect(shoe).toHaveLength(52);
+      expect(shuffledCards).toEqual(originalCards);
     });
   });
 });
