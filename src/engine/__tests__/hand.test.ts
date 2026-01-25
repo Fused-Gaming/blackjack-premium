@@ -87,16 +87,34 @@ describe('Hand Functions', () => {
       expect(canSplit(hand)).toBe(false);
     });
 
-    it('should not allow split if already split', () => {
+    it('should allow re-split for regular pairs', () => {
       const hand: Hand = {
         cards: [createCard('8'), createCard('8')],
         bet: 10,
         status: 'playing',
         isDouble: false,
         isSplit: true,
+        splitFromAces: false,
+        canHit: true,
       };
 
-      expect(canSplit(hand)).toBe(false);
+      // Regular pairs can be re-split (default behavior)
+      expect(canSplit(hand, 1, 4, false)).toBe(true);
+    });
+
+    it('should not allow split on Aces that were split', () => {
+      const hand: Hand = {
+        cards: [createCard('A'), createCard('A')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: true,
+        splitFromAces: true,
+        canHit: false,
+      };
+
+      // Split Aces cannot be re-split by default
+      expect(canSplit(hand, 1, 4, false)).toBe(false);
     });
 
     it('should not allow split with more than 2 cards', () => {
