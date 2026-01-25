@@ -7,12 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added (Development)
-
-- Automatic milestone assignment for PRs based on labels and content
-- Milestone validation check workflow (required for merging)
-- Fixed CodeQL workflow Node Package Verify Action configuration
-
 ### Planned
 
 - Multi-seat gameplay (up to 3 seats)
@@ -22,6 +16,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Mobile responsive design
 - Game statistics tracking
 - Settings persistence
+
+## [0.2.0] - 2026-01-25
+
+### Added
+
+- Automatic milestone assignment for PRs based on labels and content
+- Milestone validation check workflow (required for merging)
+- Automated PR labeling system with content and file-based detection
+- Branch protection check workflow
+- Comprehensive branching strategy documentation (.github/BRANCHING.md)
+
+### Fixed
+
+- CodeQL workflow Node Package Verify Action configuration (npm vs pnpm)
+- Node version parameter in CodeQL workflow (numeric version required)
+
+### Changed
+
+- Updated CONTRIBUTING.md to reference branching strategy
+- Enhanced README.md with workflow automation documentation
+- Completed all Milestone 1 (Foundation) tasks
 
 ## [0.1.0] - 2026-01-20
 
