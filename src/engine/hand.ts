@@ -224,7 +224,7 @@ export function doubleDownHand(hand: Hand, allowDoubleAfterSplit: boolean = true
  * @returns The outcome of the comparison
  */
 export function compareHands(
-  playerHand: Hand,
+  playerCards: Card[] | Hand,
   dealerCards: Card[]
 ): 'win' | 'loss' | 'push' | 'blackjack' {
   const playerValue = evaluateHand(playerHand.cards, playerHand.isSplit);
