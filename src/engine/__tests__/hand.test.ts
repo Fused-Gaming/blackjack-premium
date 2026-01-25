@@ -1,5 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { evaluateHand, canSplit, canDouble, shouldDealerHit, createHand } from '../hand';
+import {
+  evaluateHand,
+  canSplit,
+  canDouble,
+  shouldDealerHit,
+  createHand,
+  addCardToHand,
+  splitHand,
+  doubleDownHand,
+  compareHands,
+} from '../hand';
 import type { Card, Hand, Rank, Suit } from '../../types';
 
 const createCard = (rank: string, suit: string = '♠'): Card => ({
@@ -136,6 +146,30 @@ describe('Hand Functions', () => {
 
       expect(canDouble(hand)).toBe(false);
     });
+
+    it('should not allow double when already doubled', () => {
+      const hand: Hand = {
+        cards: [createCard('5'), createCard('6')],
+        bet: 20,
+        status: 'playing',
+        isDouble: true,
+        isSplit: false,
+      };
+
+      expect(canDouble(hand)).toBe(false);
+    });
+
+    it('should not allow double on split hand', () => {
+      const hand: Hand = {
+        cards: [createCard('8'), createCard('8')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: true,
+      };
+
+      expect(canDouble(hand)).toBe(false);
+    });
   });
 
   describe('shouldDealerHit', () => {
@@ -167,6 +201,202 @@ describe('Hand Functions', () => {
       const hand = createHand(50);
 
       expect(hand.bet).toBe(50);
+    });
+  });
+
+  describe('addCardToHand', () => {
+    it('should add card to hand', () => {
+      const hand = createHand(10);
+      const card = createCard('5');
+      const newHand = addCardToHand(hand, card);
+
+      expect(newHand.cards).toHaveLength(1);
+      expect(newHand.cards[0]).toEqual(card);
+    });
+
+    it('should auto-detect bust', () => {
+      const hand: Hand = {
+        cards: [createCard('K'), createCard('Q')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      const newHand = addCardToHand(hand, createCard('5'));
+      expect(newHand.status).toBe('bust');
+    });
+
+    it('should auto-detect blackjack', () => {
+      const hand: Hand = {
+        cards: [createCard('A')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      const newHand = addCardToHand(hand, createCard('K'));
+      expect(newHand.status).toBe('blackjack');
+    });
+  });
+
+  describe('splitHand', () => {
+    it('should split pair into two hands', () => {
+      const hand: Hand = {
+        cards: [createCard('8'), createCard('8')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      const { hand1, hand2 } = splitHand(hand);
+
+      expect(hand1.cards).toHaveLength(1);
+      expect(hand2.cards).toHaveLength(1);
+      expect(hand1.bet).toBe(10);
+      expect(hand2.bet).toBe(10);
+      expect(hand1.isSplit).toBe(true);
+      expect(hand2.isSplit).toBe(true);
+    });
+
+    it('should throw error for invalid split', () => {
+      const hand: Hand = {
+        cards: [createCard('8'), createCard('9')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(() => splitHand(hand)).toThrow('Cannot split this hand');
+    });
+  });
+
+  describe('doubleDownHand', () => {
+    it('should double the bet', () => {
+      const hand: Hand = {
+        cards: [createCard('5'), createCard('6')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      const doubled = doubleDownHand(hand);
+      expect(doubled.bet).toBe(20);
+      expect(doubled.isDouble).toBe(true);
+    });
+
+    it('should throw error for invalid double', () => {
+      const hand: Hand = {
+        cards: [createCard('5'), createCard('6'), createCard('2')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(() => doubleDownHand(hand)).toThrow('Cannot double down this hand');
+    });
+  });
+
+  describe('compareHands', () => {
+    it('should return loss when player busts', () => {
+      const playerHand: Hand = {
+        cards: [createCard('K'), createCard('Q'), createCard('5')],
+        bet: 10,
+        status: 'bust',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('10'), createCard('7')])).toBe('loss');
+    });
+
+    it('should return win when dealer busts', () => {
+      const playerHand: Hand = {
+        cards: [createCard('10'), createCard('7')],
+        bet: 10,
+        status: 'stand',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('K'), createCard('Q'), createCard('5')])).toBe('win');
+    });
+
+    it('should return blackjack when player has blackjack', () => {
+      const playerHand: Hand = {
+        cards: [createCard('A'), createCard('K')],
+        bet: 10,
+        status: 'blackjack',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('10'), createCard('10')])).toBe('blackjack');
+    });
+
+    it('should return push when both have blackjack', () => {
+      const playerHand: Hand = {
+        cards: [createCard('A'), createCard('K')],
+        bet: 10,
+        status: 'blackjack',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('A'), createCard('Q')])).toBe('push');
+    });
+
+    it('should return loss when dealer has blackjack', () => {
+      const playerHand: Hand = {
+        cards: [createCard('10'), createCard('10')],
+        bet: 10,
+        status: 'stand',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('A'), createCard('K')])).toBe('loss');
+    });
+
+    it('should return win when player value is higher', () => {
+      const playerHand: Hand = {
+        cards: [createCard('10'), createCard('9')],
+        bet: 10,
+        status: 'stand',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('10'), createCard('7')])).toBe('win');
+    });
+
+    it('should return loss when dealer value is higher', () => {
+      const playerHand: Hand = {
+        cards: [createCard('10'), createCard('7')],
+        bet: 10,
+        status: 'stand',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('10'), createCard('9')])).toBe('loss');
+    });
+
+    it('should return push when values are equal', () => {
+      const playerHand: Hand = {
+        cards: [createCard('10'), createCard('8')],
+        bet: 10,
+        status: 'stand',
+        isDouble: false,
+        isSplit: false,
+      };
+
+      expect(compareHands(playerHand, [createCard('9'), createCard('9')])).toBe('push');
     });
   });
 });
