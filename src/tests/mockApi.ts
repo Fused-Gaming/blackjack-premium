@@ -9,7 +9,7 @@
  * - Simulating multiplayer scenarios
  */
 
-import type { Card, GameResult, Hand } from '../types';
+import type { Card, GameResult } from '../types';
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -272,11 +272,12 @@ export class MockBlackjackAPI {
   /**
    * Validate deck shuffle (provably fair)
    */
-  async validateShuffle(seed: string, deckOrder: Card[]): Promise<ApiResponse<{ valid: boolean }>> {
+  async validateShuffle(_seed: string, _deckOrder: Card[]): Promise<ApiResponse<{ valid: boolean }>> {
     await this.delay();
 
     // In a real implementation, this would verify the shuffle was fair
     // using the seed and cryptographic verification
+    // Parameters prefixed with _ to indicate they're reserved for future implementation
 
     return {
       success: true,

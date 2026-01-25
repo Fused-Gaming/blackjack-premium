@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
 
 export function StatusBar() {
-  const { balance, message, phase } = useGameStore();
+  const { balance, message } = useGameStore();
 
   const getOutcomeStyle = () => {
     if (message.includes('WIN') || message.includes('Blackjack')) {
