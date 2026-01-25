@@ -102,4 +102,4 @@ jobs:
       uses: vbilltran68-devops/node-pkg-verify-action@v1
       with:
         package-manager: npm
-        node-version: lts/*
+        node-version: '20'

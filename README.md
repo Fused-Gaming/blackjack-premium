@@ -89,6 +89,26 @@ src/
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting pull requests.
 
+### Branching Strategy
+
+This project follows a structured branching workflow:
+
+- **`master`**: Production-ready code (protected)
+- **`development`**: Integration branch for features (protected)
+- **Feature branches**: `feature/*`, `fix/*`, `docs/*`, etc.
+
+See [.github/BRANCHING.md](.github/BRANCHING.md) for detailed workflow and guidelines.
+
+### Automated Workflows
+
+The repository includes automated workflows to maintain code quality and organization:
+
+- **Auto-Label**: Automatically labels PRs based on content and file changes
+- **Milestone Assignment**: Auto-assigns PRs to appropriate project milestones
+- **Milestone Validation**: Ensures all PRs have milestones before merging (required check)
+- **Branch Protection**: Validates PR branch naming and merge targets
+- **CodeQL Analysis**: Security and code quality scanning
+
 ## Security
 
 Report security issues to the project maintainer. See [SECURITY.md](SECURITY.md) for details.

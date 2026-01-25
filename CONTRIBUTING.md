@@ -5,13 +5,15 @@ Thank you for your interest in contributing to this project!
 ## Development Process
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create a feature branch from `development` (`git checkout -b feature/amazing-feature`)
 3. Make your changes
 4. Write or update tests as needed
 5. Ensure all tests pass (`npm test`)
 6. Commit your changes using conventional commits
 7. Push to your fork
-8. Open a Pull Request
+8. Open a Pull Request to the `development` branch
+
+See [BRANCHING.md](.github/BRANCHING.md) for detailed branching strategy and workflow.
 
 ## Commit Message Format
 
