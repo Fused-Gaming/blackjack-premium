@@ -181,7 +181,7 @@ describe('Split Hand Logic', () => {
       let hand = createTestHand([createCard('8'), createCard('8')]);
 
       // First split
-      let { hand1, hand2 } = splitHand(hand, 1, 4, false);
+      let { hand1 } = splitHand(hand, 1, 4, false);
       expect(canSplit(hand1, 2, 4, false)).toBe(false); // hand1 has only 1 card
 
       // Simulate hand1 with two cards that can be split
