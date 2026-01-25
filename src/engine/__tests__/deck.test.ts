@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { createDeck, createShoe, shuffleDeck, dealCard, dealCards } from '../deck';
+import { createDeck, createShoe, shuffleDeck, dealCard, dealCards, shuffleDeckWithSeed, shuffleDeckWithProof } from '../deck';
+import { generateSeed } from '../probablyFair';
 
 describe('Deck Functions', () => {
   describe('createDeck', () => {
@@ -111,6 +112,102 @@ describe('Deck Functions', () => {
     it('should throw error when not enough cards', () => {
       const deck = createDeck();
       expect(() => dealCards(deck, 53)).toThrow();
+    });
+  });
+
+  describe('shuffleDeckWithSeed', () => {
+    it('should shuffle deck deterministically with seed', async () => {
+      const deck = createDeck();
+      const seed = generateSeed();
+      const shuffled1 = await shuffleDeckWithSeed(deck, seed);
+      const shuffled2 = await shuffleDeckWithSeed(deck, seed);
+
+      expect(shuffled1).toEqual(shuffled2);
+    });
+
+    it('should not modify original deck', async () => {
+      const deck = createDeck();
+      const original = [...deck];
+      const seed = generateSeed();
+      await shuffleDeckWithSeed(deck, seed);
+
+      expect(deck).toEqual(original);
+    });
+
+    it('should produce different shuffle with different seed', async () => {
+      const deck = createDeck();
+      const seed1 = generateSeed();
+      const seed2 = generateSeed();
+      const shuffled1 = await shuffleDeckWithSeed(deck, seed1);
+      const shuffled2 = await shuffleDeckWithSeed(deck, seed2);
+
+      expect(shuffled1).not.toEqual(shuffled2);
+    });
+
+    it('should return same card count', async () => {
+      const deck = createDeck();
+      const seed = generateSeed();
+      const shuffled = await shuffleDeckWithSeed(deck, seed);
+
+      expect(shuffled).toHaveLength(52);
+    });
+
+    it('should contain all original cards', async () => {
+      const deck = createDeck();
+      const seed = generateSeed();
+      const shuffled = await shuffleDeckWithSeed(deck, seed);
+
+      const originalCards = new Set(deck.map(c => `${c.suit}${c.rank}`));
+      const shuffledCards = new Set(shuffled.map(c => `${c.suit}${c.rank}`));
+
+      expect(shuffledCards).toEqual(originalCards);
+    });
+  });
+
+  describe('shuffleDeckWithProof', () => {
+    it('should return shuffled deck and proof', async () => {
+      const deck = createDeck();
+      const result = await shuffleDeckWithProof(deck);
+
+      expect(result).toHaveProperty('shuffled');
+      expect(result).toHaveProperty('proof');
+      expect(result.shuffled).toHaveLength(52);
+    });
+
+    it('should generate valid proof', async () => {
+      const deck = createDeck();
+      const result = await shuffleDeckWithProof(deck);
+
+      expect(result.proof).toHaveProperty('seed');
+      expect(result.proof).toHaveProperty('seedHash');
+      expect(result.proof).toHaveProperty('timestamp');
+      expect(result.proof).toHaveProperty('version');
+    });
+
+    it('should use provided seed if given', async () => {
+      const deck = createDeck();
+      const seed = generateSeed();
+      const result = await shuffleDeckWithProof(deck, seed);
+
+      expect(result.proof.seed).toBe(seed);
+    });
+
+    it('should produce reproducible shuffle with proof seed', async () => {
+      const deck = createDeck();
+      const result1 = await shuffleDeckWithProof(deck);
+      const result2 = await shuffleDeckWithProof(deck, result1.proof.seed);
+
+      expect(result2.shuffled).toEqual(result1.shuffled);
+    });
+
+    it('should preserve all cards in shuffled deck', async () => {
+      const deck = createDeck();
+      const result = await shuffleDeckWithProof(deck);
+
+      const originalCards = new Set(deck.map(c => `${c.suit}${c.rank}`));
+      const shuffledCards = new Set(result.shuffled.map(c => `${c.suit}${c.rank}`));
+
+      expect(shuffledCards).toEqual(originalCards);
     });
   });
 });

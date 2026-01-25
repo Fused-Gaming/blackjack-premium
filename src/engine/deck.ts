@@ -1,4 +1,6 @@
 import type { Card, Rank, Suit } from '../types';
+import { shuffleCardsWithSeed, generateShuffleProof } from './probablyFair';
+import type { ShuffleProof } from './probablyFair';
 
 const SUITS: Suit[] = ['♠', '♥', '♦', '♣'];
 const RANKS: Rank[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
@@ -36,22 +38,67 @@ export function createShoe(deckCount: number = 6): Card[] {
 }
 
 /**
- * Shuffle deck using Fisher-Yates algorithm with crypto.getRandomValues
- * for provably fair shuffling
+ * Synchronous shuffle using Web Crypto API (deprecated - use shuffleDeckWithSeed for ProbablyFair)
+ * This is kept for backward compatibility with existing code
+ *
+ * @param deck The card deck to shuffle
+ * @returns Shuffled deck (uses async internally)
  */
 export function shuffleDeck(deck: Card[]): Card[] {
+  // For backward compatibility, create a simple random shuffle without ProbablyFair
+  // This avoids blocking the main thread
   const shuffled = [...deck];
-
   for (let i = shuffled.length - 1; i > 0; i--) {
-    // Use crypto.getRandomValues for secure randomness
     const randomBuffer = new Uint32Array(1);
     crypto.getRandomValues(randomBuffer);
     const j = Math.floor((randomBuffer[0] / (0xffffffff + 1)) * (i + 1));
-
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-
   return shuffled;
+}
+
+/**
+ * Shuffle deck with a specific seed for reproducibility
+ * Enables ProbablyFair verification
+ *
+ * @param deck The card deck to shuffle
+ * @param seed Hex-encoded seed for deterministic shuffling
+ * @returns Promise resolving to shuffled deck
+ *
+ * @example
+ * const seed = generateSeed();
+ * const shuffled = await shuffleDeckWithSeed(deck, seed);
+ */
+export async function shuffleDeckWithSeed(deck: Card[], seed: string): Promise<Card[]> {
+  return shuffleCardsWithSeed(deck, seed);
+}
+
+/**
+ * Shuffle deck and generate a proof for verification
+ *
+ * Returns both the shuffled deck and a proof that can be used to verify
+ * the shuffle was fair and reproducible with the same seed.
+ *
+ * @param deck The card deck to shuffle
+ * @param providedSeed Optional seed. If not provided, a new one is generated.
+ * @returns Promise resolving to object containing shuffled deck and shuffle proof
+ *
+ * @example
+ * const { shuffled, proof } = await shuffleDeckWithProof(deck);
+ * // Store proof for later verification
+ * // Verify with: await verifyShuffleWithSeed(originalDeck, shuffled, proof.seed)
+ */
+export async function shuffleDeckWithProof(
+  deck: Card[],
+  providedSeed?: string
+): Promise<{ shuffled: Card[]; proof: ShuffleProof }> {
+  const proof = await generateShuffleProof(providedSeed);
+  const shuffled = await shuffleCardsWithSeed(deck, proof.seed);
+
+  return {
+    shuffled,
+    proof,
+  };
 }
 
 /**
