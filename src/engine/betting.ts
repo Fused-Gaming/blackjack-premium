@@ -2,7 +2,7 @@ import type { Hand } from '../types';
 import { validateBet } from './payouts';
 
 /**
- * Betting system configuration
+ * Betting system configuration for table limits and rules
  */
 export interface BettingConfig {
   minBet: number;
@@ -11,7 +11,7 @@ export interface BettingConfig {
 }
 
 /**
- * Default betting configuration
+ * Default betting configuration matching standard blackjack rules
  */
 export const DEFAULT_BETTING_CONFIG: BettingConfig = {
   minBet: 1,
@@ -20,7 +20,7 @@ export const DEFAULT_BETTING_CONFIG: BettingConfig = {
 };
 
 /**
- * Result of a bet operation
+ * Result of a bet placement operation
  */
 export interface BetResult {
   success: boolean;
@@ -29,7 +29,7 @@ export interface BetResult {
 }
 
 /**
- * Result of a bet settlement
+ * Result of a bet settlement operation
  */
 export interface SettlementResult {
   payout: number;
@@ -38,18 +38,21 @@ export interface SettlementResult {
 }
 
 /**
- * Place a bet by deducting the amount from balance
+ * Place a bet by deducting the amount from the player's balance.
+ * Validates the bet amount against table limits and balance before deducting.
  *
- * @param balance - Current balance
- * @param amount - Bet amount
- * @param config - Betting configuration
- * @returns Bet result with new balance or error
+ * @param balance - Current player balance
+ * @param amount - Bet amount to place
+ * @param config - Betting configuration (optional, uses defaults if not provided)
+ * @returns BetResult with success status, new balance, and optional error message
  *
  * @example
- * ```ts
+ * ```typescript
  * const result = placeBet(1000, 100);
  * if (result.success) {
  *   console.log('New balance:', result.newBalance); // 900
+ * } else {
+ *   console.error(result.error);
  * }
  * ```
  */
@@ -58,7 +61,7 @@ export function placeBet(
   amount: number,
   config: BettingConfig = DEFAULT_BETTING_CONFIG
 ): BetResult {
-  // Validate the bet
+  // Validate the bet using existing validation function
   const validation = validateBet(amount, balance, config.minBet, config.maxBet);
 
   if (!validation.valid) {
@@ -77,15 +80,18 @@ export function placeBet(
 }
 
 /**
- * Cancel a bet and return the amount to balance
+ * Cancel a bet and return the amount to the player's balance.
+ * Used when a player wants to take back their bet before the round starts.
  *
- * @param balance - Current balance
+ * @param balance - Current player balance
  * @param amount - Bet amount to return
- * @returns New balance with bet returned
+ * @returns New balance with bet amount added back
+ *
+ * @throws Error if amount is invalid (negative, NaN, or Infinity)
  *
  * @example
- * ```ts
- * const newBalance = cancelBet(900, 100); // 1000
+ * ```typescript
+ * const newBalance = cancelBet(900, 100); // Returns 1000
  * ```
  */
 export function cancelBet(balance: number, amount: number): number {
@@ -97,14 +103,18 @@ export function cancelBet(balance: number, amount: number): number {
 }
 
 /**
- * Settle a bet and add payout to balance
+ * Settle a bet by adding the payout to the player's balance.
+ * Called after a hand is complete and the outcome is determined.
  *
- * @param balance - Current balance
- * @param payout - Payout amount from the bet
- * @returns Settlement result with payout, new balance, and profit
+ * @param balance - Current player balance
+ * @param payout - Payout amount (already calculated by calculatePayout)
+ * @returns SettlementResult with payout, new balance, and profit
+ *
+ * @throws Error if payout is invalid (negative, NaN, or Infinity)
  *
  * @example
- * ```ts
+ * ```typescript
+ * // After winning a $100 bet (payout is $200 for 1:1 win)
  * const result = settleBet(900, 200);
  * console.log(result); // { payout: 200, newBalance: 1100, profit: 200 }
  * ```
@@ -124,14 +134,18 @@ export function settleBet(balance: number, payout: number): SettlementResult {
 }
 
 /**
- * Settle multiple bets and add total payout to balance
+ * Settle multiple bets at once by adding total payout to balance.
+ * Useful for settling split hands or multiple player seats simultaneously.
  *
- * @param balance - Current balance
+ * @param balance - Current player balance
  * @param payouts - Array of payout amounts
- * @returns Settlement result with total payout and new balance
+ * @returns SettlementResult with total payout, new balance, and total profit
+ *
+ * @throws Error if any payout in array is invalid
  *
  * @example
- * ```ts
+ * ```typescript
+ * // Settling 3 hands: win ($200), push ($100), loss ($0)
  * const result = settleAllBets(1000, [200, 100, 0]);
  * console.log(result); // { payout: 300, newBalance: 1300, profit: 300 }
  * ```
@@ -148,16 +162,18 @@ export function settleAllBets(balance: number, payouts: number[]): SettlementRes
 }
 
 /**
- * Check if player can afford a bet
+ * Check if a player can afford to place a specific bet.
+ * Used for quick validation before attempting to place a bet.
  *
- * @param balance - Current balance
- * @param amount - Bet amount
- * @returns True if player can afford the bet
+ * @param balance - Current player balance
+ * @param amount - Bet amount to check
+ * @returns True if player has sufficient balance and amount is valid
  *
  * @example
- * ```ts
+ * ```typescript
  * if (canAffordBet(1000, 100)) {
- *   // Place the bet
+ *   // Player can afford this bet
+ *   const result = placeBet(1000, 100);
  * }
  * ```
  */
@@ -166,19 +182,23 @@ export function canAffordBet(balance: number, amount: number): boolean {
 }
 
 /**
- * Validate insurance bet amount
- * Insurance bets must be <= half of the original bet
+ * Validate an insurance bet amount.
+ * Insurance bets must be <= half of the original bet (configurable).
  *
  * @param insuranceAmount - Insurance bet amount
- * @param originalBet - Original bet amount
- * @param balance - Current balance
- * @param config - Betting configuration
- * @returns Validation result
+ * @param originalBet - Original hand bet amount
+ * @param balance - Current player balance
+ * @param config - Betting configuration (optional, uses defaults if not provided)
+ * @returns Validation result with valid flag and optional error message
  *
  * @example
- * ```ts
+ * ```typescript
  * const result = validateInsuranceBet(50, 100, 1000);
- * console.log(result.valid); // true
+ * if (result.valid) {
+ *   // Can place insurance bet
+ * } else {
+ *   console.error(result.error);
+ * }
  * ```
  */
 export function validateInsuranceBet(
@@ -210,18 +230,20 @@ export function validateInsuranceBet(
 }
 
 /**
- * Validate split bet amount
- * Split bets must equal the original bet
+ * Validate a split bet amount.
+ * Split bets must equal the original bet amount.
  *
- * @param splitAmount - Split bet amount (should equal original)
- * @param originalBet - Original bet amount
- * @param balance - Current balance
- * @returns Validation result
+ * @param splitAmount - Split bet amount (should equal original bet)
+ * @param originalBet - Original hand bet amount
+ * @param balance - Current player balance
+ * @returns Validation result with valid flag and optional error message
  *
  * @example
- * ```ts
+ * ```typescript
  * const result = validateSplitBet(100, 100, 1000);
- * console.log(result.valid); // true
+ * if (result.valid) {
+ *   // Can split hand
+ * }
  * ```
  */
 export function validateSplitBet(
@@ -248,17 +270,18 @@ export function validateSplitBet(
 }
 
 /**
- * Validate double down bet amount
- * Double down requires doubling the original bet
+ * Validate a double down operation.
+ * Double down requires the player to have enough balance to match their original bet.
  *
- * @param originalBet - Original bet amount (will be doubled)
- * @param balance - Current balance
- * @returns Validation result
+ * @param originalBet - Original hand bet amount (will be doubled)
+ * @param balance - Current player balance
+ * @returns Validation result with valid flag and optional error message
  *
  * @example
- * ```ts
- * const result = validateDoubleBet(100, 1000);
- * console.log(result.valid); // true (needs 100 more in balance)
+ * ```typescript
+ * // Player has $100 bet and $150 balance
+ * const result = validateDoubleBet(100, 150);
+ * // Returns { valid: true } - can afford to add $100 more
  * ```
  */
 export function validateDoubleBet(
@@ -279,18 +302,19 @@ export function validateDoubleBet(
 }
 
 /**
- * Calculate total bet amount across multiple hands
+ * Calculate the total bet amount across multiple hands.
+ * Used for tracking total exposure when a player has split hands.
  *
  * @param hands - Array of hands with bet amounts
- * @returns Total bet amount
+ * @returns Total bet amount across all hands
  *
  * @example
- * ```ts
- * const total = calculateHandsBet([
- *   { bet: 100, cards: [], status: 'playing', isDouble: false, isSplit: false },
- *   { bet: 100, cards: [], status: 'playing', isDouble: false, isSplit: false }
- * ]);
- * console.log(total); // 200
+ * ```typescript
+ * const hands = [
+ *   createHand(100), // First hand
+ *   createHand(100)  // Split hand
+ * ];
+ * const total = calculateHandsBet(hands); // Returns 200
  * ```
  */
 export function calculateHandsBet(hands: Hand[]): number {
@@ -298,16 +322,19 @@ export function calculateHandsBet(hands: Hand[]): number {
 }
 
 /**
- * Calculate required balance for an operation
- * Useful for checking if player can afford split, double, or insurance
+ * Calculate the required balance for an operation that adds a bet.
+ * Useful for checking if player can afford split, double, or insurance.
  *
  * @param currentHandsBet - Total bet amount from current hands
- * @param additionalBet - Additional bet required for operation
+ * @param additionalBet - Additional bet required for the operation
  * @returns Total required balance
  *
+ * @throws Error if any value is invalid (negative, NaN, or Infinity)
+ *
  * @example
- * ```ts
- * const required = calculateRequiredBalance(200, 100); // 300
+ * ```typescript
+ * // Player has $200 in current bets, wants to double for $100 more
+ * const required = calculateRequiredBalance(200, 100); // Returns 300
  * ```
  */
 export function calculateRequiredBalance(
@@ -326,15 +353,18 @@ export function calculateRequiredBalance(
 }
 
 /**
- * Deduct amount from balance (pure function)
+ * Deduct an amount from balance (pure function).
+ * Used for internal balance operations with validation.
  *
  * @param balance - Current balance
  * @param amount - Amount to deduct
- * @returns New balance
+ * @returns New balance after deduction
+ *
+ * @throws Error if balance or amount is invalid, or if amount exceeds balance
  *
  * @example
- * ```ts
- * const newBalance = deductFromBalance(1000, 100); // 900
+ * ```typescript
+ * const newBalance = deductFromBalance(1000, 100); // Returns 900
  * ```
  */
 export function deductFromBalance(balance: number, amount: number): number {
@@ -354,15 +384,18 @@ export function deductFromBalance(balance: number, amount: number): number {
 }
 
 /**
- * Add amount to balance (pure function)
+ * Add an amount to balance (pure function).
+ * Used for internal balance operations with validation.
  *
  * @param balance - Current balance
  * @param amount - Amount to add
- * @returns New balance
+ * @returns New balance after addition
+ *
+ * @throws Error if balance or amount is invalid (negative, NaN, or Infinity)
  *
  * @example
- * ```ts
- * const newBalance = addToBalance(1000, 200); // 1200
+ * ```typescript
+ * const newBalance = addToBalance(1000, 200); // Returns 1200
  * ```
  */
 export function addToBalance(balance: number, amount: number): number {
