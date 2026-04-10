@@ -290,7 +290,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   declineInsurance: () => {
-    set({ phase: 'playing', message: 'Insurance declined' });
+    set({
+      phase: 'playing',
+      message: 'Insurance declined',
+    });
+
     get().checkForBlackjacks();
   },
 
