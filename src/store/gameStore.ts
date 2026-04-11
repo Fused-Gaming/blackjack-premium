@@ -13,6 +13,7 @@ interface GameStore extends GameState {
   double: () => void;
   split: () => void;
   placeInsurance: (seatId: string) => void;
+  declineInsurance: () => void;
   resetGame: () => void;
   setMessage: (message: string) => void;
 
@@ -285,6 +286,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       message: 'Insurance placed',
     });
 
+    get().checkForBlackjacks();
+  },
+
+  declineInsurance: () => {
+    set({ phase: 'playing', message: 'Insurance declined' });
     get().checkForBlackjacks();
   },
 
