@@ -3,7 +3,38 @@ import { useGameStore } from '../../store/gameStore';
 import { canSplit, canDouble } from '../../engine/hand';
 
 export function ActionButtons() {
-  const { phase, playerSeats, activeSeatId, hit, stand, double, split } = useGameStore();
+  const { phase, playerSeats, activeSeatId, hit, stand, double, split, placeInsurance, declineInsurance } = useGameStore();
+
+  // Handle insurance phase
+  if (phase === 'insurance' && activeSeatId) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-wrap gap-3 justify-center"
+      >
+        {/* TAKE INSURANCE Button */}
+        <motion.button
+          onClick={() => placeInsurance(activeSeatId)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="px-8 md:px-12 py-4 bg-gradient-to-r from-gold to-gold-dark text-gray-900 font-bold text-lg md:text-xl rounded-xl transition-all shadow-button hover:shadow-glow-gold"
+        >
+          TAKE INSURANCE
+        </motion.button>
+
+        {/* NO INSURANCE Button */}
+        <motion.button
+          onClick={declineInsurance}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="px-8 md:px-12 py-4 bg-gradient-to-r from-loss to-loss-dark text-white font-bold text-lg md:text-xl rounded-xl transition-all shadow-button hover:shadow-glow-loss"
+        >
+          NO INSURANCE
+        </motion.button>
+      </motion.div>
+    );
+  }
 
   if (phase !== 'playing' || !activeSeatId) return null;
 
