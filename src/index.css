@@ -1,17 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: dark;
-  color: #E5E7EB;
-  background-color: #0B1220;
+  color: #E2E8F0;
+  background-color: #050A0F;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,7 +21,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: linear-gradient(180deg, #0B1220 0%, #070A12 100%);
+  background: radial-gradient(ellipse at 30% 20%, #0D1B2A 0%, #050A0F 60%, #02050A 100%);
+  overflow-x: hidden;
 }
 
 * {
@@ -34,22 +33,106 @@ button {
   font-family: inherit;
 }
 
-/* Utility classes for premium effects */
+/* ─── Scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #050A0F; }
+::-webkit-scrollbar-thumb { background: #1E3A5F; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2A4F80; }
+
+/* ─── Selection ─────────────────────────────── */
+::selection { background: rgba(245, 158, 11, 0.25); color: #FBBF24; }
+
+/* ─── Custom utilities ──────────────────────── */
 @layer utilities {
   .text-outline {
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
   }
 
   .glow-win {
-    animation: glow-pulse 1.5s ease-in-out infinite;
+    animation: glowPulse 2s ease-in-out infinite;
   }
 
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+  .glow-gold {
+    animation: glowPulseGold 2s ease-in-out infinite;
   }
 
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Glass morphism panels */
+  .glass {
+    background: rgba(13, 27, 42, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(30, 58, 95, 0.5);
+  }
+
+  .glass-light {
+    background: rgba(22, 40, 64, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(42, 79, 128, 0.35);
+  }
+
+  /* Card perspective for flip animation */
+  .card-perspective {
+    perspective: 1000px;
+  }
+
+  .card-inner {
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+
+  .card-inner.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-front, .card-back {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+  }
+
+  /* Felt texture overlay */
+  .felt-texture {
+    background-image:
+      radial-gradient(ellipse at 50% 40%, rgba(15, 81, 50, 0.9) 0%, rgba(7, 53, 32, 0.95) 50%, rgba(4, 30, 18, 1) 100%);
+  }
+
+  /* Betting ring */
+  .bet-ring {
+    box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2), 0 0 16px rgba(255, 215, 0, 0.08);
+  }
+
+  /* Brand gradient text */
+  .text-brand-gradient {
+    background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* ─── Component layer ───────────────────────── */
+@layer components {
+  /* Chip base style */
+  .chip-base {
+    @apply relative flex items-center justify-center rounded-full font-display font-bold
+           shadow-chip cursor-pointer select-none transition-all duration-150;
+  }
+
+  /* Action button base */
+  .action-btn {
+    @apply font-display font-bold tracking-wide rounded-xl transition-all duration-150
+           active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-button;
+  }
+
+  /* Panel card */
+  .panel {
+    @apply glass rounded-2xl shadow-panel;
   }
 }
