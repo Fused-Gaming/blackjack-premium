@@ -53,6 +53,16 @@ The game will be available at `http://localhost:5173`
 - Split allowed on pairs (max 1 split per hand)
 - No surrender option
 
+## Social Preview Metadata
+
+The root endpoint (`https://demo.vln.gg/`) is configured with standardized social metadata for Open Graph and Twitter/X previews.
+
+- **OG image**: `/social/og-vln-demo.svg` (1200×630)
+- **Shared title**: `VLN Demo | Provably Fair Engine`
+- **Shared description**: `Security-grade live interactive demo for transparent RNG and provably fair gameplay.`
+
+To update social preview branding, replace `public/social/og-vln-demo.svg` and keep the same dimensions.
+
 ## Development
 
 ```bash

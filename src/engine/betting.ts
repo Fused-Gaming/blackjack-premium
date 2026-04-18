@@ -61,7 +61,41 @@ export function placeBet(
   amount: number,
   config: BettingConfig = DEFAULT_BETTING_CONFIG
 ): BetResult {
-  // Validate the bet using existing validation function
+  // Preserve legacy error ordering expected by tests and existing integrations.
+  if (Number.isNaN(amount)) {
+    return {
+      success: false,
+      newBalance: balance,
+      error: 'Invalid bet amount',
+    };
+  }
+
+  if (amount < config.minBet) {
+    return {
+      success: false,
+      newBalance: balance,
+      error: `Minimum bet is ${config.minBet}`,
+    };
+  }
+
+  if (amount > config.maxBet) {
+    return {
+      success: false,
+      newBalance: balance,
+      error: `Maximum bet is ${config.maxBet}`,
+    };
+  }
+
+  // Non-finite values not covered above (e.g., -Infinity in custom configs).
+  if (!Number.isFinite(amount)) {
+    return {
+      success: false,
+      newBalance: balance,
+      error: 'Invalid bet amount',
+    };
+  }
+
+  // Validate remaining cases (including insufficient balance).
   const validation = validateBet(amount, balance, config.minBet, config.maxBet);
 
   if (!validation.valid) {

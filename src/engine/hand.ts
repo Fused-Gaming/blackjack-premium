@@ -227,6 +227,13 @@ export function compareHands(
   playerCards: Card[] | Hand,
   dealerCards: Card[]
 ): 'win' | 'loss' | 'push' | 'blackjack' {
+  const playerHand = Array.isArray(playerCards)
+    ? {
+        cards: playerCards,
+        isSplit: false,
+      }
+    : playerCards;
+
   const playerValue = evaluateHand(playerHand.cards, playerHand.isSplit);
   const dealerValue = evaluateHand(dealerCards, false); // Dealer never splits
 
