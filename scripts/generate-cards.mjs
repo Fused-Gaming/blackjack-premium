@@ -83,7 +83,6 @@ function cardSVG(rank, suit) {
   const rankDisp = display(rank);
   const isFace  = ['j','q','k'].includes(rank);
   const isAce   = rank === 'a';
-  const isNum   = !isFace && !isAce;
 
   // Corner font size adjusts for "10"
   const cornerRankSize = rank === '10' ? 12 : 14;
