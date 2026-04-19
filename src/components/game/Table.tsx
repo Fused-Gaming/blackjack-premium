@@ -2,6 +2,7 @@ import { Hand } from './Hand';
 import { useGameStore } from '../../store/gameStore';
 import { ActionButtons } from '../controls/ActionButtons';
 import { BetControls } from '../controls/BetControls';
+import { InsurancePrompt } from '../controls/InsurancePrompt';
 import { StatusBar } from '../layout/StatusBar';
 import { evaluateHand } from '../../engine/hand';
 
@@ -15,6 +16,9 @@ export function Table() {
     <div className="min-h-screen flex flex-col bg-background">
       {/* Premium Status Bar */}
       <StatusBar />
+
+      {/* Insurance Prompt Modal */}
+      <InsurancePrompt />
 
       {/* Main Game Area */}
       <div className="flex-1 flex items-center justify-center p-4 md:p-8">
