@@ -1,10 +1,12 @@
 import { create } from 'zustand';
-import type { GameState, Card } from '../types';
+import type { GameState, Card, GameHistory } from '../types';
 import { createShoe, shuffleDeck, dealCard } from '../engine/deck';
 import { createHand, addCardToHand, evaluateHand, compareHands, splitHand, doubleDownHand } from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
 
 interface GameStore extends GameState {
+  history: GameHistory[];
+
   // Public Actions
   placeBet: (seatId: string, amount: number) => void;
   startGame: () => void;
@@ -16,12 +18,14 @@ interface GameStore extends GameState {
   declineInsurance: () => void;
   resetGame: () => void;
   setMessage: (message: string) => void;
+  clearHistory: () => void;
 
   // Internal Helper Methods
   checkForBlackjacks: () => void;
   settleBets: () => void;
   moveToNextHand: () => void;
   playDealerTurn: () => void;
+  recordGameResult: (bet: number, payout: number, balanceBefore: number) => void;
 }
 
 const INITIAL_BALANCE = 10000;
@@ -43,6 +47,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   insuranceBets: {},
   balance: INITIAL_BALANCE,
   message: 'Place your bets',
+  history: [],
 
   // Actions
   placeBet: (seatId: string, amount: number) => {
@@ -358,21 +363,47 @@ export const useGameStore = create<GameStore>((set, get) => ({
   settleBets: () => {
     const state = get();
     let totalPayout = 0;
+    let totalBet = 0;
 
     for (const seat of Object.values(state.playerSeats)) {
       if (!seat.active) continue;
 
       for (const hand of seat.hands) {
+        totalBet += hand.bet;
         const outcome = compareHands(hand, state.dealerHand);
         const payout = calculatePayout(hand, outcome);
         totalPayout += payout;
       }
     }
 
+    const newBalance = state.balance + totalPayout;
     set({
-      balance: state.balance + totalPayout,
+      balance: newBalance,
       message: `Round complete. Payout: ${totalPayout}`,
     });
+
+    // Record game result in history
+    get().recordGameResult(totalBet, totalPayout, state.balance);
+  },
+
+  recordGameResult: (bet: number, payout: number, balanceBefore: number) => {
+    const state = get();
+    const gameResult: GameHistory = {
+      id: `game-${Date.now()}`,
+      timestamp: Date.now(),
+      totalBet: bet,
+      totalPayout: payout,
+      results: [],
+      balanceAfter: balanceBefore + payout,
+    };
+
+    set({
+      history: [...state.history, gameResult],
+    });
+  },
+
+  clearHistory: () => {
+    set({ history: [] });
   },
 
   resetGame: () => {

@@ -60,6 +60,15 @@ export interface GameResult {
   timestamp: number;
 }
 
+export interface GameHistory {
+  id: string;
+  timestamp: number;
+  totalBet: number;
+  totalPayout: number;
+  results: GameResult[];
+  balanceAfter: number;
+}
+
 export interface BetAmount {
   seatId: string;
   amount: number;
