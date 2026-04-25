@@ -12,6 +12,8 @@ import {
 } from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
 
+const BLACKJACK_CHECK_DELAY = 100;
+
 interface GameStore extends GameState {
   // Public Actions
   placeBet: (seatId: string, amount: number) => void;
@@ -129,7 +131,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!shouldOfferInsurance) {
       setTimeout(() => {
         get().checkForBlackjacks();
-      }, 100);
+      }, BLACKJACK_CHECK_DELAY);
     }
   },
 
@@ -137,11 +139,42 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const state = get();
     const dealerValue = evaluateHand(state.dealerHand, false); // Dealer never splits
 
-    if (dealerValue.isBlackjack) {
-      // Dealer has blackjack, end game
-      set({ phase: 'complete', message: 'Dealer Blackjack!' });
+        if (dealerHasBlackjack) {
+          // Push on player blackjack vs dealer blackjack
+          return { ...hand, status: 'stand' as typeof hand.status };
+        }
+
+        // Player natural blackjack pays 3:2
+        blackjackPayoutTotal += calculatePayout(hand.bet, 'blackjack');
+        return { ...hand, status: 'stand' as typeof hand.status };
+      });
+    });
+
+    if (dealerHasBlackjack) {
+      set({
+        playerSeats: updatedSeats,
+        phase: 'complete',
+        message: hasAnyPlayerBlackjack ? 'Blackjack push on matching hands' : 'Dealer Blackjack!',
+      });
       get().settleBets();
+      return;
     }
+
+    if (hasAnyPlayerBlackjack) {
+      set({
+        playerSeats: updatedSeats,
+        balance: state.balance + blackjackPayoutTotal,
+        phase: hasAnyPlayableHand ? 'playing' : 'complete',
+        message: hasAnyPlayableHand ? 'Blackjack paid (3:2). Continue playing.' : 'Blackjack paid (3:2)!',
+      });
+
+      if (!hasAnyPlayableHand) {
+        get().settleBets();
+      }
+      return;
+    }
+
+    set({ phase: 'playing', message: 'Choose Hit or Stand' });
   },
 
   hit: () => {
@@ -219,8 +252,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const doubledHand = doubleDownHand(currentHand, true); // Allow double after split
     const result = dealCard(state.deck, true);
-    const finalHand = addCardToHand(doubledHand, result.card);
-    finalHand.status = 'stand';
+    const finalHand = { ...addCardToHand(doubledHand, result.card), status: 'stand' as const };
 
     set({
       deck: result.remainingDeck,
@@ -405,9 +437,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    const dealerResult = evaluateHand(state.dealerHand);
+    const dealerHasBlackjack = dealerResult.isBlackjack;
+    let insuranceNet = 0;
+
+    for (const amount of Object.values(state.insuranceBets)) {
+      if (dealerHasBlackjack) {
+        // Insurance pays 2:1 when dealer has blackjack
+        insuranceNet += amount * 2;
+      }
+    }
+
+    const roundTotal = totalPayout + insuranceNet;
+
     set({
-      balance: state.balance + totalPayout,
-      message: `Round complete. Payout: ${totalPayout}`,
+      balance: state.balance + roundTotal,
+      insuranceBets: {},
+      message: `Round complete. Payout: ${totalPayout}${insuranceNet !== 0 ? `, Insurance: ${insuranceNet}` : ''}`,
     });
   },
 
