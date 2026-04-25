@@ -209,8 +209,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const doubledHand = doubleDownHand(currentHand);
     const result = dealCard(state.deck, true);
-    const finalHand = addCardToHand(doubledHand, result.card);
-    finalHand.status = 'stand';
+    const finalHand = { ...addCardToHand(doubledHand, result.card), status: 'stand' as const };
 
     set({
       deck: result.remainingDeck,
