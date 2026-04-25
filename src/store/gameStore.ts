@@ -4,6 +4,8 @@ import { createShoe, shuffleDeck, dealCard } from '../engine/deck';
 import { createHand, addCardToHand, evaluateHand, compareHands, splitHand, doubleDownHand } from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
 
+const BLACKJACK_CHECK_DELAY = 100;
+
 interface GameStore extends GameState {
   // Public Actions
   placeBet: (seatId: string, amount: number) => void;
@@ -121,7 +123,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (!shouldOfferInsurance) {
       setTimeout(() => {
         get().checkForBlackjacks();
-      }, 100);
+      }, BLACKJACK_CHECK_DELAY);
     }
   },
 
