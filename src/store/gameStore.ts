@@ -369,9 +369,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
     }
 
+    const dealerResult = evaluateHand(state.dealerHand);
+    const dealerHasBlackjack = dealerResult.isBlackjack;
+    let insuranceNet = 0;
+
+    for (const amount of Object.values(state.insuranceBets)) {
+      if (dealerHasBlackjack) {
+        // Insurance pays 2:1 when dealer has blackjack
+        insuranceNet += amount * 2;
+      }
+    }
+
+    const roundTotal = totalPayout + insuranceNet;
+
     set({
-      balance: state.balance + totalPayout,
-      message: `Round complete. Payout: ${totalPayout}`,
+      balance: state.balance + roundTotal,
+      insuranceBets: {},
+      message: `Round complete. Payout: ${totalPayout}${insuranceNet !== 0 ? `, Insurance: ${insuranceNet}` : ''}`,
     });
   },
 
