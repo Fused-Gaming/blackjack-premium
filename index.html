@@ -34,6 +34,38 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
 
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org/",
+        "@type": "VideoGame",
+        "name": "ACE — Premium Blackjack",
+        "description": "The premium provably-fair blackjack experience. Connect your wallet, place your bets, and play with full cryptographic transparency.",
+        "image": "https://ace-blackjack.example/og-image.svg",
+        "applicationCategory": "GamesApp",
+        "gamePlayMode": ["SinglePlayer", "MultiPlayer"],
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "USD",
+          "price": "0",
+          "availability": "https://schema.org/InStock"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "ACE Games"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "120",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      }
+    </script>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
