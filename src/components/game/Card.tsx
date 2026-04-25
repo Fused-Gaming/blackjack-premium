@@ -1,76 +1,73 @@
 import { motion } from 'framer-motion';
 import type { Card as CardType } from '../../types';
+import { getCardCode, getCardAsset, getCardBackAsset, dealJitter } from '../../utils/cardAssets';
 
 interface CardProps {
   card: CardType;
   index?: number;
+  /** Override deal-in delay (seconds). Defaults to stagger + jitter. */
   delay?: number;
+  compact?: boolean;
 }
 
-export function Card({ card, index = 0, delay = 0 }: CardProps) {
-  const isRed = card.suit === '♥' || card.suit === '♦';
+// Card dimensions
+const SIZE = {
+  normal:  { width: 80,  height: 112 },
+  compact: { width: 64,  height: 90  },
+} as const;
 
-  if (!card.faceUp) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, x: -200, y: -100, rotate: -25, scale: 0.8 }}
-        animate={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 }}
-        transition={{
-          duration: 0.5,
-          delay,
-          type: 'spring',
-          stiffness: 100,
-        }}
-        className="relative w-20 h-28 md:w-24 md:h-32 rounded-lg shadow-card"
-        style={{ marginLeft: index * -40 }}
-      >
-        {/* Card back design */}
-        <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary via-primary-dark to-blue-900 border-2 border-primary-light overflow-hidden">
-          {/* Pattern */}
-          <div className="absolute inset-2 border-2 border-primary-light/30 rounded" />
-          <div className="absolute inset-4 border-2 border-primary-light/20 rounded" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-10 md:w-10 md:h-12 border-4 border-white/20 rounded opacity-40" />
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
+export function Card({ card, index = 0, delay, compact = false }: CardProps) {
+  const code    = getCardCode(card);
+  const state   = card.faceUp ? 'faceUp' : 'faceDown';
+  const { width, height } = compact ? SIZE.compact : SIZE.normal;
+
+  // Stagger each card's deal-in, with perception-safe random jitter so no
+  // card identity can be inferred from animation timing.
+  const dealDelay = delay ?? dealJitter(index);
+
+  // Negative left margin to fan/overlap cards
+  const marginLeft = index > 0 ? (compact ? -28 : -44) : 0;
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -200, y: -100, rotate: -25, scale: 0.8 }}
-      animate={{
-        opacity: 1,
-        x: 0,
-        y: 0,
-        rotate: 0,
-        scale: 1,
-      }}
+      initial={{ opacity: 0, x: -220, y: -110, rotate: -28, scale: 0.75 }}
+      animate={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 }}
       transition={{
         duration: 0.5,
-        delay,
+        delay: dealDelay,
         type: 'spring',
-        stiffness: 100,
+        stiffness: 110,
+        damping: 14,
       }}
-      className="relative w-20 h-28 md:w-24 md:h-32 rounded-lg bg-white shadow-card flex flex-col justify-between p-1.5 md:p-2"
-      style={{ marginLeft: index * -40 }}
+      style={{ marginLeft, width, height, flexShrink: 0 }}
     >
-      {/* Top corner */}
-      <div className={`text-base md:text-lg font-bold leading-none ${isRed ? 'text-red-600' : 'text-black'}`}>
-        <div>{card.rank}</div>
-        <div className="text-xl md:text-2xl">{card.suit}</div>
-      </div>
-
-      {/* Center suit */}
-      <div className={`text-3xl md:text-5xl text-center leading-none ${isRed ? 'text-red-600' : 'text-black'}`}>
-        {card.suit}
-      </div>
-
-      {/* Bottom corner (rotated) */}
-      <div className={`text-base md:text-lg font-bold text-right leading-none transform rotate-180 ${isRed ? 'text-red-600' : 'text-black'}`}>
-        <div className="text-xl md:text-2xl">{card.suit}</div>
-        <div>{card.rank}</div>
+      {/*
+       * .card    — perspective container
+       * .faceUp  — class toggle drives the CSS flip (no outcome logic here)
+       * .card-inner — 3D-transformed layer
+       * .card-front — face image (starts rotated 180°, revealed on flip)
+       * .card-back  — back image (visible by default)
+       */}
+      <div
+        className={`card ${state}`}
+        style={{ width, height, borderRadius: 6 }}
+      >
+        <div className="card-inner">
+          <img
+            className="card-front"
+            src={getCardAsset(code)}
+            alt={`${card.rank} of ${code.slice(-1)}`}
+            draggable={false}
+            loading="eager"
+          />
+          <img
+            className="card-back"
+            src={getCardBackAsset()}
+            alt="card back"
+            draggable={false}
+            loading="eager"
+          />
+        </div>
       </div>
     </motion.div>
   );
