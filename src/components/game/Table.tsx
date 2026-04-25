@@ -162,7 +162,20 @@ export function Table() {
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -16 }}
-                      className="flex flex-col items-center gap-3"
+                      className={`flex flex-col items-center gap-3 ${
+                        seat.hands.length > 1
+                          ? 'px-4 py-4 rounded-2xl border-2 border-dashed'
+                          : ''
+                      }`}
+                      style={
+                        seat.hands.length > 1
+                          ? {
+                              borderColor: seat.currentHandIndex === index ? 'rgba(251, 191, 36, 0.4)' : 'rgba(255, 255, 255, 0.1)',
+                              backgroundColor:
+                                seat.currentHandIndex === index ? 'rgba(251, 191, 36, 0.05)' : 'transparent',
+                            }
+                          : undefined
+                      }
                     >
                       <Hand
                         hand={hand}
