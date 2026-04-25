@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
 import { WalletButton } from '../wallet/WalletButton';
+import { SoundToggle } from '../ui/SoundToggle';
 
 export function Header() {
   const { balance, message } = useGameStore();
@@ -50,7 +51,7 @@ export function Header() {
             </AnimatePresence>
           </div>
 
-          {/* ── Right: Balance + Wallet ── */}
+          {/* ── Right: Balance + Sound + Wallet ── */}
           <div className="flex items-center gap-3 shrink-0">
             {/* Balance pill */}
             <motion.div
@@ -67,6 +68,10 @@ export function Header() {
 
             <div className="w-px h-8 bg-border hidden sm:block" />
 
+            {/* Sound Toggle */}
+            <SoundToggle />
+
+            {/* Wallet Button */}
             <WalletButton />
           </div>
         </div>

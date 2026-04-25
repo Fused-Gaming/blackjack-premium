@@ -1,10 +1,22 @@
 import { create } from 'zustand';
-import type { GameState, Card } from '../types';
+import type { GameState, Card, Settings } from '../types';
 import { createShoe, shuffleDeck, dealCard } from '../engine/deck';
 import { createHand, addCardToHand, evaluateHand, compareHands, splitHand, doubleDownHand } from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
 
 interface GameStore extends GameState {
+  // Settings
+  soundEnabled: boolean;
+  musicEnabled: boolean;
+  animationSpeed: 'slow' | 'normal' | 'fast';
+  theme: 'dark' | 'light';
+
+  // Settings Actions
+  setSoundEnabled: (enabled: boolean) => void;
+  setMusicEnabled: (enabled: boolean) => void;
+  setAnimationSpeed: (speed: 'slow' | 'normal' | 'fast') => void;
+  setTheme: (theme: 'dark' | 'light') => void;
+
   // Public Actions
   placeBet: (seatId: string, amount: number) => void;
   startGame: () => void;
@@ -26,23 +38,107 @@ interface GameStore extends GameState {
 
 const INITIAL_BALANCE = 10000;
 
-export const useGameStore = create<GameStore>((set, get) => ({
-  // Initial state
-  phase: 'idle',
-  deck: [],
-  dealerHand: [],
-  playerSeats: {
-    seat1: {
-      id: 'seat1',
-      hands: [createHand()],
-      active: false,
-      currentHandIndex: 0,
+// Load settings from localStorage
+const loadSettings = () => {
+  if (typeof window === 'undefined') return {
+    soundEnabled: true,
+    musicEnabled: false,
+    animationSpeed: 'normal' as const,
+    theme: 'dark' as const,
+  };
+
+  try {
+    const stored = localStorage.getItem('blackjack-settings');
+    if (stored) {
+      return JSON.parse(stored) as Settings;
+    }
+  } catch {
+    // Fall back to defaults
+  }
+
+  return {
+    soundEnabled: true,
+    musicEnabled: false,
+    animationSpeed: 'normal' as const,
+    theme: 'dark' as const,
+  };
+};
+
+export const useGameStore = create<GameStore>((set, get) => {
+  const initialSettings = loadSettings();
+
+  return {
+    // Initial state
+    phase: 'idle',
+    deck: [],
+    dealerHand: [],
+    playerSeats: {
+      seat1: {
+        id: 'seat1',
+        hands: [createHand()],
+        active: false,
+        currentHandIndex: 0,
+      },
     },
-  },
-  activeSeatId: null,
-  insuranceBets: {},
-  balance: INITIAL_BALANCE,
-  message: 'Place your bets',
+    activeSeatId: null,
+    insuranceBets: {},
+    balance: INITIAL_BALANCE,
+    message: 'Place your bets',
+
+    // Settings
+    soundEnabled: initialSettings.soundEnabled,
+    musicEnabled: initialSettings.musicEnabled,
+    animationSpeed: initialSettings.animationSpeed,
+    theme: initialSettings.theme,
+
+    // Settings Actions
+    setSoundEnabled: (enabled: boolean) => {
+      set({ soundEnabled: enabled });
+      const current = get();
+      const settings = {
+        soundEnabled: enabled,
+        musicEnabled: current.musicEnabled,
+        animationSpeed: current.animationSpeed,
+        theme: current.theme,
+      };
+      localStorage.setItem('blackjack-settings', JSON.stringify(settings));
+    },
+
+    setMusicEnabled: (enabled: boolean) => {
+      set({ musicEnabled: enabled });
+      const current = get();
+      const settings = {
+        soundEnabled: current.soundEnabled,
+        musicEnabled: enabled,
+        animationSpeed: current.animationSpeed,
+        theme: current.theme,
+      };
+      localStorage.setItem('blackjack-settings', JSON.stringify(settings));
+    },
+
+    setAnimationSpeed: (speed: 'slow' | 'normal' | 'fast') => {
+      set({ animationSpeed: speed });
+      const current = get();
+      const settings = {
+        soundEnabled: current.soundEnabled,
+        musicEnabled: current.musicEnabled,
+        animationSpeed: speed,
+        theme: current.theme,
+      };
+      localStorage.setItem('blackjack-settings', JSON.stringify(settings));
+    },
+
+    setTheme: (theme: 'dark' | 'light') => {
+      set({ theme });
+      const current = get();
+      const settings = {
+        soundEnabled: current.soundEnabled,
+        musicEnabled: current.musicEnabled,
+        animationSpeed: current.animationSpeed,
+        theme,
+      };
+      localStorage.setItem('blackjack-settings', JSON.stringify(settings));
+    },
 
   // Actions
   placeBet: (seatId: string, amount: number) => {
@@ -394,5 +490,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  setMessage: (message: string) => set({ message }),
-}));
+    setMessage: (message: string) => set({ message }),
+  };
+});
