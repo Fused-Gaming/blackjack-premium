@@ -177,7 +177,19 @@ describe('Hand Functions', () => {
       expect(canDouble(hand)).toBe(false);
     });
 
-    it('should not allow double on split hand when house rule disables it', () => {
+    it('should not allow double when already doubled', () => {
+      const hand: Hand = {
+        cards: [createCard('5'), createCard('6')],
+        bet: 20,
+        status: 'playing',
+        isDouble: true,
+        isSplit: false,
+      };
+
+      expect(canDouble(hand)).toBe(false);
+    });
+
+    it('should not allow double on split hand', () => {
       const hand: Hand = {
         cards: [createCard('8'), createCard('8')],
         bet: 10,
@@ -186,7 +198,7 @@ describe('Hand Functions', () => {
         isSplit: true,
       };
 
-      expect(canDouble(hand, false)).toBe(false);
+      expect(canDouble(hand)).toBe(false);
     });
   });
 
