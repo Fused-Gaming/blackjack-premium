@@ -3,6 +3,7 @@ import type { GameState, Card, GameHistory } from '../types';
 import { createShoe, shuffleDeck, dealCard } from '../engine/deck';
 import { createHand, addCardToHand, evaluateHand, compareHands, splitHand, doubleDownHand } from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
+import { soundEffects } from '../utils/soundEffects';
 
 interface GameStore extends GameState {
   history: GameHistory[];
@@ -95,6 +96,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const result1 = dealCard(deck, true);
         const result2 = dealCard(result1.remainingDeck, true);
 
+        soundEffects.dealCard();
+        setTimeout(() => soundEffects.dealCard(), 200);
+
         updatedSeats[seatId].hands[0] = addCardToHand(
           addCardToHand(updatedSeats[seatId].hands[0], result1.card),
           result2.card
@@ -145,6 +149,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const state = get();
     if (state.phase !== 'playing' || !state.activeSeatId) return;
 
+    soundEffects.hit();
+    soundEffects.dealCard();
+
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
 
@@ -171,6 +178,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       message: handValue.isBust ? 'Bust!' : `Hand value: ${handValue.value}`,
     });
 
+    // Play bust sound if busted
+    if (handValue.isBust) {
+      setTimeout(() => soundEffects.bust(), 100);
+    }
+
     // Auto-proceed if hand is complete
     if (handValue.isBust || handValue.value === 21) {
       setTimeout(() => {
@@ -182,6 +194,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   stand: () => {
     const state = get();
     if (state.phase !== 'playing' || !state.activeSeatId) return;
+
+    soundEffects.stand();
 
     const seat = state.playerSeats[state.activeSeatId];
     const updatedHand = { ...seat.hands[seat.currentHandIndex], status: 'stand' as const };
@@ -203,6 +217,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   double: () => {
     const state = get();
     if (state.phase !== 'playing' || !state.activeSeatId) return;
+
+    soundEffects.double();
+    soundEffects.dealCard();
 
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
@@ -238,6 +255,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   split: () => {
     const state = get();
     if (state.phase !== 'playing' || !state.activeSeatId) return;
+
+    soundEffects.split();
+    soundEffects.dealCard();
 
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
@@ -283,6 +303,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ message: 'Insufficient balance for insurance' });
       return;
     }
+
+    soundEffects.insurance();
 
     set({
       insuranceBets: { ...state.insuranceBets, [seatId]: insuranceAmount },
@@ -364,6 +386,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const state = get();
     let totalPayout = 0;
     let totalBet = 0;
+    let hasWin = false;
+    let hasLoss = false;
+    let hasPush = false;
+    let hasBlackjack = false;
 
     for (const seat of Object.values(state.playerSeats)) {
       if (!seat.active) continue;
@@ -373,6 +399,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const outcome = compareHands(hand, state.dealerHand);
         const payout = calculatePayout(hand, outcome);
         totalPayout += payout;
+
+        if (outcome === 'blackjack') {
+          hasBlackjack = true;
+          hasWin = true;
+        } else if (outcome === 'win') {
+          hasWin = true;
+        } else if (outcome === 'loss') {
+          hasLoss = true;
+        } else if (outcome === 'push') {
+          hasPush = true;
+        }
       }
     }
 
@@ -381,6 +418,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       balance: newBalance,
       message: `Round complete. Payout: ${totalPayout}`,
     });
+
+    // Play outcome sound
+    if (hasBlackjack) {
+      soundEffects.blackjack();
+    } else if (hasWin) {
+      soundEffects.win();
+    } else if (hasLoss && !hasWin) {
+      soundEffects.loss();
+    } else if (hasPush) {
+      soundEffects.push();
+    }
 
     // Record game result in history
     get().recordGameResult(totalBet, totalPayout, state.balance);
