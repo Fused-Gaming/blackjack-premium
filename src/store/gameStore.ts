@@ -128,12 +128,63 @@ export const useGameStore = create<GameStore>((set, get) => ({
   checkForBlackjacks: () => {
     const state = get();
     const dealerValue = evaluateHand(state.dealerHand);
+    const dealerHasBlackjack = dealerValue.isBlackjack;
 
-    if (dealerValue.isBlackjack) {
-      // Dealer has blackjack, end game
-      set({ phase: 'complete', message: 'Dealer Blackjack!' });
+    const updatedSeats = { ...state.playerSeats };
+    let hasAnyPlayerBlackjack = false;
+    let hasAnyPlayableHand = false;
+    let blackjackPayoutTotal = 0;
+
+    Object.values(updatedSeats).forEach(seat => {
+      if (!seat.active) return;
+
+      seat.hands = seat.hands.map(hand => {
+        const handValue = evaluateHand(hand.cards);
+        const isNaturalBlackjack = hand.cards.length === 2 && handValue.isBlackjack;
+
+        if (!isNaturalBlackjack) {
+          if (hand.status === 'playing') hasAnyPlayableHand = true;
+          return hand;
+        }
+
+        hasAnyPlayerBlackjack = true;
+
+        if (dealerHasBlackjack) {
+          // Push on player blackjack vs dealer blackjack
+          return { ...hand, status: 'stand' as typeof hand.status };
+        }
+
+        // Player natural blackjack pays 3:2
+        blackjackPayoutTotal += calculatePayout(hand.bet, 'blackjack');
+        return { ...hand, status: 'stand' as typeof hand.status };
+      });
+    });
+
+    if (dealerHasBlackjack) {
+      set({
+        playerSeats: updatedSeats,
+        phase: 'complete',
+        message: hasAnyPlayerBlackjack ? 'Blackjack push on matching hands' : 'Dealer Blackjack!',
+      });
       get().settleBets();
+      return;
     }
+
+    if (hasAnyPlayerBlackjack) {
+      set({
+        playerSeats: updatedSeats,
+        balance: state.balance + blackjackPayoutTotal,
+        phase: hasAnyPlayableHand ? 'playing' : 'complete',
+        message: hasAnyPlayableHand ? 'Blackjack paid (3:2). Continue playing.' : 'Blackjack paid (3:2)!',
+      });
+
+      if (!hasAnyPlayableHand) {
+        get().settleBets();
+      }
+      return;
+    }
+
+    set({ phase: 'playing', message: 'Choose Hit or Stand' });
   },
 
   hit: () => {
