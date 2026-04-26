@@ -177,7 +177,7 @@ describe('Hand Functions', () => {
       expect(canDouble(hand)).toBe(false);
     });
 
-    it('should not allow double on split hand', () => {
+    it('should not allow double on split hand when explicitly disabled', () => {
       const hand: Hand = {
         cards: [createCard('8'), createCard('8')],
         bet: 10,
@@ -186,7 +186,19 @@ describe('Hand Functions', () => {
         isSplit: true,
       };
 
-      expect(canDouble(hand)).toBe(false);
+      expect(canDouble(hand, false)).toBe(false);
+    });
+
+    it('should allow double on split hand when enabled', () => {
+      const hand: Hand = {
+        cards: [createCard('8'), createCard('8')],
+        bet: 10,
+        status: 'playing',
+        isDouble: false,
+        isSplit: true,
+      };
+
+      expect(canDouble(hand, true)).toBe(true);
     });
   });
 

@@ -87,7 +87,7 @@ export function canSplit(
  * @param allowDoubleAfterSplit - Whether doubling is allowed after split (default: true)
  * @returns True if the hand can be doubled down
  */
-export function canDouble(hand: Hand, allowDoubleAfterSplit: boolean = false): boolean {
+export function canDouble(hand: Hand, allowDoubleAfterSplit: boolean = true): boolean {
   if (hand.cards.length !== 2) return false;
   if (hand.isDouble) return false;
   if (hand.isSplit && !allowDoubleAfterSplit) return false;
