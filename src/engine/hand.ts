@@ -219,7 +219,7 @@ export function doubleDownHand(hand: Hand, allowDoubleAfterSplit: boolean = true
 
 /**
  * Compare player hand to dealer hand and determine outcome
- * @param playerHand - The player's hand
+ * @param playerCards - The player's hand (cards array or Hand object)
  * @param dealerCards - The dealer's cards
  * @returns The outcome of the comparison
  */
