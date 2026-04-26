@@ -3,24 +3,156 @@
 @tailwind utilities;
 
 :root {
-  /* ── Card animation design tokens ── */
-  --card-flip-duration: 600ms;
-  --card-flip-easing:   cubic-bezier(0.4, 0, 0.2, 1);
-  --card-deal-duration: 500ms;
-  --card-deal-easing:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* ════════════════════════════════════════════════════════════════════════════════
+     DESIGN SYSTEM - ACE Brand (Amber, Casino, Elegant)
+     Dark Premium SaaS Casino UI — All values in CSS custom properties
+     ════════════════════════════════════════════════════════════════════════════════ */
 
-  font-family: 'Inter', system-ui, sans-serif;
+  /* ── TYPOGRAPHY & RENDERING ── */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: dark;
   color: #E2E8F0;
   background-color: #050A0F;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* ── COLOR TOKENS: NEUTRALS ── */
+  --color-white: #F8FAFC;
+  --color-gray-100: #F1F5F9;
+  --color-gray-200: #E2E8F0;
+  --color-gray-300: #CBD5E1;
+  --color-gray-400: #94A3B8;
+  --color-gray-500: #64748B;
+  --color-gray-600: #475569;
+  --color-gray-700: #334155;
+  --color-gray-800: #1E293B;
+  --color-gray-900: #0F172A;
+  --color-black: #000000;
+
+  /* ── COLOR TOKENS: BRAND (ACE - Amber) ── */
+  --color-amber-50: #FFFBEB;
+  --color-amber-100: #FEF3C7;
+  --color-amber-200: #FDE68A;
+  --color-amber-300: #FCD34D;
+  --color-amber-400: #FBBF24;
+  --color-amber-500: #F59E0B;
+  --color-amber-600: #D97706;
+  --color-amber-700: #B45309;
+  --color-amber-800: #92400E;
+  --color-amber-900: #78350F;
+
+  /* ── COLOR TOKENS: SEMANTIC OUTCOMES ── */
+  --color-success: #10B981;
+  --color-success-dark: #059669;
+  --color-success-glow: #34D399;
+  --color-success-muted: #064E3B;
+
+  --color-error: #EF4444;
+  --color-error-dark: #DC2626;
+  --color-error-glow: #F87171;
+  --color-error-muted: #450A0A;
+
+  --color-warning: #F59E0B;
+  --color-warning-muted: #451A03;
+
+  /* ── COLOR TOKENS: BACKGROUNDS (Dark Theme) ── */
+  --bg-primary: #050A0F;
+  --bg-secondary: #0D1B2A;
+  --bg-tertiary: #111F30;
+  --bg-quaternary: #162840;
+  --bg-table: #0A3D26;
+  --bg-overlay: rgba(5, 10, 15, 0.8);
+
+  /* ── COLOR TOKENS: BORDERS ── */
+  --border-default: #1E3A5F;
+  --border-subtle: #132538;
+  --border-bright: #2A4F80;
+
+  /* ── TEXT COLORS ── */
+  --text-primary: #E2E8F0;
+  --text-secondary: #64748B;
+  --text-tertiary: #475569;
+  --text-bright: #F8FAFC;
+  --text-gold: #F59E0B;
+  --text-mono: #94A3B8;
+
+  /* ── SPACING (4px base unit) ── */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* ── TYPOGRAPHY SCALE ── */
+  --text-2xs: 0.625rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* ── BORDER RADIUS ── */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+
+  /* ── TRANSITIONS ── */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  --duration-slowest: 800ms;
+
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── SHADOW TOKENS ── */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.7);
+
+  /* Game-specific shadows */
+  --shadow-felt: inset 0 0 60px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0,0,0,0.3);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-chip: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18);
+
+  /* ── CARD ANIMATION TOKENS ── */
+  --card-flip-duration: 600ms;
+  --card-flip-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --card-deal-duration: 500ms;
+  --card-deal-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── CHIP DENOMINATIONS ── */
+  --chip-1-color: #6B7280;
+  --chip-5-color: #EF4444;
+  --chip-10-color: #3B82F6;
+  --chip-25-color: #F59E0B;
+  --chip-50-color: #10B981;
+  --chip-100-color: #1a1a1a;
+  --chip-500-color: #7C3AED;
 }
 
 body {
