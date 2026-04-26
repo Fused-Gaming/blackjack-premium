@@ -162,6 +162,18 @@ describe('Hand Functions', () => {
         isSplit: false,
       };
 
+      expect(canDouble(hand, false)).toBe(false);
+    });
+
+    it('should not allow double when already doubled', () => {
+      const hand: Hand = {
+        cards: [createCard('5'), createCard('6')],
+        bet: 20,
+        status: 'playing',
+        isDouble: true,
+        isSplit: false,
+      };
+
       expect(canDouble(hand)).toBe(false);
     });
 

@@ -88,3 +88,9 @@ Last Updated: 2026-01-20
 5. Build UI components
 6. Add animations and polish
 7. Local testing and iteration
+
+## Social Metadata Notes
+- Primary demo endpoint is `https://demo.vln.gg/`.
+- Keep social cards standardized between Open Graph and Twitter/X metadata in `index.html`.
+- Brand image path is `public/social/og-vln-demo.svg` at 1200x630.
+- If messaging changes, update title/description consistently across all social tags.

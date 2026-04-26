@@ -1,0 +1,76 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">VLN Demo — Provably Fair Engine</title>
+  <desc id="desc">Security-grade live interactive blackjack demo with transparent RNG verification.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#050A16" />
+      <stop offset="1" stop-color="#0B1022" />
+    </linearGradient>
+    <linearGradient id="accent" x1="184" y1="0" x2="628" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5AE0FF" />
+      <stop offset="1" stop-color="#7DE6FF" />
+    </linearGradient>
+    <linearGradient id="badge" x1="0" y1="0" x2="230" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D9B56E" />
+      <stop offset="1" stop-color="#8A6A33" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(850 380) rotate(90) scale(220 300)">
+      <stop stop-color="#3CCEFF" stop-opacity="0.45" />
+      <stop offset="1" stop-color="#3CCEFF" stop-opacity="0" />
+    </radialGradient>
+    <filter id="softShadow" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000814" flood-opacity="0.5" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <!-- Circuit/grid texture -->
+  <g opacity="0.24" stroke="#6E88C6" stroke-width="1">
+    <path d="M0 84H1200M0 168H1200M0 252H1200M0 336H1200M0 420H1200M0 504H1200" />
+    <path d="M140 0V630M280 0V630M420 0V630M560 0V630M700 0V630M840 0V630M980 0V630" />
+  </g>
+
+  <!-- Left content -->
+  <g filter="url(#softShadow)">
+    <text x="92" y="258" fill="#F6FAFF" font-size="84" font-family="Inter, Arial, sans-serif" font-weight="800" letter-spacing="-1.5">VLN Demo</text>
+    <text x="92" y="324" fill="url(#accent)" font-size="60" font-family="Inter, Arial, sans-serif" font-weight="700" letter-spacing="-1">Provably Fair Engine</text>
+    <line x1="92" y1="358" x2="628" y2="358" stroke="#2A3A63" stroke-width="2" />
+    <text x="92" y="412" fill="#B9C7E4" font-size="44" font-family="Inter, Arial, sans-serif" font-weight="500">Live Interactive Security Demo</text>
+  </g>
+
+  <!-- Security badge -->
+  <g transform="translate(890 86)">
+    <path d="M0 14C0 6.26801 6.26801 0 14 0H218L230 52H14C6.26801 52 0 45.732 0 38V14Z" fill="#0D152D" stroke="url(#badge)" stroke-width="3" />
+    <text x="26" y="35" fill="#F9FCFF" font-size="36" font-family="Inter, Arial, sans-serif" font-weight="800">SECURITY-GRADE</text>
+  </g>
+
+  <!-- Cards -->
+  <g filter="url(#softShadow)">
+    <rect x="700" y="190" width="180" height="250" rx="20" fill="#FDFEFF" transform="rotate(-8 700 190)" />
+    <text x="748" y="262" fill="#141B2D" font-size="62" font-family="Inter, Arial, sans-serif" font-weight="700">A♠</text>
+    <rect x="826" y="176" width="180" height="250" rx="20" fill="#FDFEFF" transform="rotate(7 826 176)" />
+    <text x="864" y="244" fill="#C3313B" font-size="62" font-family="Inter, Arial, sans-serif" font-weight="700">J♥</text>
+  </g>
+
+  <!-- RNG Hex -->
+  <g transform="translate(840 372)">
+    <polygon points="0,64 37,0 111,0 148,64 111,128 37,128" fill="#101C34" stroke="#64DCFF" stroke-width="4" />
+    <text x="39" y="79" fill="#F8FDFF" font-size="64" font-family="Inter, Arial, sans-serif" font-weight="800">RNG</text>
+  </g>
+
+  <!-- Chips -->
+  <g filter="url(#softShadow)">
+    <ellipse cx="730" cy="500" rx="84" ry="26" fill="#0A1020" opacity="0.5" />
+    <ellipse cx="840" cy="520" rx="84" ry="26" fill="#0A1020" opacity="0.5" />
+    <circle cx="728" cy="468" r="72" fill="#1A253D" stroke="#9FB7E3" stroke-width="8" />
+    <circle cx="728" cy="468" r="52" fill="#111A2D" />
+    <text x="680" y="488" fill="#FFFFFF" font-size="64" font-family="Inter, Arial, sans-serif" font-weight="800">100</text>
+
+    <circle cx="842" cy="490" r="72" fill="#1D5B4B" stroke="#B8DCCF" stroke-width="8" />
+    <circle cx="842" cy="490" r="52" fill="#144538" />
+    <text x="805" y="510" fill="#FFFFFF" font-size="64" font-family="Inter, Arial, sans-serif" font-weight="800">25</text>
+  </g>
+</svg>
