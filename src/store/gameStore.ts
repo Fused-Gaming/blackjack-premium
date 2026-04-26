@@ -1,7 +1,15 @@
 import { create } from 'zustand';
 import type { GameState, Card } from '../types';
 import { createShoe, shuffleDeck, dealCard } from '../engine/deck';
-import { createHand, addCardToHand, evaluateHand, compareHands, splitHand, doubleDownHand } from '../engine/hand';
+import {
+  createHand,
+  addCardToHand,
+  evaluateHand,
+  compareHands,
+  splitHand,
+  doubleDownHand,
+  canHit,
+} from '../engine/hand';
 import { calculatePayout } from '../engine/payouts';
 
 const BLACKJACK_CHECK_DELAY = 100;
@@ -129,7 +137,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   checkForBlackjacks: () => {
     const state = get();
-    const dealerValue = evaluateHand(state.dealerHand);
+    const dealerValue = evaluateHand(state.dealerHand, false); // Dealer never splits
     const dealerHasBlackjack = dealerValue.isBlackjack;
 
     const updatedSeats = { ...state.playerSeats };
@@ -196,20 +204,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
 
-    if (currentHand.status !== 'playing') {
+    // Check if hand can hit (prevents hitting on split Aces or completed hands)
+    if (!canHit(currentHand)) {
+      set({ message: currentHand.splitFromAces ? 'Split Aces receive only one card' : 'Cannot hit this hand' });
       get().moveToNextHand();
       return;
     }
 
     const result = dealCard(state.deck, true);
     const updatedHand = addCardToHand(currentHand, result.card);
-    const handValue = evaluateHand(updatedHand.cards);
+    const handValue = evaluateHand(updatedHand.cards, updatedHand.isSplit);
 
     const updatedSeats = {
       ...state.playerSeats,
       [state.activeSeatId]: {
         ...seat,
-        hands: seat.hands.map((h, i) => i === seat.currentHandIndex ? updatedHand : h),
+        hands: seat.hands.map((h, i) => (i === seat.currentHandIndex ? updatedHand : h)),
       },
     };
 
@@ -239,7 +249,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...state.playerSeats,
         [state.activeSeatId]: {
           ...seat,
-          hands: seat.hands.map((h, i) => i === seat.currentHandIndex ? updatedHand : h),
+          hands: seat.hands.map((h, i) => (i === seat.currentHandIndex ? updatedHand : h)),
         },
       },
       message: 'Standing',
@@ -260,7 +270,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const doubledHand = doubleDownHand(currentHand);
+    const doubledHand = doubleDownHand(currentHand, true); // Allow double after split
     const result = dealCard(state.deck, true);
     const finalHand = { ...addCardToHand(doubledHand, result.card), status: 'stand' as const };
 
@@ -271,7 +281,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         ...state.playerSeats,
         [state.activeSeatId]: {
           ...seat,
-          hands: seat.hands.map((h, i) => i === seat.currentHandIndex ? finalHand : h),
+          hands: seat.hands.map((h, i) => (i === seat.currentHandIndex ? finalHand : h)),
         },
       },
       message: 'Doubled down',
@@ -288,20 +298,39 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
+    const currentHandCount = seat.hands.length;
 
+    // Check balance
     if (state.balance < currentHand.bet) {
       set({ message: 'Insufficient balance to split' });
       return;
     }
 
-    const { hand1, hand2 } = splitHand(currentHand);
+    // Split the hand (with max hands limit of 4, no re-split Aces)
+    let hand1, hand2;
+    try {
+      const result = splitHand(currentHand, currentHandCount, 4, false);
+      hand1 = result.hand1;
+      hand2 = result.hand2;
+    } catch (error) {
+      set({ message: error instanceof Error ? error.message : 'Cannot split' });
+      return;
+    }
+
+    const isSplittingAces = currentHand.cards[0].rank === 'A';
 
     // Deal one card to each split hand
     const result1 = dealCard(state.deck, true);
     const result2 = dealCard(result1.remainingDeck, true);
 
-    const newHand1 = addCardToHand(hand1, result1.card);
-    const newHand2 = addCardToHand(hand2, result2.card);
+    let newHand1 = addCardToHand(hand1, result1.card);
+    let newHand2 = addCardToHand(hand2, result2.card);
+
+    // Auto-stand split Aces (they can only receive one card)
+    if (isSplittingAces) {
+      newHand1 = { ...newHand1, status: 'stand' as const };
+      newHand2 = { ...newHand2, status: 'stand' as const };
+    }
 
     const newHands = [...seat.hands];
     newHands[seat.currentHandIndex] = newHand1;
@@ -317,8 +346,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
           hands: newHands,
         },
       },
-      message: 'Hand split',
+      message: isSplittingAces ? 'Aces split (one card each)' : 'Hand split',
     });
+
+    // If split Aces, auto-proceed to next hand since they cannot hit
+    if (isSplittingAces) {
+      setTimeout(() => {
+        get().moveToNextHand();
+      }, 1000);
+    }
   },
 
   placeInsurance: (seatId: string) => {
@@ -386,7 +422,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       dealerHand = dealerHand.map(card => ({ ...card, faceUp: true }));
 
       let deck = state.deck;
-      const dealerValue = evaluateHand(dealerHand);
+      const dealerValue = evaluateHand(dealerHand, false); // Dealer never splits
 
       if (dealerValue.value < 17) {
         const result = dealCard(deck, true);
