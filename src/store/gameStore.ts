@@ -137,7 +137,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   checkForBlackjacks: () => {
     const state = get();
-    const dealerValue = evaluateHand(state.dealerHand);
+    const dealerValue = evaluateHand(state.dealerHand, false); // Dealer never splits
     const dealerHasBlackjack = dealerValue.isBlackjack;
 
     const updatedSeats = { ...state.playerSeats };

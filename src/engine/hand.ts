@@ -219,22 +219,17 @@ export function doubleDownHand(hand: Hand, allowDoubleAfterSplit: boolean = true
 
 /**
  * Compare player hand to dealer hand and determine outcome
- * @param playerCards - The player's hand (cards array or Hand object)
+ * @param playerHand - The player's hand
  * @param dealerCards - The dealer's cards
  * @returns The outcome of the comparison
  */
 export function compareHands(
-  playerCards: Card[] | Hand,
+  playerHand: Card[] | Hand,
   dealerCards: Card[]
 ): 'win' | 'loss' | 'push' | 'blackjack' {
-  const playerHand = Array.isArray(playerCards)
-    ? {
-        cards: playerCards,
-        isSplit: false,
-      }
-    : playerCards;
-
-  const playerValue = evaluateHand(playerHand.cards, playerHand.isSplit);
+  const playerCards = Array.isArray(playerHand) ? playerHand : playerHand.cards;
+  const playerIsSplit = !Array.isArray(playerHand) && playerHand.isSplit;
+  const playerValue = evaluateHand(playerCards, playerIsSplit);
   const dealerValue = evaluateHand(dealerCards, false); // Dealer never splits
 
   // Player bust always loses
