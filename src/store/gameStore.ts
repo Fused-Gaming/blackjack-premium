@@ -137,7 +137,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   checkForBlackjacks: () => {
     const state = get();
-    const dealerValue = evaluateHand(state.dealerHand, false); // Dealer never splits
+    const dealerValue = evaluateHand(state.dealerHand);
+    const dealerHasBlackjack = dealerValue.isBlackjack;
+
+    const updatedSeats = { ...state.playerSeats };
+    let hasAnyPlayerBlackjack = false;
+    let hasAnyPlayableHand = false;
+    let blackjackPayoutTotal = 0;
+
+    Object.values(updatedSeats).forEach(seat => {
+      if (!seat.active) return;
+
+      seat.hands = seat.hands.map(hand => {
+        const handValue = evaluateHand(hand.cards);
+        const isNaturalBlackjack = hand.cards.length === 2 && handValue.isBlackjack;
+
+        if (!isNaturalBlackjack) {
+          if (hand.status === 'playing') hasAnyPlayableHand = true;
+          return hand;
+        }
+
+        hasAnyPlayerBlackjack = true;
 
         if (dealerHasBlackjack) {
           // Push on player blackjack vs dealer blackjack
@@ -145,7 +165,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         }
 
         // Player natural blackjack pays 3:2
-        blackjackPayoutTotal += calculatePayout(hand.bet, 'blackjack');
+        blackjackPayoutTotal += calculatePayout(hand, 'blackjack');
         return { ...hand, status: 'stand' as typeof hand.status };
       });
     });
