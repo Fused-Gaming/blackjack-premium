@@ -75,3 +75,13 @@ Closes #123
 ## Questions?
 
 Open an issue for discussion before starting major changes.
+
+---
+
+## Get Involved
+
+We're always looking for talented engineers to contribute! Interested in helping build the future of provably fair gaming?
+
+**Contact us**: ace21@vln.gg
+
+Whether you're interested in game engine development, UI/UX improvements, testing, or documentation, we'd love to hear from you!
