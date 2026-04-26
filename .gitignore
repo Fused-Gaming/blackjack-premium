@@ -50,3 +50,22 @@ Thumbs.db
 .cache
 .parcel-cache
 .claude-flow/
+
+# claude-flow runtime (keep config, ignore runtime data)
+.claude-flow/data/
+.claude-flow/logs/
+.claude-flow/sessions/
+
+# Claude Code generated memory/state
+.claude/memory/
+.claude/state/
+
+# Generated assets
+public/og-image.png
+
+# Storybook
+storybook-static/
+
+# Bundle analysis
+stats.html
+bundle-report.json
