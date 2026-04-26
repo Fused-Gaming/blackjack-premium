@@ -157,7 +157,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         }
 
         // Player natural blackjack pays 3:2
-        blackjackPayoutTotal += calculatePayout(hand.bet, 'blackjack');
+        blackjackPayoutTotal += calculatePayout(hand, 'blackjack');
         return { ...hand, status: 'stand' as typeof hand.status };
       });
     });
