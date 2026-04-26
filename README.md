@@ -130,3 +130,9 @@ MIT License - See LICENSE file for details
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+---
+
+## Contributing
+
+We're looking for talented engineers to help build the future of provably fair gaming! If you're interested in contributing to this project, please reach out to **ace21@vln.gg** or see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
