@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added a professionally designed Open Graph preview image for `https://demo.vln.gg/social/og-vln-demo.svg`.
+- Standardized root endpoint social metadata across Open Graph and Twitter/X tags in `index.html`.
+
 ### Planned
 
 - Multi-seat gameplay (up to 3 seats)
