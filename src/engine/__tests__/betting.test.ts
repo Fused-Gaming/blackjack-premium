@@ -54,7 +54,7 @@ describe('Betting System', () => {
       const result = placeBet(1000, -50);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Minimum bet is 1'); // Negative numbers fail min check first
+      expect(result.error).toBe('Invalid bet amount'); // Negative numbers fail finitude check first
     });
 
     it('should reject NaN bet', () => {
@@ -68,7 +68,7 @@ describe('Betting System', () => {
       const result = placeBet(1000, Infinity);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Maximum bet is 1000'); // Infinity fails max check first
+      expect(result.error).toBe('Invalid bet amount'); // Infinity fails finitude check first
     });
 
     it('should accept bet at minimum limit', () => {
