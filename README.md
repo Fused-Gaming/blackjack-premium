@@ -2,6 +2,8 @@
 
 A professional, secure, and engaging blackjack game inspired by modern crypto casino interfaces.
 
+<img width="1280" height="752" alt="IMG_4100" src="https://github.com/user-attachments/assets/9fc5d675-0e23-4cce-8876-877a279023df" />
+
 ## Features
 
 - **Classic Blackjack Gameplay**: Standard rules with dealer standing on 17
