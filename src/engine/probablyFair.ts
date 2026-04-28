@@ -153,6 +153,15 @@ export async function verifyShuffleProof(proof: ShuffleProof): Promise<Verificat
     versionSupported: false,
   };
 
+  // Validate seed format first
+  if (!/^[a-f0-9]{64}$/i.test(proof.seed)) {
+    return {
+      valid: false,
+      error: 'Invalid seed format. Expected 64 hexadecimal characters.',
+      details,
+    };
+  }
+
   // Verify seed hash
   try {
     const calculatedHash = await hashSeed(proof.seed);
@@ -254,8 +263,8 @@ export async function seededShuffle(deck: number[], seed: string): Promise<numbe
     seedCounter++;
 
     const view = new Uint32Array(hashBuffer);
-    // Convert first 4 bytes to number in range [0, 1)
-    const value = view[0] / 0xffffffff;
+    // Convert first 4 bytes to number in range [0, 1) using exclusive upper bound
+    const value = view[0] / 0x100000000;
     return value;
   };
 
