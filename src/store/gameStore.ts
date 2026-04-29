@@ -270,7 +270,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    const doubledHand = doubleDownHand(currentHand, true); // Allow double after split
+    const doubledHand = doubleDownHand(currentHand);
     const result = dealCard(state.deck, true);
     const finalHand = { ...addCardToHand(doubledHand, result.card), status: 'stand' as const };
 

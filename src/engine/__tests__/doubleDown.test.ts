@@ -136,7 +136,7 @@ describe('Double Down Logic', () => {
       // Note: Some casinos don't allow doubling on split Aces
     });
 
-    it('should work with default allowDoubleAfterSplit parameter (true)', () => {
+    it('should not allow double after split by default', () => {
       const hand: Hand = {
         cards: [createCard('6'), createCard('5')],
         bet: 10,
@@ -147,8 +147,8 @@ describe('Double Down Logic', () => {
         canHit: true,
       };
 
-      // Default should allow double after split
-      expect(canDouble(hand)).toBe(true);
+      // Default does not allow double after split (standard blackjack rules)
+      expect(canDouble(hand)).toBe(false);
     });
   });
 
@@ -284,7 +284,7 @@ describe('Double Down Logic', () => {
       expect(doubled.isDouble).toBe(true);
     });
 
-    it('should work with default allowDoubleAfterSplit parameter', () => {
+    it('should not allow doubling after split by default', () => {
       const hand: Hand = {
         cards: [createCard('9'), createCard('2')],
         bet: 15,
@@ -295,11 +295,8 @@ describe('Double Down Logic', () => {
         canHit: true,
       };
 
-      // Default allows double after split
-      const doubled = doubleDownHand(hand);
-
-      expect(doubled.bet).toBe(30);
-      expect(doubled.isDouble).toBe(true);
+      // Default does not allow double after split (standard blackjack rules)
+      expect(() => doubleDownHand(hand)).toThrow('Cannot double down this hand');
     });
   });
 
