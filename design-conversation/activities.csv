@@ -1,0 +1,105 @@
+type,ip_address,timestamp,data,access_profile
+login,2605:b100:701:8880:3947:6c8a:af7f:2070,2021-01-29 23:44:59,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,68.147.2.10,2021-07-02 02:07:39,"{""access_profile"":""rhcrypto""}",@rhcrypto
+logout,68.147.2.10,2021-07-02 02:11:11,"{""access_profile"":""rhcrypto""}",@rhcrypto
+password_reset_start,2605:b100:712:5be6:c009:ba3d:159b:102a,2021-11-17 23:29:39,,@rhcrypto
+password_reset_done,68.147.2.10,2021-11-17 23:30:25,,@rhcrypto
+login,2605:b100:712:5be6:c009:ba3d:159b:102a,2021-11-17 23:30:50,"{""access_profile"":""rhcrypto""}",@rhcrypto
+color_theme_change,2605:b100:712:5be6:c009:ba3d:159b:102a,2021-11-17 23:30:57,"[[""theme"",""light"",""auto""]]",@rhcrypto
+account_settings_update,2605:b100:712:5be6:c009:ba3d:159b:102a,2021-11-17 23:33:03,"[[""timezone"",0,100]]",@rhcrypto
+enabled_coins_updated,2605:b100:712:5be6:c009:ba3d:159b:102a,2021-11-17 23:33:15,"[[""enable_zec"",true,false]]",@rhcrypto
+worker_delete,2605:b100:70b:e221:b110:7f26:219b:516e,2021-11-18 01:11:44,"{""name"":""rhcrypto.worker1""}",@rhcrypto
+workers_delete,2605:b100:73b:de1e:708b:f5d4:78ac:a117,2021-11-18 18:45:21,"{""count"":3,""coin"":""BTC""}",@rhcrypto
+bad_login,2605:b100:736:7a0f:3158:e7dd:5052:b7b9,2022-03-21 17:35:42,,@rhcrypto
+bad_login,2605:b100:736:7a0f:3158:e7dd:5052:b7b9,2022-03-21 17:35:55,,@rhcrypto
+password_reset_start,2605:b100:736:7a0f:3158:e7dd:5052:b7b9,2022-03-21 17:36:42,,@rhcrypto
+password_reset_done,68.147.2.10,2022-03-21 17:38:50,,@rhcrypto
+login,2605:b100:736:7a0f:3158:e7dd:5052:b7b9,2022-03-21 17:40:00,"{""access_profile"":""rhcrypto""}",@rhcrypto
+bad_login,2605:b100:736:7a0f:3158:e7dd:5052:b7b9,2022-03-21 20:05:28,,@rhcrypto
+login,2605:b100:736:7a0f:3158:e7dd:5052:b7b9,2022-03-21 20:05:42,"{""access_profile"":""rhcrypto""}",@rhcrypto
+bad_login,170.203.221.91,2022-04-28 18:59:49,,@rhcrypto
+bad_login,170.203.221.91,2022-04-28 19:00:08,,@rhcrypto
+bad_login,170.203.221.91,2022-04-28 19:00:30,,@rhcrypto
+login,170.203.221.91,2022-04-28 19:00:50,"{""access_profile"":""rhcrypto""}",@rhcrypto
+bad_login,170.203.221.91,2022-04-29 03:16:43,,@rhcrypto
+bad_login,170.203.221.91,2022-04-29 03:17:11,,@rhcrypto
+login,170.203.221.91,2022-04-29 03:17:32,"{""access_profile"":""rhcrypto""}",@rhcrypto
+bad_login,50.65.136.175,2022-04-29 04:55:34,,@rhcrypto
+bad_login,50.65.136.175,2022-04-29 04:55:48,,@rhcrypto
+login,50.65.136.175,2022-04-29 04:56:02,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,50.65.136.175,2022-04-29 05:42:44,"{""access_profile"":""rhcrypto""}",@rhcrypto
+bad_login,50.65.136.175,2022-04-29 09:44:30,,@rhcrypto
+login,50.65.136.175,2022-04-29 09:44:47,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,50.65.136.175,2022-04-29 09:46:40,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,50.65.136.175,2022-04-29 14:18:17,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,50.65.136.175,2022-04-29 14:25:46,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,50.65.136.175,2022-04-29 14:27:14,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,50.65.136.175,2022-04-29 16:42:33,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-04-29 19:22:53,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-04-29 20:46:19,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-04-30 00:59:02,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-04-30 01:14:23,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-04-30 01:19:48,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,198.166.185.202,2022-04-30 04:20:45,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,198.166.185.202,2022-04-30 04:41:18,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,198.166.185.202,2022-04-30 05:17:23,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,198.166.185.183,2022-04-30 10:45:23,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,198.166.185.183,2022-04-30 16:36:01,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,68.147.2.10,2022-04-30 20:38:58,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,68.147.2.10,2022-04-30 22:43:19,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,68.147.2.10,2022-04-30 23:26:48,"{""access_profile"":""rhcrypto""}",@rhcrypto
+access_profile_create,170.203.221.83,2022-05-05 22:27:10,"{""name"":""James""}",@rhcrypto
+login,170.203.221.83,2022-05-05 22:27:54,"{""access_profile"":""James@rhcrypto""}",Watcher@rhcrypto
+logout,170.203.221.83,2022-05-06 00:09:45,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-05-06 00:10:13,"{""access_profile"":""rhcrypto""}",@rhcrypto
+access_profile_update,170.203.221.83,2022-05-06 00:57:44,"[""Watcher"",[""name"",""James"",""Watcher""]]",@rhcrypto
+login,178.249.214.66,2022-05-06 16:03:39,"{""access_profile"":""Watcher@rhcrypto""}",Watcher@rhcrypto
+color_theme_change,178.249.214.66,2022-05-06 16:04:13,"[[""theme"",""auto"",""dark""]]",Watcher@rhcrypto
+bad_login,2605:b100:706:17e2:3dfc:e41a:88b2:eff8,2022-05-15 21:16:47,,@rhcrypto
+bad_login,2605:b100:706:17e2:3dfc:e41a:88b2:eff8,2022-05-15 21:17:02,,@rhcrypto
+bad_login,2605:b100:706:17e2:3dfc:e41a:88b2:eff8,2022-05-15 21:17:15,,@rhcrypto
+bad_login,2605:b100:706:17e2:3dfc:e41a:88b2:eff8,2022-05-15 21:17:29,,@rhcrypto
+login,2605:b100:706:17e2:3dfc:e41a:88b2:eff8,2022-05-15 21:17:48,"{""access_profile"":""rhcrypto""}",@rhcrypto
+bad_login,2605:b100:706:17e2:2cd1:3199:c9cf:81a1,2022-05-19 00:20:40,,@rhcrypto
+bad_login,2605:b100:706:17e2:2cd1:3199:c9cf:81a1,2022-05-19 00:20:54,,@rhcrypto
+login,2605:b100:706:17e2:2cd1:3199:c9cf:81a1,2022-05-19 00:21:15,"{""access_profile"":""rhcrypto""}",@rhcrypto
+worker_delete,2605:b100:713:dd96:3058:97cf:2ab6:7f1e,2022-05-19 22:38:04,"{""name"":""rhcrypto.S9BOS5892""}",@rhcrypto
+worker_delete,2605:b100:713:dd96:3058:97cf:2ab6:7f1e,2022-05-19 22:54:34,"{""name"":""rhcrypto.S9BOS7428""}",@rhcrypto
+worker_delete,2605:b100:713:dd96:3058:97cf:2ab6:7f1e,2022-05-19 23:01:43,"{""name"":""rhcrypto.S9BOS5982""}",@rhcrypto
+worker_delete,2605:b100:713:dd96:3058:97cf:2ab6:7f1e,2022-05-19 23:08:40,"{""name"":""rhcrypto.S9BOS0432""}",@rhcrypto
+bad_login,68.147.2.10,2022-06-02 23:46:49,,@rhcrypto
+login,68.147.2.10,2022-06-02 23:47:03,"{""access_profile"":""rhcrypto""}",@rhcrypto
+payout_account_settings_update,68.147.2.10,2022-06-02 23:50:09,"{""wallet_name"":""Blue Wallet"",""triggers"":[{""type"":""frequency"",""frequency"":""weekly"",""day_in_period"":1}],""currency"":""BTC""}",@rhcrypto
+payout_channel_verify,68.147.2.10,2022-06-02 23:50:21,"{""payout_account_name"":""Bitcoin Financial Account"",""wallet_name"":""Blue Wallet""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-06-02 23:50:36,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+login,68.147.2.10,2022-06-03 15:35:08,"{""access_profile"":""rhcrypto""}",@rhcrypto
+payout_request_create,207.228.78.5,2022-06-20 01:42:11,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+payout_request_create,207.228.78.202,2022-06-21 19:38:56,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+password_reset_start,170.203.221.83,2022-06-24 21:10:04,,@rhcrypto
+logout,185.153.179.105,2022-06-24 21:16:17,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,185.153.179.105,2022-06-24 21:16:41,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-06-24 21:18:06,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,170.203.221.83,2022-06-25 19:25:37,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,172.83.40.70,2022-06-27 04:36:52,"{""access_profile"":""Watcher@rhcrypto""}",Watcher@rhcrypto
+login,170.203.221.83,2022-06-30 18:38:29,"{""access_profile"":""rhcrypto""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-07-08 01:31:12,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-07-09 21:29:51,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-07-12 14:20:37,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+login,68.147.2.10,2022-07-14 20:18:20,"{""access_profile"":""rhcrypto""}",@rhcrypto
+logout,68.147.2.10,2022-07-26 01:51:45,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,68.147.2.10,2022-07-26 01:52:00,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,66.115.146.173,2022-07-26 17:18:36,"{""access_profile"":""Watcher@rhcrypto""}",Watcher@rhcrypto
+payout_request_create,68.147.2.10,2022-08-04 12:33:54,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-08-18 18:01:07,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+user_appeal_dissmised,68.147.2.10,2022-08-19 10:38:52,"{""message"":""<b>Slush Pool will be renamed Braiins Pool<\/b><br><br>In September, we\u2019re officially <b>renaming Slush Pool<\/b> to Braiins Pool <b>to unite the branding of all of our mining tools<\/b> under the Braiins umbrella.<br>Nothing changes as to the pool operations, and <b>miners are not required to take any action<\/b> as old stratum URLs will work indefinitely. <a href=\""https:\/\/slushpool.com\/en\/news\/goodbye-slush-pool\/\"">MORE_INFO<\/a>""}",@rhcrypto
+login,68.147.2.10,2022-09-16 17:28:48,"{""access_profile"":""rhcrypto""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-09-27 08:12:23,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-10-02 01:53:41,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+payout_request_create,207.228.78.145,2022-10-16 19:50:56,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+payout_request_create,68.147.2.10,2022-10-24 03:57:56,"{""name"":""Bitcoin Financial Account""}",@rhcrypto
+user_appeal_dissmised,68.147.2.10,2022-11-30 04:30:43,"{""message"":""<b>Hello Braiins Pool!<\/b><br><br>As you may already know, in July we announced that we would be saying <b>goodbye to the Slush Pool name<\/b>. Well, the time has come. <b>As of September 14th, our bitcoin mining pool is renamed Braiins Pool.<\/b> As this is <b>purely a renaming exercise<\/b>, you do not need to take any action. The pool operations and the team behind the pool remains the same and <b>mining is not affected<\/b>.""}",@rhcrypto
+password_reset_start,94.109.61.250,2023-12-15 17:17:35,,@rhcrypto
+password_reset_done,94.109.61.250,2023-12-15 17:17:58,,@rhcrypto
+login,94.109.61.250,2023-12-15 17:20:23,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,212.15.80.236,2026-03-01 10:02:28,"{""access_profile"":""rhcrypto""}",@rhcrypto
+login,91.132.137.77,2026-03-01 10:18:06,"{""access_profile"":""rhcrypto""}",@rhcrypto

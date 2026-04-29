@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blackjack 1920x1080 Wow Table Mockup</title>
+  <style>
+    :root {
+      --bg: #05080c;
+      --panel: #0d131a;
+      --felt-a: #1f6d4e;
+      --felt-b: #0d2b22;
+      --gold: #f5d77f;
+      --gold2: #bf9a4c;
+      --green: #25ff9a;
+      --cyan: #4ce8ff;
+      --red: #ff4769;
+      --purple: #c78bff;
+      --text: #fff7dc;
+      --muted: #9caaa5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      width: 100vw;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #000;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+    }
+    .stage {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 8%, rgba(76,232,255,.16), transparent 27%),
+        radial-gradient(circle at 50% 82%, rgba(37,255,154,.13), transparent 33%),
+        linear-gradient(180deg, #070b10 0%, #030509 100%);
+      transform-origin: center;
+    }
+    @media (max-width: 1920px), (max-height: 1080px) {
+      .stage { transform: scale(min(calc(100vw / 1920), calc(100vh / 1080))); }
+      body { overflow: hidden; }
+    }
+    .top-hud {
+      position: absolute;
+      inset: 28px 42px auto 42px;
+      height: 82px;
+      display: grid;
+      grid-template-columns: 360px 1fr 360px;
+      align-items: center;
+      z-index: 10;
+    }
+    .hud-card {
+      height: 74px;
+      padding: 14px 18px;
+      border-radius: 22px;
+      background: rgba(12,18,25,.78);
+      border: 1px solid rgba(245,215,127,.22);
+      box-shadow: 0 16px 36px rgba(0,0,0,.38), inset 0 0 28px rgba(245,215,127,.04);
+    }
+    .hud-card small { display:block; color: var(--muted); font-size: 13px; font-weight: 800; letter-spacing: .08em; }
+    .hud-card strong { color: var(--gold); font-size: 25px; }
+    .phase {
+      justify-self: center;
+      padding: 18px 34px;
+      border-radius: 999px;
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: .14em;
+      background: rgba(6,13,11,.72);
+      border: 1px solid rgba(37,255,154,.55);
+      box-shadow: 0 0 34px rgba(37,255,154,.18), inset 0 0 24px rgba(37,255,154,.08);
+    }
+    .dealer-panel {
+      position: absolute;
+      top: 122px;
+      left: 660px;
+      width: 600px;
+      height: 152px;
+      z-index: 8;
+      border-radius: 32px;
+      padding: 22px 26px;
+      background: linear-gradient(180deg, rgba(16,24,32,.95), rgba(7,11,16,.9));
+      border: 1px solid rgba(245,215,127,.45);
+      box-shadow: 0 28px 60px rgba(0,0,0,.46), 0 0 45px rgba(245,215,127,.09), inset 0 0 35px rgba(245,215,127,.05);
+    }
+    .dealer-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px; }
+    .dealer-header b { color: var(--gold); font-size: 22px; letter-spacing:.08em; }
+    .dealer-header span { color: #c7d0c9; font-size: 15px; }
+    .cards { display:flex; gap: 12px; align-items:center; }
+    .card {
+      width: 64px; height: 88px; border-radius: 12px;
+      background: linear-gradient(145deg, #ffffff, #dce2e8);
+      color:#101318; display:grid; place-items:center;
+      font-weight:950; font-size:28px;
+      box-shadow: 0 14px 24px rgba(0,0,0,.38);
+    }
+    .card.back { background: linear-gradient(135deg,#22344a,#070b10); color: var(--gold); border: 1px solid rgba(245,215,127,.42); }
+    .card.red { color:#d8213f; }
+    .dealer-total { margin-left:auto; font-size: 28px; color: var(--gold); font-weight:950; }
+    .message-rail {
+      position:absolute;
+      top:292px;
+      left:390px;
+      width:1140px;
+      height:64px;
+      display:flex; align-items:center; justify-content:center;
+      border-radius: 24px;
+      z-index:7;
+      background: rgba(5,8,12,.72);
+      border: 1px solid rgba(76,232,255,.28);
+      color: var(--cyan);
+      font-weight: 950;
+      font-size: 22px;
+      letter-spacing:.08em;
+      box-shadow: 0 0 44px rgba(76,232,255,.1);
+    }
+    .table {
+      position:absolute;
+      left:160px;
+      top:226px;
+      width:1600px;
+      height:780px;
+      z-index:1;
+    }
+    svg { width:100%; height:100%; overflow:visible; }
+    .seatText { text-anchor:middle; dominant-baseline:middle; fill:var(--text); font-weight:950; }
+    .seatSmall { text-anchor:middle; dominant-baseline:middle; fill:#bac5bf; font-weight:850; letter-spacing:.07em; }
+    .dim { opacity:.45; }
+    .active-halo { animation: pulse 1.25s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(37,255,154,1)) drop-shadow(0 0 34px rgba(37,255,154,.65)); }
+    .turn-chip { animation: bob 1.2s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(245,215,127,.9)); }
+    @keyframes pulse { 0%,100%{opacity:.75; stroke-width:8;} 50%{opacity:1; stroke-width:14;} }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .seat-panels {
+      position:absolute;
+      left:110px; right:110px; bottom:42px;
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      z-index:9;
+    }
+    .seat-card {
+      min-height: 172px;
+      border-radius: 28px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(16,24,32,.92), rgba(7,11,16,.9));
+      border: 1px solid rgba(245,215,127,.22);
+      box-shadow: 0 20px 44px rgba(0,0,0,.38), inset 0 0 28px rgba(255,255,255,.03);
+    }
+    .seat-card.active {
+      border-color: rgba(37,255,154,.68);
+      box-shadow: 0 0 42px rgba(37,255,154,.18), 0 20px 44px rgba(0,0,0,.38), inset 0 0 28px rgba(37,255,154,.07);
+    }
+    .seat-card .head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .seat-card b { color: var(--gold); font-size: 16px; }
+    .badge {
+      padding: 7px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      color:#c9d2cc;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.05em;
+    }
+    .badge.active { color: var(--green); background: rgba(37,255,154,.09); border:1px solid rgba(37,255,154,.35); }
+    .seat-card .row { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top: 10px; }
+    .metric { border-radius: 16px; padding: 9px 10px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08); }
+    .metric small { display:block; color:#87948f; font-size:10px; font-weight:850; letter-spacing:.08em; }
+    .metric strong { color: var(--gold); font-size: 15px; }
+    .metric.side strong { color: var(--purple); }
+    .action-dock {
+      position:absolute;
+      right:42px;
+      top:404px;
+      width:250px;
+      z-index:10;
+      padding: 18px;
+      border-radius: 30px;
+      background: rgba(12,18,25,.88);
+      border:1px solid rgba(37,255,154,.45);
+      box-shadow: 0 0 44px rgba(37,255,154,.12), 0 20px 44px rgba(0,0,0,.4);
+    }
+    .timer {
+      width: 88px; height:88px; margin: 0 auto 16px;
+      border-radius:50%; display:grid; place-items:center;
+      background: conic-gradient(var(--green) 0 72%, rgba(255,255,255,.1) 72% 100%);
+      color: var(--green); font-size: 27px; font-weight:950;
+      box-shadow: 0 0 32px rgba(37,255,154,.22);
+    }
+    .actions { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    button { height:58px; border:0; border-radius:18px; font-weight:950; letter-spacing:.05em; color:#06100c; background:linear-gradient(180deg,#55ffb8,#18c77f); }
+    button:nth-child(2){background:linear-gradient(180deg,#ffe89b,#d0a941)}
+    button:nth-child(3){background:linear-gradient(180deg,#ff8ea0,#ff4d6d)}
+    button:nth-child(4){background:linear-gradient(180deg,#e2c3ff,#a766f1)}
+    .left-rail {
+      position:absolute; left:42px; top:404px; width:250px; z-index:10;
+      display:grid; gap:14px;
+    }
+    .rail-card { padding:18px; border-radius:26px; background:rgba(12,18,25,.82); border:1px solid rgba(245,215,127,.18); box-shadow: 0 20px 44px rgba(0,0,0,.36); }
+    .rail-card small { color:var(--muted); font-weight:850; letter-spacing:.08em; }
+    .rail-card h3 { margin:8px 0 0; color:var(--gold); font-size:24px; }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <section class="top-hud">
+      <div class="hud-card"><small>WALLET BALANCE</small><strong>$1,250.00</strong></div>
+      <div class="phase">PLAYER TURNS · ROUND 18</div>
+      <div class="hud-card" style="text-align:right"><small>NETWORK / CONTRACT</small><strong>Synced · 34ms</strong></div>
+    </section>
+
+    <section class="dealer-panel">
+      <div class="dealer-header"><b>DEALER</b><span>Dealer must hit soft 17</span></div>
+      <div class="cards"><div class="card back">◆</div><div class="card red">6♥</div><div class="dealer-total">Total: ?</div></div>
+    </section>
+
+    <div class="message-rail">ACTING NOW: SEAT 3 · YOUR TURN · NEXT: SEAT 4</div>
+
+    <aside class="left-rail">
+      <div class="rail-card"><small>TABLE LIMITS</small><h3>$5 / $500</h3></div>
+      <div class="rail-card"><small>SHOE STATUS</small><h3>287 Cards</h3></div>
+      <div class="rail-card"><small>21+3 MODE</small><h3>Seat-local</h3></div>
+    </aside>
+
+    <aside class="action-dock">
+      <div class="timer">08</div>
+      <div style="text-align:center;color:var(--green);font-weight:950;letter-spacing:.08em;margin-bottom:14px;">SEAT 3 ACTIVE</div>
+      <div class="actions"><button>HIT</button><button>STAND</button><button>DOUBLE</button><button>SPLIT</button></div>
+    </aside>
+
+    <section class="table">
+      <svg viewBox="0 0 1600 780" aria-label="widescreen blackjack table SVG">
+        <defs>
+          <radialGradient id="felt" cx="50%" cy="45%" r="65%">
+            <stop offset="0%" stop-color="#1f6d4e" />
+            <stop offset="56%" stop-color="#123e31" />
+            <stop offset="100%" stop-color="#071813" />
+          </radialGradient>
+          <linearGradient id="goldStroke" x1="0" x2="1">
+            <stop offset="0" stop-color="#7d642f" />
+            <stop offset=".5" stop-color="#f5d77f" />
+            <stop offset="1" stop-color="#7d642f" />
+          </linearGradient>
+        </defs>
+        <ellipse cx="800" cy="395" rx="710" ry="330" fill="url(#felt)" stroke="url(#goldStroke)" stroke-width="7" />
+        <ellipse cx="800" cy="395" rx="652" ry="292" fill="none" stroke="#8a6e34" stroke-width="2" opacity=".72" />
+        <ellipse cx="800" cy="395" rx="520" ry="212" fill="none" stroke="#f5d77f" stroke-width="1" stroke-dasharray="9 14" opacity=".16" />
+        <text x="800" y="366" text-anchor="middle" fill="#f5d77f" font-size="48" font-weight="950" opacity=".68">BLACKJACK PAYS 3 TO 2</text>
+        <text x="800" y="414" text-anchor="middle" fill="#d2b56c" font-size="22" font-weight="850" opacity=".78">21+3 · PER-SEAT OUTCOMES · SMART CONTRACT SETTLEMENT</text>
+
+        <!-- Dealing lanes -->
+        <path d="M800 112 C520 210 320 340 205 532" fill="none" stroke="#4ce8ff" stroke-width="2" stroke-dasharray="8 12" opacity=".22" />
+        <path d="M800 112 C640 235 548 380 475 615" fill="none" stroke="#4ce8ff" stroke-width="2" stroke-dasharray="8 12" opacity=".22" />
+        <path d="M800 112 C800 285 800 420 800 662" fill="none" stroke="#25ff9a" stroke-width="3" stroke-dasharray="8 12" opacity=".45" />
+        <path d="M800 112 C960 235 1052 380 1125 615" fill="none" stroke="#4ce8ff" stroke-width="2" stroke-dasharray="8 12" opacity=".22" />
+        <path d="M800 112 C1080 210 1280 340 1395 532" fill="none" stroke="#4ce8ff" stroke-width="2" stroke-dasharray="8 12" opacity=".22" />
+
+        <!-- seat groups -->
+        <g class="dim"><circle cx="205" cy="532" r="64" fill="#0f141b" stroke="#c9a85b" stroke-width="4"/><rect x="155" y="430" width="100" height="54" rx="16" fill="#0e1319" stroke="#c9a85b"/><text x="205" y="456" class="seatSmall" font-size="13">WAIT</text><text x="205" y="532" class="seatText" font-size="30">1</text><circle cx="205" cy="612" r="30" fill="#10161d" stroke="#4ce8ff"/><text x="205" y="612" class="seatSmall" font-size="12">NEXT</text></g>
+        <g class="dim"><circle cx="475" cy="615" r="64" fill="#0f141b" stroke="#c9a85b" stroke-width="4"/><rect x="425" y="512" width="100" height="54" rx="16" fill="#0e1319" stroke="#c9a85b"/><text x="475" y="539" class="seatSmall" font-size="13">STAND</text><text x="475" y="615" class="seatText" font-size="30">2</text><circle cx="548" cy="590" r="22" fill="#131d26" stroke="#6f7b81"/><text x="548" y="590" text-anchor="middle" dominant-baseline="middle" fill="#aeb7b2" font-size="15" font-weight="950">✓</text></g>
+        <g><circle class="active-halo" cx="800" cy="662" r="88" fill="none" stroke="#25ff9a" stroke-width="9"/><circle cx="800" cy="662" r="70" fill="#10191f" stroke="#f5d77f" stroke-width="4"/><rect x="716" y="532" width="168" height="64" rx="20" fill="#11191e" stroke="#25ff9a" stroke-width="3"/><text x="800" y="564" text-anchor="middle" dominant-baseline="middle" fill="#25ff9a" font-size="18" font-weight="950">YOUR TURN</text><text x="800" y="662" class="seatText" font-size="42">3</text><circle class="turn-chip" cx="800" cy="508" r="26" fill="#f5d77f"/><text x="800" y="508" text-anchor="middle" dominant-baseline="middle" fill="#07100c" font-size="21" font-weight="950">▶</text><rect x="743" y="452" width="50" height="70" rx="10" fill="#fff"/><text x="768" y="492" text-anchor="middle" fill="#111" font-size="21" font-weight="950">K♣</text><rect x="807" y="452" width="50" height="70" rx="10" fill="#fff"/><text x="832" y="492" text-anchor="middle" fill="#d8213f" font-size="21" font-weight="950">7♥</text><text x="887" y="494" fill="#f5d77f" font-size="23" font-weight="950">17</text></g>
+        <g class="dim"><circle cx="1125" cy="615" r="64" fill="#0f141b" stroke="#c9a85b" stroke-width="4"/><rect x="1075" y="512" width="100" height="54" rx="16" fill="#0e1319" stroke="#c9a85b"/><text x="1125" y="539" class="seatSmall" font-size="13">WAIT</text><text x="1125" y="615" class="seatText" font-size="30">4</text><circle cx="1052" cy="590" r="22" fill="#131d26" stroke="#c9a85b"/><text x="1052" y="590" text-anchor="middle" dominant-baseline="middle" fill="#f5d77f" font-size="13" font-weight="950">+2</text></g>
+        <g class="dim"><circle cx="1395" cy="532" r="64" fill="#0f141b" stroke="#c9a85b" stroke-width="4"/><rect x="1345" y="430" width="100" height="54" rx="16" fill="#0e1319" stroke="#c9a85b"/><text x="1395" y="456" class="seatSmall" font-size="13">WAIT</text><text x="1395" y="532" class="seatText" font-size="30">5</text><circle cx="1395" cy="612" r="30" fill="#10161d" stroke="#c9a85b"/><text x="1395" y="612" class="seatSmall" font-size="12">+3</text></g>
+      </svg>
+    </section>
+
+    <section class="seat-panels">
+      <div class="seat-card"><div class="head"><b>Seat 1</b><span class="badge">NEXT</span></div><div class="row"><div class="metric"><small>BET</small><strong>$25</strong></div><div class="metric side"><small>21+3</small><strong>LOSE</strong></div></div></div>
+      <div class="seat-card"><div class="head"><b>Seat 2</b><span class="badge">STOOD</span></div><div class="row"><div class="metric"><small>BET</small><strong>$50</strong></div><div class="metric side"><small>21+3</small><strong>—</strong></div></div></div>
+      <div class="seat-card active"><div class="head"><b>Seat 3 · You</b><span class="badge active">ACTIVE</span></div><div class="row"><div class="metric"><small>BET</small><strong>$50</strong></div><div class="metric side"><small>21+3</small><strong>FLUSH +$60</strong></div></div></div>
+      <div class="seat-card"><div class="head"><b>Seat 4</b><span class="badge">IN 2</span></div><div class="row"><div class="metric"><small>BET</small><strong>$100</strong></div><div class="metric side"><small>21+3</small><strong>PLACED</strong></div></div></div>
+      <div class="seat-card"><div class="head"><b>Seat 5</b><span class="badge">IN 3</span></div><div class="row"><div class="metric"><small>BET</small><strong>$10</strong></div><div class="metric side"><small>21+3</small><strong>LOSE</strong></div></div></div>
+    </section>
+  </main>
+</body>
+</html>

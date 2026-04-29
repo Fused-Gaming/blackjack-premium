@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACE Blackjack — Advanced Betting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Dark mode colors */
+            --color-bg-dark: #0a0e27;
+            --color-bg-card: #1a1f3a;
+            --color-bg-hover: #242d4d;
+            --color-bg-active: #2d3a5c;
+            
+            /* Accents */
+            --color-hit: #00d4ff;
+            --color-stand: #00ff88;
+            --color-double: #ff6b35;
+            --color-split: #ffd700;
+            --color-surrender: #ff4757;
+            --color-insurance: #a855f7;
+            --color-chip: #00ff88;
+            
+            /* Text */
+            --color-text-primary: #ffffff;
+            --color-text-secondary: #a0aec0;
+            --color-text-muted: #718096;
+            
+            /* Layout */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 24px;
+            --spacing-2xl: 32px;
+            
+            /* Timing */
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg-dark);
+            color: var(--color-text-primary);
+            padding: var(--spacing-2xl);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+            animation: slideInDown 0.6s var(--transition-smooth);
+        }
+
+        header h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, var(--color-hit), var(--color-stand), var(--color-double));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        /* GAME TABLE AREA */
+        .game-table {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 16px;
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .table-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-2xl);
+        }
+
+        /* BETTING AREA - Player Position */
+        .betting-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--spacing-lg);
+            width: 100%;
+            padding: var(--spacing-lg);
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+        }
+
+        /* INDIVIDUAL BET TILES */
+        .bet-tile {
+            position: relative;
+            background: rgba(0, 20, 40, 0.6);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bet-tile::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-smooth);
+            pointer-events: none;
+        }
+
+        .bet-tile:hover::before {
+            opacity: 1;
+        }
+
+        .bet-tile:hover {
+            border-color: var(--color-hit);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), inset 0 0 20px rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .bet-tile:active {
+            transform: translateY(0);
+            box-shadow: inset 0 2px 8px rgba(0, 212, 255, 0.2);
+        }
+
+        .bet-tile.betting {
+            border-color: var(--color-chip);
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .bet-tile.locked {
+            border-color: var(--color-stand);
+            background: rgba(0, 255, 136, 0.15);
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .bet-tile-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+
+        .bet-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-chip);
+            font-family: 'Monaco', 'Courier New', monospace;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .bet-chips {
+            font-size: 12px;
+            color: var(--color-text-muted);
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .chip-stack {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid var(--color-chip);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+        }
+
+        /* CHIP SELECTOR - CENTERED IN SCREEN */
+        .chip-selector-center {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        .chip-selector-center.active {
+            pointer-events: auto;
+        }
+
+        /* Chip Button (Center) */
+        .chip-button-center {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-hit), var(--color-double));
+            border: 4px solid var(--color-hit);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--color-text-primary);
+            font-weight: bold;
+            transition: all var(--transition-smooth);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), 0 8px 32px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 10;
+        }
+
+        .chip-button-center:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .chip-button-center:active {
+            transform: scale(0.95);
+        }
+
+        /* Chip Ring (Center) */
+        .chip-ring-center {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .chip-ring-center.active {
+            pointer-events: auto;
+        }
+
+        .chip-item-center {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            border: 3px solid;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-family: 'Monaco', 'Courier New', monospace;
+            opacity: 0;
+            transform: scale(0);
+            top: 50%;
+            left: 50%;
+            pointer-events: none;
+        }
+
+        .chip-ring-center.active .chip-item-center {
+            pointer-events: auto;
+        }
+
+        .chip-item-center:hover {
+            transform: scale(1.15);
+        }
+
+        /* Chip colors and positions */
+        .chip-5 {
+            background: linear-gradient(135deg, #ff6b9d, #c06c84);
+            border-color: #ff6b9d;
+            color: #fff;
+        }
+
+        .chip-25 {
+            background: linear-gradient(135deg, #6bcf7f, #4d96ff);
+            border-color: #6bcf7f;
+            color: #fff;
+        }
+
+        .chip-100 {
+            background: linear-gradient(135deg, #ffd700, #ff6b35);
+            border-color: #ffd700;
+            color: #000;
+        }
+
+        .chip-500 {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-color: #a855f7;
+            color: #fff;
+        }
+
+        .chip-1000 {
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            border-color: #00d4ff;
+            color: #fff;
+        }
+
+        /* Animation for chip expansion */
+        .chip-ring-center.active .chip-5 {
+            animation: orbitInCenter 0.5s var(--transition-bounce) forwards;
+            animation-delay: 0s;
+        }
+
+        .chip-ring-center.active .chip-25 {
+            animation: orbitInCenter 0.5s var(--transition-bounce) forwards;
+            animation-delay: 0.08s;
+        }
+
+        .chip-ring-center.active .chip-100 {
+            animation: orbitInCenter 0.5s var(--transition-bounce) forwards;
+            animation-delay: 0.16s;
+        }
+
+        .chip-ring-center.active .chip-500 {
+            animation: orbitInCenter 0.5s var(--transition-bounce) forwards;
+            animation-delay: 0.24s;
+        }
+
+        .chip-ring-center.active .chip-1000 {
+            animation: orbitInCenter 0.5s var(--transition-bounce) forwards;
+            animation-delay: 0.32s;
+        }
+
+        /* Chip orbital positions (from center button) */
+        .chip-5 { --tx: 140px; --ty: -70px; }
+        .chip-25 { --tx: 105px; --ty: -105px; }
+        .chip-100 { --tx: 0px; --ty: -140px; }
+        .chip-500 { --tx: -105px; --ty: -105px; }
+        .chip-1000 { --tx: -140px; --ty: -70px; }
+
+        @keyframes orbitInCenter {
+            from {
+                opacity: 0;
+                transform: translate(0, 0) scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: translate(var(--tx), var(--ty)) scale(1);
+            }
+        }
+
+        /* SELECTED CHIP DISPLAY */
+        .selected-chip-display {
+            position: fixed;
+            bottom: var(--spacing-xl);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid var(--color-hit);
+            border-radius: 12px;
+            padding: var(--spacing-md) var(--spacing-xl);
+            color: var(--color-hit);
+            font-family: 'Monaco', 'Courier New', monospace;
+            backdrop-filter: blur(10px);
+            z-index: 1999;
+            animation: slideInUp 0.4s var(--transition-smooth);
+        }
+
+        .selected-chip-display .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .selected-chip-display .amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--color-chip);
+        }
+
+        /* STATUS AND TIMER */
+        .betting-status {
+            position: fixed;
+            top: var(--spacing-xl);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid var(--color-chip);
+            border-radius: 12px;
+            padding: var(--spacing-md) var(--spacing-xl);
+            color: var(--color-chip);
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+            z-index: 1999;
+            animation: slideInDown 0.4s var(--transition-smooth);
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--color-hit);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .timer.warning {
+            color: var(--color-surrender);
+        }
+
+        /* LOCK BUTTON */
+        .lock-button {
+            position: fixed;
+            bottom: var(--spacing-xl);
+            right: var(--spacing-xl);
+            background: linear-gradient(135deg, var(--color-chip), var(--color-stand));
+            border: 2px solid var(--color-chip);
+            border-radius: 12px;
+            padding: var(--spacing-md) var(--spacing-xl);
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all var(--transition-smooth);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1999;
+        }
+
+        .lock-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .lock-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* ANIMATIONS */
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .chip-button-center { width: 64px; height: 64px; font-size: 22px; }
+            .chip-ring-center { width: 240px; height: 240px; }
+            .chip-item-center { width: 56px; height: 56px; font-size: 10px; }
+            .chip-5 { --tx: 112px; --ty: -56px; }
+            .chip-25 { --tx: 84px; --ty: -84px; }
+            .chip-100 { --tx: 0px; --ty: -112px; }
+            .chip-500 { --tx: -84px; --ty: -84px; }
+            .chip-1000 { --tx: -112px; --ty: -56px; }
+            
+            .betting-area {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+            margin: var(--spacing-2xl) 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Betting Status & Timer -->
+    <div class="betting-status">
+        <div>Betting Phase</div>
+        <div class="timer" id="timer">60s</div>
+    </div>
+
+    <!-- Selected Chip Display -->
+    <div class="selected-chip-display" id="selectedDisplay" style="display: none;">
+        <div class="label">Current Chip</div>
+        <div class="amount" id="chipAmount">$0</div>
+    </div>
+
+    <!-- Lock Button -->
+    <button class="lock-button" id="lockButton" disabled>Lock Bets</button>
+
+    <!-- Centered Chip Selector -->
+    <div class="chip-selector-center" id="chipSelector">
+        <button class="chip-button-center" id="chipButtonCenter" onclick="toggleChipRing()">
+            <span id="chipIcon">+</span>
+        </button>
+        
+        <div class="chip-ring-center" id="chipRing">
+            <div class="chip-item-center chip-5" onclick="selectChip(5, '$5')">$5</div>
+            <div class="chip-item-center chip-25" onclick="selectChip(25, '$25')">$25</div>
+            <div class="chip-item-center chip-100" onclick="selectChip(100, '$100')">$100</div>
+            <div class="chip-item-center chip-500" onclick="selectChip(500, '$500')">$500</div>
+            <div class="chip-item-center chip-1000" onclick="selectChip(1000, '$1K')">$1K</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>⟐ BETTING PHASE ⟐</h1>
+            <p>Select chips → Click bet areas → Lock in bets</p>
+        </header>
+
+        <!-- Game Table -->
+        <div class="game-table">
+            <div class="table-content">
+                <!-- Dealer Area -->
+                <div style="text-align: center; margin-bottom: var(--spacing-2xl);">
+                    <div style="font-size: 14px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: var(--spacing-md);">Dealer</div>
+                    <div style="font-size: 28px; color: var(--color-hit);">🂡 🂭</div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Player Betting Area -->
+                <div style="text-align: center; margin-bottom: var(--spacing-lg);">
+                    <div style="font-size: 14px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: var(--spacing-md);">Place Your Bets</div>
+                </div>
+
+                <div class="betting-area">
+                    <!-- Main Bet -->
+                    <div class="bet-tile" id="betMain" onclick="addBet('main')">
+                        <div class="bet-tile-label">Main Bet</div>
+                        <div class="bet-amount" id="betMainAmount">$0</div>
+                        <div class="bet-chips" id="betMainChips"></div>
+                    </div>
+
+                    <!-- Side Bet 21 -->
+                    <div class="bet-tile" id="betSide21" onclick="addBet('side21')">
+                        <div class="bet-tile-label">Side Bet 21</div>
+                        <div class="bet-amount" id="betSide21Amount">$0</div>
+                        <div class="bet-chips" id="betSide21Chips"></div>
+                    </div>
+
+                    <!-- +3 Bet -->
+                    <div class="bet-tile" id="betPlus3" onclick="addBet('plus3')">
+                        <div class="bet-tile-label">+3 Bet</div>
+                        <div class="bet-amount" id="betPlus3Amount">$0</div>
+                        <div class="bet-chips" id="betPlus3Chips"></div>
+                    </div>
+
+                    <!-- DNA Bet -->
+                    <div class="bet-tile" id="betDNA" onclick="addBet('dna')">
+                        <div class="bet-tile-label">DNA Bet</div>
+                        <div class="bet-amount" id="betDNAAmount">$0</div>
+                        <div class="bet-chips" id="betDNAChips"></div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Total Bet Display -->
+                <div style="text-align: center; padding: var(--spacing-lg); background: rgba(0, 255, 136, 0.1); border-radius: 8px; border: 1px solid rgba(0, 255, 136, 0.2);">
+                    <div style="font-size: 12px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: var(--spacing-sm);">Total Bet</div>
+                    <div style="font-size: 32px; font-weight: bold; color: var(--color-chip); font-family: 'Monaco', 'Courier New', monospace;" id="totalBet">$0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        const gameState = {
+            selectedChip: null,
+            selectedChipDisplay: null,
+            isChipRingOpen: false,
+            bets: {
+                main: [],
+                side21: [],
+                plus3: [],
+                dna: []
+            },
+            timerSeconds: 60,
+            isLocked: false
+        };
+
+        // Toggle Chip Ring
+        function toggleChipRing() {
+            const ring = document.getElementById('chipRing');
+            const selector = document.getElementById('chipSelector');
+            const icon = document.getElementById('chipIcon');
+            
+            gameState.isChipRingOpen = !gameState.isChipRingOpen;
+            
+            if (gameState.isChipRingOpen) {
+                ring.classList.add('active');
+                selector.classList.add('active');
+                icon.textContent = '×';
+            } else {
+                ring.classList.remove('active');
+                selector.classList.remove('active');
+                icon.textContent = '+';
+            }
+        }
+
+        // Select Chip Denomination
+        function selectChip(amount, display) {
+            gameState.selectedChip = amount;
+            gameState.selectedChipDisplay = display;
+            
+            // Show selected chip display
+            const selectedDisplay = document.getElementById('selectedDisplay');
+            document.getElementById('chipAmount').textContent = display;
+            selectedDisplay.style.display = 'block';
+            
+            // Keep ring open for multiple bets (no auto-close)
+            // Chips remain selected until player clicks elsewhere
+            
+            updateLockButton();
+        }
+
+        // Add Bet to Area (Multiple Clicks Support)
+        function addBet(betType) {
+            if (gameState.isLocked) return;
+            if (!gameState.selectedChip) return;
+            
+            // Add chip to the bet
+            gameState.bets[betType].push(gameState.selectedChip);
+            
+            // Update visual
+            updateBetDisplay(betType);
+            updateTotalBet();
+            updateLockButton();
+        }
+
+        // Update Bet Display
+        function updateBetDisplay(betType) {
+            const bets = gameState.bets[betType];
+            const totalAmount = bets.reduce((sum, chip) => sum + chip, 0);
+            
+            // Update amount
+            const amountEl = document.getElementById(`bet${formatType(betType)}Amount`);
+            amountEl.textContent = `$${totalAmount}`;
+            
+            // Update chips display
+            const chipsEl = document.getElementById(`bet${formatType(betType)}Chips`);
+            const chipCounts = {};
+            bets.forEach(chip => {
+                chipCounts[chip] = (chipCounts[chip] || 0) + 1;
+            });
+            
+            chipsEl.innerHTML = Object.entries(chipCounts)
+                .map(([chip, count]) => `<div class="chip-stack">$${chip} ×${count}</div>`)
+                .join('');
+            
+            // Mark as betting
+            const tileEl = document.getElementById(`bet${formatType(betType)}`);
+            if (totalAmount > 0) {
+                tileEl.classList.add('betting');
+            } else {
+                tileEl.classList.remove('betting');
+            }
+        }
+
+        // Format Type (main -> Main, side21 -> Side21)
+        function formatType(type) {
+            const map = {
+                'main': 'Main',
+                'side21': 'Side21',
+                'plus3': 'Plus3',
+                'dna': 'DNA'
+            };
+            return map[type];
+        }
+
+        // Update Total Bet
+        function updateTotalBet() {
+            const total = Object.values(gameState.bets)
+                .flat()
+                .reduce((sum, chip) => sum + chip, 0);
+            
+            document.getElementById('totalBet').textContent = `$${total}`;
+        }
+
+        // Update Lock Button
+        function updateLockButton() {
+            const lockButton = document.getElementById('lockButton');
+            const total = Object.values(gameState.bets)
+                .flat()
+                .reduce((sum, chip) => sum + chip, 0);
+            
+            lockButton.disabled = total === 0;
+        }
+
+        // Lock Button Handler
+        document.getElementById('lockButton').addEventListener('click', () => {
+            if (gameState.isLocked) return;
+            
+            gameState.isLocked = true;
+            
+            // Lock all bet tiles
+            Object.keys(gameState.bets).forEach(betType => {
+                const tileEl = document.getElementById(`bet${formatType(betType)}`);
+                tileEl.classList.add('locked');
+            });
+            
+            // Close chip ring
+            gameState.isChipRingOpen = false;
+            document.getElementById('chipRing').classList.remove('active');
+            document.getElementById('chipSelector').classList.remove('active');
+            document.getElementById('chipIcon').textContent = '+';
+            
+            // Hide chip selector
+            document.getElementById('chipSelector').style.display = 'none';
+            
+            // Update button
+            document.getElementById('lockButton').textContent = 'Bets Locked';
+            
+            // Stop timer
+            clearInterval(gameState.timerInterval);
+            
+            console.log('Bets locked:', gameState.bets);
+        });
+
+        // Timer
+        function startTimer() {
+            gameState.timerInterval = setInterval(() => {
+                gameState.timerSeconds--;
+                const timerEl = document.getElementById('timer');
+                
+                if (gameState.timerSeconds <= 0) {
+                    clearInterval(gameState.timerInterval);
+                    document.getElementById('lockButton').click();
+                } else if (gameState.timerSeconds <= 10) {
+                    timerEl.classList.add('warning');
+                }
+                
+                timerEl.textContent = gameState.timerSeconds + 's';
+            }, 1000);
+        }
+
+        // Remove Bet (Double-click to remove last chip)
+        document.querySelectorAll('.bet-tile').forEach((tile, index) => {
+            const types = ['main', 'side21', 'plus3', 'dna'];
+            tile.addEventListener('dblclick', () => {
+                const betType = types[index];
+                if (gameState.bets[betType].length > 0) {
+                    gameState.bets[betType].pop();
+                    updateBetDisplay(betType);
+                    updateTotalBet();
+                    updateLockButton();
+                }
+            });
+        });
+
+        // Click outside to close chip ring
+        document.addEventListener('click', (e) => {
+            const chipSelector = document.getElementById('chipSelector');
+            if (!chipSelector.contains(e.target) && gameState.isChipRingOpen) {
+                // Optional: Don't close on outside click - keep ring open for continuous betting
+                // gameState.isChipRingOpen = false;
+                // document.getElementById('chipRing').classList.remove('active');
+                // document.getElementById('chipIcon').textContent = '+';
+            }
+        });
+
+        // Initialize
+        startTimer();
+        updateLockButton();
+    </script>
+</body>
+</html>
