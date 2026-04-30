@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACE Blackjack Premium - Design System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Georgia', serif;
+            background: linear-gradient(135deg, #050a0f 0%, #0f1419 50%, #1a1f24 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInPage 1.2s ease-out;
+        }
+
+        @keyframes fadeInPage {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-wrapper {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: logoFloatIn 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes logoFloatIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .logo-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.3));
+            animation: logoPulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoPulseGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 60px rgba(245, 158, 11, 0.6));
+            }
+        }
+
+        .logo-svg:hover {
+            animation: logoInteractiveGlow 0.6s ease-in-out forwards;
+        }
+
+        @keyframes logoInteractiveGlow {
+            0% {
+                filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.3)) brightness(1);
+            }
+            50% {
+                filter: drop-shadow(0 0 80px rgba(245, 158, 11, 0.8)) brightness(1.1);
+            }
+            100% {
+                filter: drop-shadow(0 0 60px rgba(245, 158, 11, 0.6)) brightness(1);
+            }
+        }
+
+        .brandmark {
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: #f59e0b;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            animation: brandmarkFadeIn 1.8s ease-out;
+        }
+
+        @keyframes brandmarkFadeIn {
+            from {
+                opacity: 0;
+                letter-spacing: 8px;
+            }
+            to {
+                opacity: 1;
+                letter-spacing: 3px;
+            }
+        }
+
+        .brandmark::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+            margin: 1rem auto 0;
+            animation: brandmarkUnderline 2s ease-out;
+        }
+
+        @keyframes brandmarkUnderline {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 60px;
+                opacity: 1;
+            }
+        }
+
+        .spacer {
+            height: 0;
+            opacity: 0;
+        }
+
+        .cta-wrapper {
+            margin-top: 1rem;
+            animation: ctaFadeIn 2.2s ease-out;
+        }
+
+        @keyframes ctaFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            padding: 18px 48px;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: #050a0f;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: left 0.5s ease-out;
+            z-index: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2);
+            letter-spacing: 3px;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px) scale(0.98);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .button-text::after {
+            content: '→';
+            display: inline-block;
+            transition: transform 0.3s ease;
+            font-size: 18px;
+        }
+
+        .cta-button:hover .button-text::after {
+            transform: translateX(6px);
+        }
+
+        .cta-button:active .button-text::after {
+            transform: translateX(3px);
+        }
+
+        /* Animation token system */
+        :root {
+            --duration-fast: 0.15s;
+            --duration-base: 0.3s;
+            --duration-slow: 0.6s;
+            --easing-ease-out: cubic-bezier(0.33, 0.66, 0.66, 1);
+            --easing-ease-in-out: cubic-bezier(0.37, 0, 0.63, 1);
+            --easing-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --color-primary: #f59e0b;
+            --color-primary-dark: #d97706;
+            --color-primary-light: #fbbf24;
+            --color-bg-dark: #050a0f;
+            --color-bg-light: #1a1f24;
+        }
+
+        /* Ripple effect on click */
+        .cta-button {
+            --ripple-x: 0;
+            --ripple-y: 0;
+            --ripple-size: 0;
+        }
+
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            pointer-events: none;
+            left: var(--ripple-x);
+            top: var(--ripple-y);
+            width: var(--ripple-size);
+            height: var(--ripple-size);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            animation: rippleExpand 0.6s ease-out;
+        }
+
+        @keyframes rippleExpand {
+            from {
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            to {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                gap: 2rem;
+                padding: 1.5rem;
+            }
+
+            .logo-wrapper {
+                width: 240px;
+                height: 240px;
+            }
+
+            .brandmark {
+                font-size: 16px;
+                letter-spacing: 2px;
+            }
+
+            .cta-button {
+                padding: 14px 36px;
+                font-size: 13px;
+                letter-spacing: 1px;
+            }
+
+            .button-text::after {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-wrapper {
+                width: 180px;
+                height: 180px;
+            }
+
+            .brandmark {
+                font-size: 14px;
+                letter-spacing: 1.5px;
+            }
+
+            .cta-button {
+                padding: 12px 28px;
+                font-size: 12px;
+                letter-spacing: 1px;
+            }
+        }
+
+        /* Focus states for keyboard navigation */
+        .cta-button:focus-visible {
+            outline: 2px solid #f59e0b;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-wrapper">
+            <svg class="logo-svg" width="300" height="300" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="aceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1a1f24;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#050a0f;stop-opacity:1" />
+                    </linearGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                
+                <!-- Main background -->
+                <rect width="32" height="32" rx="6" fill="url(#aceGradient)"></rect>
+                
+                <!-- Border accent -->
+                <rect width="32" height="32" rx="6" fill="none" stroke="#F59E0B" stroke-width="0.5" opacity="0.5"></rect>
+                
+                <!-- Spade symbol with glow -->
+                <g filter="url(#glow)">
+                    <text x="16" y="24" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#F59E0B" text-anchor="middle" font-weight="bold">♠</text>
+                </g>
+                
+                <!-- Accent dots -->
+                <circle cx="5" cy="5" r="1.5" fill="#F59E0B" opacity="0.6"></circle>
+                <circle cx="27" cy="27" r="1.5" fill="#F59E0B" opacity="0.6"></circle>
+            </svg>
+        </div>
+
+        <!-- Brandmark -->
+        <div class="brandmark">ACE Blackjack Premium</div>
+
+        <!-- Spacer -->
+        <div class="spacer"></div>
+
+        <!-- Call to Action Button -->
+        <div class="cta-wrapper">
+            <button class="cta-button" id="enterBtn">
+                <span class="button-text">Click Here to Enter</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const enterBtn = document.getElementById('enterBtn');
+
+        // Hover animation token
+        enterBtn.addEventListener('mouseenter', () => {
+            // Hover state is handled by CSS
+        });
+
+        enterBtn.addEventListener('mouseleave', () => {
+            // Hover state is handled by CSS
+        });
+
+        // Click animation with ripple effect
+        enterBtn.addEventListener('click', (e) => {
+            const rect = enterBtn.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Set ripple position using CSS variables
+            enterBtn.style.setProperty('--ripple-x', x + 'px');
+            enterBtn.style.setProperty('--ripple-y', y + 'px');
+            enterBtn.style.setProperty('--ripple-size', '0px');
+
+            // Trigger ripple animation
+            const ripple = enterBtn.querySelector('::after');
+            
+            // Simulate navigation after animation completes
+            setTimeout(() => {
+                // Redirect to dashboard or next page
+                window.location.href = 'ace-environment-dashboard.html';
+            }, 600);
+        });
+
+        // Keyboard support (Enter key)
+        enterBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                enterBtn.click();
+            }
+        });
+
+        // Log animation token system to console
+        console.log('%c ACE Animation Tokens Loaded', 'color: #f59e0b; font-size: 14px; font-weight: bold');
+        console.log({
+            'Duration Fast': 'var(--duration-fast): 0.15s',
+            'Duration Base': 'var(--duration-base): 0.3s',
+            'Duration Slow': 'var(--duration-slow): 0.6s',
+            'Easing Ease-Out': 'cubic-bezier(0.33, 0.66, 0.66, 1)',
+            'Easing Ease-In-Out': 'cubic-bezier(0.37, 0, 0.63, 1)',
+            'Easing Bounce': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+            'Primary Color': '#f59e0b',
+            'Primary Light': '#fbbf24',
+            'Primary Dark': '#d97706'
+        });
+    </script>
+</body>
+</html>
