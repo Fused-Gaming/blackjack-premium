@@ -160,9 +160,8 @@ export function canPlaceInsurance(dealerUpCard: Card, hand: Hand, balance: numbe
     return false;
   }
 
-  // Must have enough balance for at least the maximum insurance bet
-  const maxInsuranceBet = getMaxInsuranceBet(hand);
-  if (balance < maxInsuranceBet) {
+  // Must have enough balance for at least some insurance bet (any amount > 0)
+  if (balance <= 0) {
     return false;
   }
 
