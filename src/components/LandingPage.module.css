@@ -5,14 +5,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
-  padding: 2rem;
-  max-width: 600px;
   width: 100%;
+  height: 100vh;
+  padding: clamp(16px, 3vw, 24px);
   text-align: center;
-  margin: 0 auto;
-  min-height: 100vh;
   background: var(--bg-radial);
+  animation: fadeInPage var(--d-slow) var(--ease-out);
+  overflow: hidden;
+}
+
+.contentGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 32px);
+  max-height: 90vh;
+  max-width: 100%;
   animation: fadeInPage var(--d-slow) var(--ease-out);
 }
 
@@ -36,12 +45,24 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .logoWrapper {
-  width: 300px;
-  height: 300px;
+  width: clamp(100px, 28vw, 200px);
+  aspect-ratio: 100 / 160;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: logoFloatIn 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+.logoWrapper:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.4));
+}
+
+.logoWrapper:active {
+  transform: scale(0.98);
 }
 
 @keyframes logoFloatIn {
@@ -58,33 +79,55 @@
 .logoSvg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.3));
-  animation: logoPulseGlow 3s ease-in-out infinite;
+  animation: logoCardPulse 3s ease-in-out infinite;
 }
 
-@keyframes logoPulseGlow {
+@keyframes logoCardPulse {
   0%,
   100% {
-    filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.3));
+    opacity: 1;
   }
   50% {
-    filter: drop-shadow(0 0 60px rgba(245, 158, 11, 0.6));
+    opacity: 1.02;
   }
 }
 
 .logoSvg:hover {
-  animation: logoInteractiveGlow 0.6s ease-in-out forwards;
+  animation: logoCardHover 0.6s ease-in-out forwards;
 }
 
-@keyframes logoInteractiveGlow {
+@keyframes logoCardHover {
   0% {
-    filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.3)) brightness(1);
+    opacity: 1;
   }
   50% {
-    filter: drop-shadow(0 0 80px rgba(245, 158, 11, 0.8)) brightness(1.1);
+    opacity: 1.05;
   }
   100% {
-    filter: drop-shadow(0 0 60px rgba(245, 158, 11, 0.6)) brightness(1);
+    opacity: 1;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Card Group - Subtle Reactionary Animation */
+/* ─────────────────────────────────────────────────────────────── */
+
+.logoWrapper.interacting .cardGroup {
+  animation: cardReaction 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes cardReaction {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.008) translateY(-1px);
+    opacity: 1.01;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
   }
 }
 
@@ -93,14 +136,17 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .brandmark {
-  font-size: 18px;
-  font-weight: 500;
-  letter-spacing: 3px;
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 800;
+  letter-spacing: clamp(2.5px, 0.4vw, 4px);
   color: var(--brand);
   text-transform: uppercase;
   font-family: var(--font-display);
-  margin-bottom: 1rem;
   animation: brandmarkFadeIn 1.8s var(--ease-out);
+  line-height: 1.2;
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
 }
 
 @keyframes brandmarkFadeIn {
@@ -117,10 +163,10 @@
 .brandmark::after {
   content: '';
   display: block;
-  width: 60px;
-  height: 1px;
+  width: clamp(80px, 25vw, 120px);
+  height: 2px;
   background: linear-gradient(90deg, transparent, var(--brand), transparent);
-  margin: 1rem auto 0;
+  margin: clamp(8px, 1.5vw, 14px) auto 0;
   animation: brandmarkUnderline 2s var(--ease-out);
 }
 
@@ -135,22 +181,14 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────── */
-/* Spacer */
-/* ─────────────────────────────────────────────────────────────── */
-
-.spacer {
-  height: 0;
-  opacity: 0;
-}
 
 /* ─────────────────────────────────────────────────────────────── */
 /* CTA Button Section */
 /* ─────────────────────────────────────────────────────────────── */
 
 .ctaWrapper {
-  margin-top: 1rem;
   animation: ctaFadeIn 2.2s var(--ease-out);
+  flex-shrink: 0;
 }
 
 @keyframes ctaFadeIn {
@@ -169,10 +207,10 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .ctaButton {
-  padding: 18px 48px;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 2px;
+  padding: clamp(10px, 1.8vw, 14px) clamp(24px, 5vw, 40px);
+  font-size: clamp(11px, 1.6vw, 13px);
+  font-weight: 600;
+  letter-spacing: clamp(0.5px, 0.15vw, 1.5px);
   color: var(--bg);
   background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
   border: 2px solid var(--brand);
@@ -184,6 +222,8 @@
   overflow: hidden;
   box-shadow: var(--shadow-button);
   font-family: var(--font-display);
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .ctaButton::before {
@@ -257,51 +297,18 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 @media (max-width: 768px) {
-  .container {
-    gap: 2rem;
-    padding: 1.5rem;
-  }
-
-  .logoWrapper {
-    width: 240px;
-    height: 240px;
-  }
-
-  .brandmark {
-    font-size: 16px;
-    letter-spacing: 2px;
-  }
-
-  .ctaButton {
-    padding: 14px 36px;
-    font-size: 13px;
-    letter-spacing: 1px;
+  .ctaWrapper {
+    margin-top: 0;
   }
 
   .buttonText::after {
-    font-size: 16px;
+    font-size: clamp(14px, 1.5vw, 18px);
   }
 }
 
 @media (max-width: 480px) {
-  .logoWrapper {
-    width: 180px;
-    height: 180px;
-  }
-
-  .brandmark {
-    font-size: 14px;
-    letter-spacing: 1.5px;
-  }
-
-  .ctaButton {
-    padding: 12px 28px;
-    font-size: 12px;
-    letter-spacing: 1px;
-  }
-
   .buttonText {
-    gap: 8px;
+    gap: clamp(6px, 1vw, 8px);
   }
 }
 

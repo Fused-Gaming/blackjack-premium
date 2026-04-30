@@ -13,9 +13,19 @@ A professional, secure, and engaging blackjack game with premium branding, smoot
 
 ### User Experience
 - **Premium Landing Page**: Branded entry point with interactive animations
+  - Responsive fluid scaling for all screen sizes
+  - Optimized logo glow (15% reduction for visual clarity)
+  - No unwanted scrolling across all devices
 - **Dark Theme**: Modern design system with 161 design tokens
 - **Smooth Animations**: 8+ custom animations using design tokens
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
+  - Fluid CSS clamp() for seamless scaling
+  - Proper margins and bleed areas based on resolution
+  - Typography perfectly sized for any viewport
+- **Social Sharing**: Open Graph endpoint with rich media previews
+  - Dedicated OG preview at `/public/og-preview.html`
+  - Enhanced Twitter Card metadata
+  - Standardized metadata across all platforms
 - **Accessibility**: WCAG AA compliant with keyboard navigation and reduced motion support
 
 ## Tech Stack
