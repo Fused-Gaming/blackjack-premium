@@ -292,6 +292,12 @@
   outline-offset: 2px;
 }
 
+.ctaButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* ─────────────────────────────────────────────────────────────── */
 /* Responsive Design */
 /* ─────────────────────────────────────────────────────────────── */
@@ -338,5 +344,228 @@
 
   .ctaButton {
     color: var(--bg);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Entrance Sequence - Smoke & Greeting */
+/* ─────────────────────────────────────────────────────────────── */
+
+.container.entering {
+  transition: background 1.5s ease-out;
+}
+
+.smokeContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.smokeParticle {
+  position: absolute;
+  width: clamp(40px, 8vw, 120px);
+  height: clamp(40px, 8vw, 120px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  filter: blur(25px);
+  animation: smokeRise 3s ease-out forwards;
+}
+
+@keyframes smokeRise {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) translateX(0) scale(0.5);
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-500px) translateX(var(--drift)) scale(1.5);
+  }
+}
+
+.smokeParticle:nth-child(1) {
+  --drift: 80px;
+}
+.smokeParticle:nth-child(2) {
+  --drift: -60px;
+}
+.smokeParticle:nth-child(3) {
+  --drift: 100px;
+}
+.smokeParticle:nth-child(4) {
+  --drift: -80px;
+}
+.smokeParticle:nth-child(5) {
+  --drift: 120px;
+}
+.smokeParticle:nth-child(6) {
+  --drift: -100px;
+}
+.smokeParticle:nth-child(7) {
+  --drift: 60px;
+}
+.smokeParticle:nth-child(8) {
+  --drift: -120px;
+}
+.smokeParticle:nth-child(9) {
+  --drift: 90px;
+}
+.smokeParticle:nth-child(10) {
+  --drift: -70px;
+}
+.smokeParticle:nth-child(11) {
+  --drift: 110px;
+}
+.smokeParticle:nth-child(12) {
+  --drift: -90px;
+}
+
+.greetingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  animation: greetingFadeIn 0.8s ease-out forwards;
+  z-index: 100;
+}
+
+@keyframes greetingFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+.greetingContent {
+  text-align: center;
+  animation: greetingScaleUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  padding: clamp(20px, 5vw, 40px);
+}
+
+@keyframes greetingScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.greetingTitle {
+  font-size: clamp(42px, 8vw, 72px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--brand);
+  margin: 0;
+  font-family: var(--font-display);
+  text-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+  animation: titleReveal 0.8s ease-out 0.2s both;
+}
+
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.greetingMessage {
+  font-size: clamp(16px, 3vw, 24px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: clamp(12px, 2vw, 20px) 0;
+  letter-spacing: 1px;
+  font-family: var(--font-display);
+  animation: messageReveal 0.8s ease-out 0.4s both;
+}
+
+@keyframes messageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.greetingDivider {
+  width: clamp(60px, 15vw, 120px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  margin: clamp(16px, 2vw, 24px) auto;
+  animation: dividerExpand 0.8s ease-out 0.6s both;
+}
+
+@keyframes dividerExpand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 120px;
+    opacity: 1;
+  }
+}
+
+.greetingSubtext {
+  font-size: clamp(13px, 2.2vw, 18px);
+  color: rgba(255, 255, 255, 0.7);
+  margin: clamp(12px, 2vw, 18px) 0 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  animation: subtextReveal 0.8s ease-out 0.8s both;
+}
+
+@keyframes subtextReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.greetingOverlay {
+  animation: greetingFadeOut 0.6s ease-in 2.2s both;
+}
+
+@keyframes greetingFadeOut {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0);
   }
 }

@@ -7,14 +7,23 @@ interface LandingPageProps {
 
 export const LandingPage = ({ onEnter }: LandingPageProps) => {
   const [isInteracting, setIsInteracting] = React.useState(false);
+  const [isEntering, setIsEntering] = React.useState(false);
+  const [showGreeting, setShowGreeting] = React.useState(false);
 
   const handleEnter = () => {
-    onEnter?.();
+    setIsEntering(true);
+    setShowGreeting(true);
+
+    setTimeout(() => {
+      onEnter?.();
+    }, 2800);
   };
 
   const handleLogoInteraction = () => {
-    setIsInteracting(true);
-    setTimeout(() => setIsInteracting(false), 600);
+    if (!isEntering) {
+      setIsInteracting(true);
+      setTimeout(() => setIsInteracting(false), 600);
+    }
   };
 
   React.useEffect(() => {
@@ -24,10 +33,10 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [isEntering]);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${isEntering ? styles.entering : ''}`}>
       {/* Main Content Group - Grouped elements with controlled sizing */}
       <div className={styles.contentGroup}>
         {/* Logo Section */}
@@ -157,11 +166,43 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
 
         {/* Call to Action Button */}
         <div className={styles.ctaWrapper}>
-          <button className={styles.ctaButton} onClick={handleEnter}>
+          <button
+            className={styles.ctaButton}
+            onClick={handleEnter}
+            disabled={isEntering}
+          >
             <span className={styles.buttonText}>Click Here to Enter</span>
           </button>
         </div>
       </div>
+
+      {/* Smoke Particles Background */}
+      {isEntering && (
+        <div className={styles.smokeContainer}>
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className={styles.smokeParticle}
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${i * 0.15}s`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Welcome Greeting Overlay */}
+      {showGreeting && (
+        <div className={styles.greetingOverlay}>
+          <div className={styles.greetingContent}>
+            <h1 className={styles.greetingTitle}>Welcome to ACE</h1>
+            <p className={styles.greetingMessage}>Good Fortune & Business Loyalty</p>
+            <div className={styles.greetingDivider} />
+            <p className={styles.greetingSubtext}>Enter the Casino</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
