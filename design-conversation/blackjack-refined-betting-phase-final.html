@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACE Blackjack — Refined Betting Phase with Countdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================================
+           ACE BLACKJACK REFINED BETTING PHASE v5.3
+           Hidden Chips + Countdown Timer + DNA Auto-Calculate + Clear Button
+           ============================================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        :root {
+            /* COLORS */
+            --brand: #F59E0B;
+            --brand-light: #FBBF24;
+            --brand-dark: #D97706;
+            --gold: #FFD700;
+            --bg: #050A0F;
+            --bg-dark: #02050A;
+            --bg-card: #0D1B2A;
+            --bg-elevated: #162840;
+            --felt: #0A3D26;
+            --felt-light: #0F5132;
+            --border: #1E3A5F;
+            --win: #10B981;
+            --loss: #EF4444;
+            --text: #E2E8F0;
+            --text-muted: #64748B;
+            --text-subtle: #475569;
+
+            /* CHIP COLORS */
+            --chip-5: #EF4444;
+            --chip-25: #F59E0B;
+            --chip-100: #FFD700;
+            --chip-500: #7C3AED;
+            --chip-1000: #3B82F6;
+
+            /* TYPOGRAPHY */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-display: 'Outfit', 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+            /* MOTION */
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: linear-gradient(135deg, #050A0F 0%, #0a1628 50%, #050A0F 100%);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           MAIN CONTAINER
+           ════════════════════════════════════════════════════════════════════ */
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           HEADER
+           ════════════════════════════════════════════════════════════════════ */
+
+        header {
+            flex: 0 0 auto;
+            text-align: center;
+            padding: 20px;
+            background: rgba(5, 10, 15, 0.5);
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-center {
+            flex: 1;
+        }
+
+        header h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--brand), var(--gold), var(--brand));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 8px;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           COUNTDOWN TIMER
+           ════════════════════════════════════════════════════════════════════ */
+
+        .timer-display {
+            flex: 0 0 auto;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--brand);
+            border-radius: 12px;
+            padding: 12px 24px;
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .timer-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--brand);
+            font-family: var(--font-mono);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-value.warning {
+            animation: pulse-warning 1s ease-in-out infinite;
+            color: var(--loss);
+        }
+
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           CONTENT
+           ════════════════════════════════════════════════════════════════════ */
+
+        .content {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           BETTING BOARD
+           ════════════════════════════════════════════════════════════════════ */
+
+        .betting-board {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--felt-light);
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+            padding: 30px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 60px rgba(0,0,0,0.5),
+                inset 0 0 60px rgba(0,0,0,0.3),
+                0 0 40px rgba(255,215,0,0.15);
+            position: relative;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           EXPAND BUTTON (+)
+           ════════════════════════════════════════════════════════════════════ */
+
+        .expand-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            border: 4px solid var(--brand);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 900;
+            color: #000;
+            box-shadow: 
+                0 0 40px rgba(245,158,11,0.6),
+                0 8px 32px rgba(0,0,0,0.5);
+            transition: all 0.3s var(--ease-out);
+            z-index: 100;
+        }
+
+        .expand-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 
+                0 0 50px rgba(245,158,11,0.8),
+                0 12px 40px rgba(0,0,0,0.6);
+        }
+
+        .expand-button:active {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        .expand-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(0);
+            transition: all 0.4s var(--ease-out);
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           CHIPS CONTAINER (Hidden, Expands on +)
+           ════════════════════════════════════════════════════════════════════ */
+
+        .chips-expansion-area {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s var(--ease-out);
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .chips-expansion-area.expanded {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .chips-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           INDIVIDUAL CHIP
+           ════════════════════════════════════════════════════════════════════ */
+
+        .chip {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-out);
+            box-shadow: 
+                0 4px 12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: #000;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+            animation: chipPopIn 0.5s var(--ease-spring);
+        }
+
+        @keyframes chipPopIn {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .chip::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), transparent);
+            pointer-events: none;
+        }
+
+        .chip:hover {
+            transform: scale(1.1);
+            box-shadow: 
+                0 6px 20px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 0 20px rgba(255,215,0,0.4);
+        }
+
+        .chip:active {
+            transform: scale(0.95);
+        }
+
+        .chip.selected {
+            transform: scale(1.15);
+            box-shadow: 
+                0 8px 30px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4),
+                0 0 30px rgba(255,215,0,0.6);
+        }
+
+        .chip.chip-5 {
+            background: linear-gradient(135deg, #ff6b9d, #c06c84);
+            border-color: #ff6b9d;
+        }
+
+        .chip.chip-25 {
+            background: linear-gradient(135deg, var(--chip-25), var(--brand-light));
+            border-color: var(--chip-25);
+        }
+
+        .chip.chip-100 {
+            background: linear-gradient(135deg, var(--chip-100), #ffa500);
+            border-color: var(--chip-100);
+        }
+
+        .chip.chip-500 {
+            background: linear-gradient(135deg, var(--chip-500), #ec4899);
+            border-color: var(--chip-500);
+        }
+
+        .chip.chip-1000 {
+            background: linear-gradient(135deg, var(--chip-1000), #60a5fa);
+            border-color: var(--chip-1000);
+        }
+
+        .chip-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            line-height: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .chip-value {
+            font-size: 28px;
+            font-weight: 900;
+            margin-top: 6px;
+            line-height: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           BETTING AREAS (Revealed with chips)
+           ════════════════════════════════════════════════════════════════════ */
+
+        .betting-areas-container {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s var(--ease-out);
+            pointer-events: none;
+            z-index: 40;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .betting-areas-container.expanded {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .betting-areas {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .bet-area {
+            background: rgba(0, 20, 40, 0.7);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .bet-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(245,158,11,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s var(--ease-out);
+            pointer-events: none;
+        }
+
+        .bet-area:hover::before {
+            opacity: 1;
+        }
+
+        .bet-area:hover {
+            border-color: var(--brand);
+            box-shadow: 
+                0 0 20px rgba(245,158,11,0.3),
+                inset 0 0 20px rgba(245,158,11,0.05);
+            transform: translateY(-3px);
+            background: rgba(0, 30, 60, 0.8);
+        }
+
+        .bet-area.active {
+            border-color: var(--win);
+            background: rgba(16, 185, 129, 0.15);
+            box-shadow: 
+                0 0 20px rgba(16,185,129,0.3),
+                inset 0 0 20px rgba(16,185,129,0.1);
+        }
+
+        .bet-area.center {
+            grid-column: 1;
+            grid-row: 1 / 3;
+        }
+
+        .bet-area.side-21 {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .bet-area.plus3 {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .bet-area.dna {
+            grid-column: 4;
+            grid-row: 1;
+        }
+
+        .bet-area.total {
+            grid-column: 2 / -1;
+            grid-row: 2;
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            cursor: default;
+        }
+
+        .bet-area.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .bet-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .center .bet-label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .bet-amount {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--chip-25);
+            font-family: var(--font-mono);
+            margin-bottom: 8px;
+        }
+
+        .center .bet-amount {
+            font-size: 42px;
+        }
+
+        .total .bet-amount {
+            font-size: 32px;
+        }
+
+        .bet-chips {
+            font-size: 11px;
+            color: var(--text-subtle);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .chip-stack {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--chip-25);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-family: var(--font-mono);
+            white-space: nowrap;
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           SELECTED CHIP DISPLAY
+           ════════════════════════════════════════════════════════════════════ */
+
+        .selected-display {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(5, 10, 15, 0.95);
+            border: 2px solid var(--brand);
+            border-radius: 12px;
+            padding: 12px 24px;
+            color: var(--brand);
+            font-family: var(--font-mono);
+            backdrop-filter: blur(16px);
+            z-index: 1000;
+            text-align: center;
+            display: none;
+            animation: slideInUp 0.4s var(--ease-out);
+        }
+
+        .selected-display.active {
+            display: block;
+        }
+
+        .selected-display .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .selected-display .amount {
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           CONTROL PANEL
+           ════════════════════════════════════════════════════════════════════ */
+
+        .control-panel {
+            flex: 0 0 auto;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border: 2px solid var(--brand);
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            color: #000;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s var(--ease-out);
+            font-family: var(--font-display);
+            box-shadow: 0 0 20px rgba(245,158,11,0.45);
+            white-space: nowrap;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 0 20px rgba(245,158,11,0.45),
+                0 0 30px rgba(245,158,11,0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn.reset {
+            background: linear-gradient(135deg, var(--win), #059669);
+            border-color: var(--win);
+        }
+
+        .btn.clear {
+            background: linear-gradient(135deg, var(--loss), #dc2626);
+            border-color: var(--loss);
+        }
+
+        /* ════════════════════════════════════════════════════════════════════
+           RESPONSIVE
+           ════════════════════════════════════════════════════════════════════ */
+
+        @media (max-width: 1200px) {
+            .expand-button {
+                width: 100px;
+                height: 100px;
+                font-size: 36px;
+            }
+
+            .chip {
+                width: 85px;
+                height: 85px;
+            }
+
+            .chip-value {
+                font-size: 24px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .timer-display {
+                padding: 8px 16px;
+            }
+
+            .timer-value {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .betting-board {
+                padding: 15px;
+            }
+
+            .expand-button {
+                width: 80px;
+                height: 80px;
+                font-size: 28px;
+            }
+
+            .chip {
+                width: 70px;
+                height: 70px;
+            }
+
+            .chip-label {
+                font-size: 10px;
+            }
+
+            .chip-value {
+                font-size: 18px;
+            }
+
+            .chips-grid {
+                gap: 15px;
+            }
+
+            .betting-areas {
+                gap: 12px;
+            }
+
+            .bet-area {
+                padding: 12px;
+            }
+
+            .bet-label {
+                font-size: 10px;
+            }
+
+            .bet-amount {
+                font-size: 18px;
+            }
+
+            .center .bet-amount {
+                font-size: 24px;
+            }
+
+            .control-panel {
+                gap: 12px;
+                padding: 12px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- HEADER with TIMER -->
+        <header>
+            <div class="header-center">
+                <h1>⟐ BETTING PHASE ⟐</h1>
+                <p>Tap + to Select Chips and Place Bets</p>
+            </div>
+            <div class="timer-display">
+                <div class="timer-label">Betting Time</div>
+                <div class="timer-value" id="timerValue">60s</div>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="content">
+            <!-- BETTING BOARD -->
+            <div class="betting-board">
+                <!-- EXPAND BUTTON (+) -->
+                <button class="expand-button" id="expandButton" onclick="expandBoard()">+</button>
+
+                <!-- CHIPS GRID (Hidden, Expands) -->
+                <div class="chips-expansion-area" id="chipsArea">
+                    <div class="chips-grid">
+                        <div class="chip chip-5" onclick="selectChip(5, '$5')" role="button" tabindex="0">
+                            <div class="chip-label">CHIP</div>
+                            <div class="chip-value">$5</div>
+                        </div>
+                        <div class="chip chip-25" onclick="selectChip(25, '$25')" role="button" tabindex="0">
+                            <div class="chip-label">CHIP</div>
+                            <div class="chip-value">$25</div>
+                        </div>
+                        <div class="chip chip-100" onclick="selectChip(100, '$100')" role="button" tabindex="0">
+                            <div class="chip-label">CHIP</div>
+                            <div class="chip-value">$100</div>
+                        </div>
+                        <div class="chip chip-500" onclick="selectChip(500, '$500')" role="button" tabindex="0">
+                            <div class="chip-label">CHIP</div>
+                            <div class="chip-value">$500</div>
+                        </div>
+                        <div class="chip chip-1000" onclick="selectChip(1000, '$1K')" role="button" tabindex="0">
+                            <div class="chip-label">CHIP</div>
+                            <div class="chip-value">$1K</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BETTING AREAS (Hidden, Expands) -->
+                <div class="betting-areas-container" id="bettingAreasContainer">
+                    <div class="betting-areas">
+                        <!-- CENTER BET -->
+                        <div class="bet-area center" onclick="addBet('center')">
+                            <div class="bet-label">Main Bet</div>
+                            <div class="bet-amount" id="betCenterAmount">$0</div>
+                            <div class="bet-chips" id="betCenterChips"></div>
+                        </div>
+
+                        <!-- SIDE BET 21 -->
+                        <div class="bet-area side-21" onclick="addBet('side21')">
+                            <div class="bet-label">Side Bet 21</div>
+                            <div class="bet-amount" id="betSide21Amount">$0</div>
+                            <div class="bet-chips" id="betSide21Chips"></div>
+                        </div>
+
+                        <!-- +3 BET -->
+                        <div class="bet-area plus3" onclick="addBet('plus3')">
+                            <div class="bet-label">+3 Bet</div>
+                            <div class="bet-amount" id="betPlus3Amount">$0</div>
+                            <div class="bet-chips" id="betPlus3Chips"></div>
+                        </div>
+
+                        <!-- DNA BET (Auto-calculated as 5% of main) -->
+                        <div class="bet-area dna">
+                            <div class="bet-label">DNA Bet (5%)</div>
+                            <div class="bet-amount" id="betDNAAmount">$0</div>
+                            <div class="bet-chips" id="betDNAChips"></div>
+                        </div>
+
+                        <!-- TOTAL BET -->
+                        <div class="bet-area total">
+                            <div class="bet-label">Total Bet</div>
+                            <div class="bet-amount" id="totalBetAmount">$0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTROL PANEL -->
+            <div class="control-panel">
+                <button class="btn" id="lockButton" onclick="lockBets()" disabled>Lock Bets</button>
+                <button class="btn clear" onclick="clearBets()">Clear All</button>
+                <button class="btn reset" onclick="resetBoard()">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELECTED CHIP DISPLAY -->
+    <div class="selected-display" id="selectedDisplay">
+        <div class="label">Chip Selected</div>
+        <div class="amount" id="chipAmount">$0</div>
+    </div>
+
+    <script>
+        const gameState = {
+            selectedChip: null,
+            selectedChipDisplay: null,
+            bets: {
+                center: [],
+                side21: [],
+                plus3: [],
+                dna: []
+            },
+            isLocked: false,
+            isExpanded: false,
+            timerInterval: null,
+            timerSeconds: 60
+        };
+
+        function expandBoard() {
+            gameState.isExpanded = !gameState.isExpanded;
+
+            const expandButton = document.getElementById('expandButton');
+            const chipsArea = document.getElementById('chipsArea');
+            const bettingAreasContainer = document.getElementById('bettingAreasContainer');
+
+            if (gameState.isExpanded) {
+                expandButton.classList.add('hidden');
+                chipsArea.classList.add('expanded');
+                bettingAreasContainer.classList.add('expanded');
+            } else {
+                if (!gameState.selectedChip) {
+                    expandButton.classList.remove('hidden');
+                    chipsArea.classList.remove('expanded');
+                    bettingAreasContainer.classList.remove('expanded');
+                }
+            }
+        }
+
+        function selectChip(amount, display) {
+            gameState.selectedChip = amount;
+            gameState.selectedChipDisplay = display;
+
+            const selectedDisplay = document.getElementById('selectedDisplay');
+            document.getElementById('chipAmount').textContent = display;
+            selectedDisplay.classList.add('active');
+
+            document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('selected'));
+            event.target.closest('.chip').classList.add('selected');
+
+            updateLockButton();
+        }
+
+        function addBet(betType) {
+            if (gameState.isLocked || !gameState.selectedChip) return;
+
+            gameState.bets[betType].push(gameState.selectedChip);
+            updateBetDisplay(betType);
+            updateTotalBet();
+            updateLockButton();
+        }
+
+        function updateBetDisplay(betType) {
+            const bets = gameState.bets[betType];
+            const totalAmount = bets.reduce((sum, chip) => sum + chip, 0);
+
+            const typeMap = {
+                center: 'Center',
+                side21: 'Side21',
+                plus3: 'Plus3',
+                dna: 'DNA'
+            };
+            const typeLabel = typeMap[betType];
+
+            document.getElementById(`bet${typeLabel}Amount`).textContent = `$${totalAmount}`;
+
+            const chipCounts = {};
+            bets.forEach(chip => {
+                chipCounts[chip] = (chipCounts[chip] || 0) + 1;
+            });
+
+            const chipsEl = document.getElementById(`bet${typeLabel}Chips`);
+            chipsEl.innerHTML = Object.entries(chipCounts)
+                .map(([chip, count]) => `<div class="chip-stack">$${chip} ×${count}</div>`)
+                .join('');
+
+            const betArea = document.querySelector(`.bet-area.${betType === 'center' ? 'center' : betType === 'side21' ? 'side-21' : betType === 'plus3' ? 'plus3' : 'dna'}`);
+            if (betArea) {
+                if (totalAmount > 0) {
+                    betArea.classList.add('active');
+                } else {
+                    betArea.classList.remove('active');
+                }
+            }
+        }
+
+        function updateTotalBet() {
+            const centerTotal = gameState.bets.center.reduce((sum, chip) => sum + chip, 0);
+            const side21Total = gameState.bets.side21.reduce((sum, chip) => sum + chip, 0);
+            const plus3Total = gameState.bets.plus3.reduce((sum, chip) => sum + chip, 0);
+
+            // Calculate DNA as 5% of center bet
+            const dnaAmount = Math.floor(centerTotal * 0.05);
+            
+            // Update DNA bet display
+            document.getElementById('betDNAAmount').textContent = `$${dnaAmount}`;
+            
+            // Update DNA chips display
+            if (dnaAmount === 0) {
+                document.getElementById('betDNAChips').innerHTML = '';
+                document.querySelector('.bet-area.dna').classList.remove('active');
+            } else {
+                // Show DNA as automatically calculated
+                document.getElementById('betDNAChips').innerHTML = `<div class="chip-stack">Auto: 5% of Main</div>`;
+                document.querySelector('.bet-area.dna').classList.add('active');
+            }
+
+            // Update total (includes DNA)
+            const total = centerTotal + side21Total + plus3Total + dnaAmount;
+            document.getElementById('totalBetAmount').textContent = `$${total}`;
+        }
+
+        function updateLockButton() {
+            const lockButton = document.getElementById('lockButton');
+            const centerTotal = gameState.bets.center.reduce((sum, chip) => sum + chip, 0);
+            lockButton.disabled = centerTotal === 0;
+        }
+
+        function lockBets() {
+            gameState.isLocked = true;
+
+            document.querySelectorAll('.bet-area').forEach(area => {
+                area.classList.add('locked');
+            });
+
+            document.getElementById('lockButton').textContent = 'Locked';
+            document.getElementById('lockButton').disabled = true;
+            document.getElementById('selectedDisplay').classList.remove('active');
+
+            clearInterval(gameState.timerInterval);
+
+            console.log('Bets locked:', gameState.bets);
+        }
+
+        function clearBets() {
+            gameState.bets = { center: [], side21: [], plus3: [], dna: [] };
+            gameState.selectedChip = null;
+
+            ['Center', 'Side21', 'Plus3', 'DNA'].forEach(type => {
+                document.getElementById(`bet${type}Amount`).textContent = '$0';
+                document.getElementById(`bet${type}Chips`).innerHTML = '';
+            });
+
+            document.getElementById('totalBetAmount').textContent = '$0';
+            document.getElementById('selectedDisplay').classList.remove('active');
+
+            document.querySelectorAll('.bet-area').forEach(area => {
+                area.classList.remove('active');
+            });
+
+            document.querySelectorAll('.chip').forEach(chip => chip.classList.remove('selected'));
+
+            updateLockButton();
+        }
+
+        function resetBoard() {
+            clearBets();
+
+            gameState.isLocked = false;
+            gameState.isExpanded = false;
+
+            document.getElementById('expandButton').classList.remove('hidden');
+            document.getElementById('chipsArea').classList.remove('expanded');
+            document.getElementById('bettingAreasContainer').classList.remove('expanded');
+
+            document.getElementById('lockButton').textContent = 'Lock Bets';
+            document.getElementById('lockButton').disabled = true;
+
+            document.querySelectorAll('.bet-area').forEach(area => {
+                area.classList.remove('locked');
+            });
+
+            // Reset timer
+            gameState.timerSeconds = 60;
+            updateTimerDisplay();
+
+            updateLockButton();
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('timerValue');
+            timerEl.textContent = `${gameState.timerSeconds}s`;
+
+            if (gameState.timerSeconds <= 10) {
+                timerEl.classList.add('warning');
+            } else {
+                timerEl.classList.remove('warning');
+            }
+        }
+
+        function startTimer() {
+            gameState.timerInterval = setInterval(() => {
+                gameState.timerSeconds--;
+                updateTimerDisplay();
+
+                if (gameState.timerSeconds <= 0) {
+                    clearInterval(gameState.timerInterval);
+                    if (!gameState.isLocked) {
+                        lockBets();
+                    }
+                }
+            }, 1000);
+        }
+
+        // Start timer on load
+        startTimer();
+
+        // Keyboard support
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    chip.click();
+                }
+            });
+        });
+
+        updateLockButton();
+    </script>
+</body>
+</html>

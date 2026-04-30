@@ -1,18 +1,34 @@
-# Blackjack Game
+# ACE Blackjack Premium
 
-A professional, secure, and engaging blackjack game inspired by modern crypto casino interfaces.
+A professional, secure, and engaging blackjack game with premium branding, smooth animations, and transparent gameplay mechanics.
 
 <img width="1280" height="752" alt="IMG_4100" src="https://github.com/user-attachments/assets/9fc5d675-0e23-4cce-8876-877a279023df" />
 
 ## Features
 
+### Gameplay
 - **Classic Blackjack Gameplay**: Standard rules with dealer standing on 17
 - **Multi-Seat Support**: Play up to 3 hands simultaneously
 - **Insurance & Side Bets**: Full feature set for advanced players
 - **Split & Double Down**: All standard blackjack actions supported
 - **Provably Fair**: Transparent RNG for verifiable fairness
-- **Modern UI**: Dark theme with smooth animations
-- **Responsive Design**: Works on desktop and mobile devices
+
+### User Experience
+- **Premium Landing Page**: Branded entry point with interactive animations
+  - Responsive fluid scaling for all screen sizes
+  - Optimized logo glow (15% reduction for visual clarity)
+  - No unwanted scrolling across all devices
+- **Dark Theme**: Modern design system with 161 design tokens
+- **Smooth Animations**: 8+ custom animations using design tokens
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+  - Fluid CSS clamp() for seamless scaling
+  - Proper margins and bleed areas based on resolution
+  - Typography perfectly sized for any viewport
+- **Social Sharing**: Open Graph endpoint with rich media previews
+  - Dedicated OG preview at `/public/og-preview.html`
+  - Enhanced Twitter Card metadata
+  - Standardized metadata across all platforms
+- **Accessibility**: WCAG AA compliant with keyboard navigation and reduced motion support
 
 ## Tech Stack
 
@@ -54,6 +70,35 @@ The game will be available at `http://localhost:5173`
 - Double down allowed on any two cards
 - Split allowed on pairs (max 1 split per hand)
 - No surrender option
+
+## Design System
+
+The project includes a comprehensive design system with 161 design tokens organized by category:
+
+### Color Palette
+- **Brand**: Amber/Gold (#F59E0B, #FBBF24, #D97706)
+- **Surfaces**: Dark navy backgrounds (#050A0F, #0D1B2A, #162840)
+- **Felt**: Casino green (#0A3D26) with variations
+- **Outcomes**: Win (green), Loss (red), Push (gold)
+- **Chips**: 7 denominations with unique colors
+
+### Typography
+- **Display**: Outfit font (600-900 weights)
+- **Body**: Inter font (400-900 weights)
+- **Mono**: JetBrains Mono for code and labels
+- **Responsive scale**: clamp() for fluid sizing
+
+### Key Features
+- CSS custom properties in `src/index.css`
+- Tailwind CSS integration
+- Motion presets (fast: 150ms, base: 250ms, slow: 500ms)
+- Shadow and elevation system
+- Responsive spacing scale (4px base unit)
+
+### Documentation
+- **`src/DESIGN-TOKENS.md`**: Complete token reference
+- **`DESIGN-INVENTORY.md`**: Design asset inventory
+- **`LANDING-PAGE-IMPLEMENTATION.md`**: Landing page guide
 
 ## Social Preview Metadata
 

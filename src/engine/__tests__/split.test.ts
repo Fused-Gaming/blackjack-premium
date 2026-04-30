@@ -178,7 +178,7 @@ describe('Split Hand Logic', () => {
 
   describe('Multiple split hands', () => {
     it('should allow splitting up to 4 hands', () => {
-      let hand = createTestHand([createCard('8'), createCard('8')]);
+      const hand = createTestHand([createCard('8'), createCard('8')]);
 
       // First split
       let { hand1 } = splitHand(hand, 1, 4, false);

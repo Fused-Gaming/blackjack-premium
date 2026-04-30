@@ -7,7 +7,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <!-- Canonical URL -->
+    <!-- Canonical Link -->
     <link rel="canonical" href="https://demo.vln.gg/" />
 
     <!-- Primary Meta -->
@@ -63,9 +63,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!-- Redirect to main app -->
+    <script>
+      // Redirect to the main landing page after a brief delay
+      // This allows crawlers to read the OG meta tags before redirecting
+      window.location.href = '/';
+    </script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- OG Preview Container for crawlers -->
+    <noscript>
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #050A0F; padding: 2rem;">
+        <img src="/social/og-vln-demo.svg" alt="ACE Premium Blackjack" style="max-width: 100%; height: auto;" />
+        <h1 style="color: #F59E0B; font-family: 'Outfit', sans-serif; margin-top: 2rem;">ACE Premium Blackjack</h1>
+        <p style="color: #E2E8F0; font-family: 'Inter', sans-serif; text-align: center; max-width: 500px;">
+          Experience premium provably-fair blackjack with cryptographic transparency.
+        </p>
+        <a href="/" style="color: #F59E0B; margin-top: 2rem; text-decoration: none; border: 2px solid #F59E0B; padding: 1rem 2rem; border-radius: 12px;">
+          Enter Game →
+        </a>
+      </div>
+    </noscript>
   </body>
 </html>

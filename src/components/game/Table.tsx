@@ -76,8 +76,8 @@ export function Table() {
       <InsurancePrompt />
 
       {/* ── Main felt area ── */}
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 md:py-8">
-        <div className="w-full max-w-2xl xl:max-w-3xl">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-3 md:py-4 overflow-y-auto min-h-0">
+        <div className="w-full max-w-2xl xl:max-w-3xl flex flex-col flex-shrink-0">
 
           {/* ─── Felt Table ─── */}
           <div
@@ -92,10 +92,10 @@ export function Table() {
               ].join(', '),
             }}
           >
-            <div className="p-6 md:p-10 lg:p-12">
+            <div className="p-4 md:p-6 lg:p-8">
 
               {/* ── Dealer Zone ── */}
-              <div className="mb-6 md:mb-10">
+              <div className="mb-4 md:mb-6">
                 <div className="flex flex-col items-center gap-2">
                   <Hand
                     hand={{ cards: dealerHand, bet: 0, status: 'playing', isDouble: false, isSplit: false }}
@@ -115,7 +115,7 @@ export function Table() {
               </div>
 
               {/* ── Center divider with betting ring ── */}
-              <div className="relative flex items-center justify-center mb-6 md:mb-10">
+              <div className="relative flex items-center justify-center mb-4 md:mb-6">
                 <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
                 <div
                   className="relative z-10 w-16 h-16 rounded-full flex items-center justify-center"
@@ -194,8 +194,8 @@ export function Table() {
       </div>
 
       {/* ── Controls tray ── */}
-      <div className="border-t border-border/50 glass">
-        <div className="max-w-2xl xl:max-w-3xl mx-auto px-4 py-4 md:py-5 flex flex-col gap-3">
+      <div className="border-t border-border/50 glass flex-shrink-0">
+        <div className="max-w-2xl xl:max-w-3xl mx-auto px-4 py-3 md:py-4 flex flex-col gap-2">
           <ActionButtons />
           <BetControls />
 

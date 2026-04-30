@@ -49,6 +49,7 @@ Thumbs.db
 *.temp
 .cache
 .parcel-cache
+.claude-flow/
 
 # claude-flow runtime (keep config, ignore runtime data)
 .claude-flow/data/
