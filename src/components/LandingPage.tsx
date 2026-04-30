@@ -14,12 +14,12 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
       {/* Main Content Group - Grouped elements with controlled sizing */}
       <div className={styles.contentGroup}>
         {/* Logo Section */}
-        <div className={styles.logoWrapper}>
+        <div className={styles.logoWrapper} onClick={handleEnter}>
           <svg
             className={styles.logoSvg}
             width="300"
-            height="300"
-            viewBox="0 0 100 140"
+            height="320"
+            viewBox="0 0 100 160"
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
@@ -41,14 +41,14 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
             </defs>
 
             {/* Card background with rounded corners (like a playing card) */}
-            <rect x="5" y="5" width="90" height="130" rx="8" ry="8" fill="url(#cardGradient)" />
+            <rect x="5" y="5" width="90" height="150" rx="8" ry="8" fill="url(#cardGradient)" />
 
             {/* Card border - elegant outline with subtle glow */}
             <rect
               x="5"
               y="5"
               width="90"
-              height="130"
+              height="150"
               rx="8"
               ry="8"
               fill="none"
@@ -63,7 +63,7 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               x="6.5"
               y="6.5"
               width="87"
-              height="127"
+              height="147"
               rx="7"
               ry="7"
               fill="none"
@@ -72,7 +72,7 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               opacity="0.3"
             />
 
-            {/* Card back pattern - subtle diagonal lines */}
+            {/* Card back pattern - subtle horizontal lines */}
             <g opacity="0.08" stroke="var(--brand)" strokeWidth="0.3">
               <line x1="10" y1="10" x2="90" y2="10" />
               <line x1="10" y1="20" x2="90" y2="20" />
@@ -87,12 +87,14 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               <line x1="10" y1="110" x2="90" y2="110" />
               <line x1="10" y1="120" x2="90" y2="120" />
               <line x1="10" y1="130" x2="90" y2="130" />
+              <line x1="10" y1="140" x2="90" y2="140" />
+              <line x1="10" y1="150" x2="90" y2="150" />
             </g>
 
             {/* Spade symbol - centered on card */}
             <text
               x="50"
-              y="80"
+              y="75"
               fontFamily="Georgia, serif"
               fontSize="48"
               fill="var(--brand)"
@@ -102,6 +104,20 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               ♠
             </text>
 
+            {/* ACE wordmark below spade */}
+            <text
+              x="50"
+              y="115"
+              fontFamily="var(--font-display), Outfit, sans-serif"
+              fontSize="14"
+              fill="var(--brand)"
+              textAnchor="middle"
+              fontWeight="bold"
+              letterSpacing="2"
+            >
+              ACE
+            </text>
+
             {/* Subtle corner decorations (like on playing cards) */}
             <g opacity="0.4" fill="var(--brand)">
               {/* Top-left corner */}
@@ -109,9 +125,9 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               {/* Top-right corner */}
               <circle cx="90" cy="12" r="1.2" />
               {/* Bottom-left corner */}
-              <circle cx="10" cy="128" r="1.2" />
+              <circle cx="10" cy="148" r="1.2" />
               {/* Bottom-right corner */}
-              <circle cx="90" cy="128" r="1.2" />
+              <circle cx="90" cy="148" r="1.2" />
             </g>
           </svg>
         </div>

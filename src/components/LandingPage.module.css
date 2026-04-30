@@ -46,12 +46,23 @@
 
 .logoWrapper {
   width: clamp(100px, 28vw, 200px);
-  aspect-ratio: 100 / 140;
+  aspect-ratio: 100 / 160;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: logoFloatIn 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+.logoWrapper:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.4));
+}
+
+.logoWrapper:active {
+  transform: scale(0.98);
 }
 
 @keyframes logoFloatIn {
@@ -102,9 +113,9 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .brandmark {
-  font-size: clamp(12px, 2vw, 16px);
-  font-weight: 600;
-  letter-spacing: clamp(1.5px, 0.2vw, 2.5px);
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 700;
+  letter-spacing: clamp(2px, 0.3vw, 3.5px);
   color: var(--brand);
   text-transform: uppercase;
   font-family: var(--font-display);
