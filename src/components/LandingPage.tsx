@@ -5,12 +5,54 @@ interface LandingPageProps {
   onEnter?: () => void;
 }
 
+const GREETINGS = [
+  {
+    title: 'Welcome Back, Player!',
+    message: 'Good Fortune & Business Loyalty',
+  },
+  {
+    title: 'Welcome to ACE',
+    message: 'Your Luck is Calling',
+  },
+  {
+    title: 'Ready to Play?',
+    message: 'Fortune Favors the Bold',
+  },
+  {
+    title: 'Welcome to the Table',
+    message: 'Expect the Extraordinary',
+  },
+  {
+    title: 'ACE Awaits You',
+    message: 'Where Skill Meets Chance',
+  },
+  {
+    title: 'Step Into Luxury',
+    message: 'Premium Blackjack Experience',
+  },
+  {
+    title: 'High Stakes Welcome',
+    message: 'Provably Fair Gaming',
+  },
+  {
+    title: 'Welcome Aboard',
+    message: 'Let the Games Begin',
+  },
+];
+
 export const LandingPage = ({ onEnter }: LandingPageProps) => {
   const [isInteracting, setIsInteracting] = React.useState(false);
   const [isEntering, setIsEntering] = React.useState(false);
   const [showGreeting, setShowGreeting] = React.useState(false);
+  const [currentGreeting, setCurrentGreeting] = React.useState(GREETINGS[0]);
+
+  const getRandomGreeting = () => {
+    const randomIndex = Math.floor(Math.random() * GREETINGS.length);
+    return GREETINGS[randomIndex];
+  };
 
   const handleEnter = () => {
+    setCurrentGreeting(getRandomGreeting());
     setIsEntering(true);
     setShowGreeting(true);
 
@@ -196,8 +238,8 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
       {showGreeting && (
         <div className={styles.greetingOverlay}>
           <div className={styles.greetingContent}>
-            <h1 className={styles.greetingTitle}>Welcome to ACE</h1>
-            <p className={styles.greetingMessage}>Good Fortune & Business Loyalty</p>
+            <h1 className={styles.greetingTitle}>{currentGreeting.title}</h1>
+            <p className={styles.greetingMessage}>{currentGreeting.message}</p>
             <div className={styles.greetingDivider} />
             <p className={styles.greetingSubtext}>Enter the Casino</p>
           </div>
