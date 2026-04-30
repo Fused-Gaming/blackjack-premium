@@ -30,18 +30,9 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
                 <stop offset="100%" stopColor="#08171f" stopOpacity="1" />
               </linearGradient>
 
-              {/* Subtle inner glow */}
-              <filter id="cardGlow">
-                <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
-                <feMerge>
-                  <feMergeNode in="coloredBlur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-
-              {/* Spade glow */}
-              <filter id="spadeGlow">
-                <feGaussianBlur stdDeviation="1" result="coloredBlur" />
+              {/* Very subtle card outer glow */}
+              <filter id="cardOuterGlow">
+                <feGaussianBlur stdDeviation="1.2" result="coloredBlur" />
                 <feMerge>
                   <feMergeNode in="coloredBlur" />
                   <feMergeNode in="SourceGraphic" />
@@ -52,7 +43,7 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
             {/* Card background with rounded corners (like a playing card) */}
             <rect x="5" y="5" width="90" height="130" rx="8" ry="8" fill="url(#cardGradient)" />
 
-            {/* Card border - elegant outline */}
+            {/* Card border - elegant outline with subtle glow */}
             <rect
               x="5"
               y="5"
@@ -64,6 +55,7 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               stroke="var(--brand)"
               strokeWidth="1.2"
               opacity="0.6"
+              filter="url(#cardOuterGlow)"
             />
 
             {/* Inner card edge highlight (like real playing cards) */}
@@ -97,20 +89,18 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               <line x1="10" y1="130" x2="90" y2="130" />
             </g>
 
-            {/* Spade symbol with subtle glow - centered on card */}
-            <g filter="url(#spadeGlow)">
-              <text
-                x="50"
-                y="80"
-                fontFamily="Georgia, serif"
-                fontSize="48"
-                fill="var(--brand)"
-                textAnchor="middle"
-                fontWeight="bold"
-              >
-                ♠
-              </text>
-            </g>
+            {/* Spade symbol - centered on card */}
+            <text
+              x="50"
+              y="80"
+              fontFamily="Georgia, serif"
+              fontSize="48"
+              fill="var(--brand)"
+              textAnchor="middle"
+              fontWeight="bold"
+            >
+              ♠
+            </text>
 
             {/* Subtle corner decorations (like on playing cards) */}
             <g opacity="0.4" fill="var(--brand)">
