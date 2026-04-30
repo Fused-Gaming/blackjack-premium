@@ -1,0 +1,28 @@
+# ACE Premium Blackjack - Crawling Rules
+User-agent: *
+Allow: /
+Allow: /og-preview.html
+Allow: /social/
+
+# Specific bot rules
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Disallow bot traffic during peak hours (optional)
+# User-agent: *
+# Crawl-delay: 1
+
+# Sitemap
+Sitemap: /sitemap.xml
