@@ -3,7 +3,7 @@ import { useGameStore } from '../../store/gameStore';
 import { canSplit, canDouble } from '../../engine/hand';
 
 const btnBase =
-  'px-7 md:px-10 py-3.5 rounded-xl font-display font-bold text-base md:text-lg tracking-wide transition-all shadow-button active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed';
+  'px-7 md:px-10 py-3.5 rounded-[var(--r-lg)] font-display font-bold text-base md:text-lg tracking-wide transition-all duration-[var(--d-base)] shadow-button active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed';
 
 export function ActionButtons() {
   const { phase, playerSeats, activeSeatId, balance, hit, stand, double, split, placeInsurance, declineInsurance } =
@@ -24,8 +24,8 @@ export function ActionButtons() {
           className="flex flex-col items-center gap-3"
         >
           <div className="text-center">
-            <p className="text-sm font-mono text-text-muted mb-0.5 uppercase tracking-widest">Dealer shows Ace</p>
-            <p className="text-xs text-text-subtle">Insurance costs ${insuranceCost} · pays 2:1</p>
+            <p className="text-sm font-mono text-[var(--text-muted)] mb-0.5 uppercase tracking-widest">Dealer shows Ace</p>
+            <p className="text-xs text-[var(--text-subtle)]">Insurance costs ${insuranceCost} · pays 2:1</p>
           </div>
           <div className="flex gap-3 justify-center flex-wrap">
             <motion.button
@@ -33,8 +33,8 @@ export function ActionButtons() {
               disabled={balance < insuranceCost}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className={`${btnBase} text-background shadow-glow-brand`}
-              style={{ background: 'linear-gradient(135deg, #FBBF24 0%, #F59E0B 60%, #D97706 100%)' }}
+              className={`${btnBase} text-bg shadow-glow-brand`}
+              style={{ background: 'linear-gradient(135deg, var(--brand-light) 0%, var(--brand) 60%, var(--brand-dark) 100%)' }}
             >
               Insure — ${insuranceCost}
             </motion.button>
@@ -42,7 +42,7 @@ export function ActionButtons() {
               onClick={declineInsurance}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className={`${btnBase} border border-border text-text-muted hover:text-text hover:border-border-bright bg-background-elevated`}
+              className={`${btnBase} border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text)] hover:border-[var(--border-bright)] bg-[var(--bg-elevated)]`}
             >
               No Thanks
             </motion.button>
@@ -78,7 +78,7 @@ export function ActionButtons() {
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
           className={`${btnBase} text-white shadow-glow-win`}
-          style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}
+          style={{ background: 'linear-gradient(135deg, var(--win) 0%, var(--win-dark) 100%)' }}
         >
           Hit
         </motion.button>
@@ -89,7 +89,7 @@ export function ActionButtons() {
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
           className={`${btnBase} text-white`}
-          style={{ background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)' }}
+          style={{ background: 'linear-gradient(135deg, var(--loss) 0%, var(--loss-dark) 100%)' }}
         >
           Stand
         </motion.button>
@@ -103,8 +103,8 @@ export function ActionButtons() {
             animate={{ opacity: 1, scale: 1 }}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
-            className={`${btnBase} text-background shadow-glow-brand`}
-            style={{ background: 'linear-gradient(135deg, #FBBF24 0%, #F59E0B 60%, #D97706 100%)' }}
+            className={`${btnBase} text-bg shadow-glow-brand`}
+            style={{ background: 'linear-gradient(135deg, var(--brand-light) 0%, var(--brand) 60%, var(--brand-dark) 100%)' }}
           >
             Double
           </motion.button>
@@ -120,7 +120,7 @@ export function ActionButtons() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
             className={`${btnBase} text-white`}
-            style={{ background: 'linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)' }}
+            style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)' }}
           >
             Split
           </motion.button>
