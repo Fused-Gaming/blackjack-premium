@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACE Blackjack Premium — Design System Explorer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       ROOT TOKENS — ACE Blackjack Premium Design System
+       ============================================================ */
+    :root {
+      /* BRAND — Amber Gold */
+      --brand:           #F59E0B;
+      --brand-light:     #FBBF24;
+      --brand-dark:      #D97706;
+      --brand-glow:      #FCD34D;
+
+      /* Gold accent */
+      --gold:            #FFD700;
+      --gold-light:      #FFED4E;
+      --gold-dark:       #DAA520;
+      --gold-amber:      #F59E0B;
+
+      /* SURFACE — Deep Navy */
+      --bg:              #050A0F;
+      --bg-dark:         #02050A;
+      --bg-card:         #0D1B2A;
+      --bg-panel:        #111F30;
+      --bg-elevated:     #162840;
+
+      --bg-radial:
+        radial-gradient(ellipse at 30% 20%, #0D1B2A 0%, #050A0F 60%, #02050A 100%);
+
+      /* BORDERS */
+      --border:          #1E3A5F;
+      --border-subtle:   #132538;
+      --border-bright:   #2A4F80;
+
+      /* FELT TABLE — Casino Green */
+      --felt:            #0A3D26;
+      --felt-light:      #0F5132;
+      --felt-dark:       #073520;
+      --felt-glow:       #1A6B54;
+      --felt-rim:        #0C4530;
+
+      --felt-radial:
+        radial-gradient(ellipse at 50% 35%, #0F5132 0%, #0A3D26 45%, #073520 100%);
+
+      /* OUTCOME — Win / Loss / Push */
+      --win:             #10B981;
+      --win-glow:        #34D399;
+      --win-dark:        #059669;
+      --win-muted:       #064E3B;
+
+      --loss:            #EF4444;
+      --loss-glow:       #F87171;
+      --loss-dark:       #DC2626;
+      --loss-muted:      #450A0A;
+
+      --push:            #F59E0B;
+      --push-muted:      #451A03;
+
+      /* CHIPS — Denomination Colors */
+      --chip-1:    #6B7280;
+      --chip-5:    #EF4444;
+      --chip-10:   #3B82F6;
+      --chip-25:   #F59E0B;
+      --chip-50:   #10B981;
+      --chip-100:  #1A1A1A;
+      --chip-500:  #7C3AED;
+
+      /* TEXT */
+      --text:            #E2E8F0;
+      --text-bright:     #F8FAFC;
+      --text-muted:      #64748B;
+      --text-subtle:     #475569;
+      --text-gold:       #F59E0B;
+      --text-mono:       #94A3B8;
+
+      --fg1:             var(--text-bright);
+      --fg2:             var(--text);
+      --fg3:             var(--text-muted);
+      --fg4:             var(--text-subtle);
+
+      /* TYPOGRAPHY */
+      --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+      --font-display: 'Outfit', 'Inter', sans-serif;
+      --font-mono:    'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+      --font-serif:   Georgia, 'Times New Roman', serif;
+
+      /* TYPE SCALE */
+      --text-2xs: 0.625rem;
+      --text-xs:  0.75rem;
+      --text-sm:  0.875rem;
+      --text-base: 1rem;
+      --text-lg:  1.125rem;
+      --text-xl:  1.25rem;
+      --text-2xl: 1.5rem;
+      --text-3xl: 1.875rem;
+      --text-4xl: 2.25rem;
+
+      /* SPACING */
+      --s-1:  4px;
+      --s-2:  8px;
+      --s-3:  12px;
+      --s-4:  16px;
+      --s-5:  20px;
+      --s-6:  24px;
+      --s-8:  32px;
+      --s-10: 40px;
+      --s-12: 48px;
+      --s-16: 64px;
+
+      /* RADII */
+      --r-sm:   0.375rem;
+      --r-md:   0.5rem;
+      --r-lg:   0.75rem;
+      --r-xl:   1rem;
+      --r-2xl:  1.25rem;
+      --r-3xl:  1.5rem;
+      --r-4xl:  2rem;
+      --r-5xl:  2.5rem;
+      --r-pill: 9999px;
+
+      /* MOTION */
+      --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-flip:    cubic-bezier(0.4, 0, 0.2, 1);
+
+      --d-fast:    150ms;
+      --d-base:    250ms;
+      --d-slow:    500ms;
+      --d-card-flip: 600ms;
+      --d-card-deal: 500ms;
+
+      /* SHADOWS */
+      --shadow-card:        0 4px 16px rgba(0,0,0,0.45), 0 1px 4px rgba(0,0,0,0.3);
+      --shadow-card-hover:  0 8px 24px rgba(0,0,0,0.5);
+      --shadow-chip:        0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18);
+      --shadow-button:      0 4px 14px rgba(0,0,0,0.3);
+      --shadow-panel:       0 8px 32px rgba(0,0,0,0.4);
+      --shadow-modal:       0 24px 64px rgba(0,0,0,0.7);
+      --shadow-felt:        inset 0 0 60px rgba(0,0,0,0.5);
+      --shadow-felt-rim:    0 0 0 3px rgba(255,215,0,0.12), inset 0 0 80px rgba(0,0,0,0.4);
+      --glow-win:    0 0 24px rgba(16,185,129,0.5),  0 0 50px rgba(16,185,129,0.2);
+      --glow-loss:   0 0 24px rgba(239,68,68,0.5),   0 0 50px rgba(239,68,68,0.2);
+      --glow-gold:   0 0 24px rgba(245,158,11,0.6),  0 0 50px rgba(245,158,11,0.3);
+      --glow-brand:  0 0 20px rgba(245,158,11,0.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--fg2);
+      background: var(--bg-radial);
+      background-color: var(--bg);
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ============================================================
+       LAYOUT
+       ============================================================ */
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 320px;
+      background: rgba(13, 27, 42, 0.85);
+      backdrop-filter: blur(16px);
+      border-right: 1px solid var(--border-subtle);
+      padding: var(--s-6);
+      overflow-y: auto;
+      position: sticky;
+      top: 0;
+      max-height: 100vh;
+    }
+
+    .main {
+      flex: 1;
+      padding: var(--s-8);
+      overflow-y: auto;
+    }
+
+    /* ============================================================
+       SIDEBAR
+       ============================================================ */
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.5rem;
+      margin-bottom: var(--s-8);
+      background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-glyph {
+      font-size: 2rem;
+      margin-right: 0.25rem;
+    }
+
+    .nav-section {
+      margin-bottom: var(--s-8);
+    }
+
+    .nav-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--fg4);
+      margin-bottom: var(--s-3);
+      display: block;
+    }
+
+    .nav-item {
+      display: block;
+      width: 100%;
+      padding: var(--s-3) var(--s-4);
+      margin-bottom: var(--s-2);
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-lg);
+      color: var(--fg3);
+      font-size: var(--text-sm);
+      cursor: pointer;
+      transition: all var(--d-base) var(--ease-out);
+      text-align: left;
+      font-family: var(--font-sans);
+    }
+
+    .nav-item:hover {
+      border-color: var(--border-bright);
+      color: var(--fg2);
+      background: rgba(42, 79, 128, 0.2);
+    }
+
+    .nav-item.active {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--brand);
+      color: var(--brand);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       MAIN CONTENT
+       ============================================================ */
+    .view {
+      display: none;
+      animation: fadeIn var(--d-base) ease-out;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--fg1);
+      margin-bottom: var(--s-4);
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      line-height: 1.1;
+      color: var(--fg1);
+      margin-bottom: var(--s-4);
+      margin-top: var(--s-8);
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--fg1);
+      margin-bottom: var(--s-3);
+    }
+
+    p {
+      color: var(--fg2);
+      line-height: 1.6;
+      margin-bottom: var(--s-4);
+    }
+
+    /* ============================================================
+       TABLE PREVIEW
+       ============================================================ */
+    .table-preview {
+      background: var(--felt-radial);
+      border-radius: var(--r-5xl);
+      padding: var(--s-8);
+      margin: var(--s-6) 0;
+      box-shadow: var(--shadow-felt), var(--shadow-felt-rim);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .dealer-zone {
+      width: 100%;
+      text-align: center;
+      margin-bottom: var(--s-8);
+    }
+
+    .dealer-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--fg3);
+      margin-bottom: var(--s-3);
+    }
+
+    .dealer-hand {
+      display: flex;
+      justify-content: center;
+      gap: var(--s-4);
+    }
+
+    .card {
+      width: 80px;
+      height: 120px;
+      background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: bold;
+      font-size: 2rem;
+      color: #1A1A1A;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(226, 232, 240, 0.3);
+      position: relative;
+      animation: dealCard var(--d-card-deal) var(--ease-spring);
+    }
+
+    .card:nth-child(1) {
+      animation-delay: 0ms;
+    }
+
+    .card:nth-child(2) {
+      animation-delay: 120ms;
+    }
+
+    .card:nth-child(3) {
+      animation-delay: 240ms;
+    }
+
+    @keyframes dealCard {
+      from {
+        opacity: 0;
+        transform: translate(-220px, -110px) rotate(-28deg) scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0) scale(1);
+      }
+    }
+
+    .card.back {
+      background: linear-gradient(135deg, #0D1B2A 0%, #050A0F 100%);
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      color: var(--brand);
+      font-size: 2.5rem;
+    }
+
+    .players-zone {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--s-6);
+      width: 100%;
+    }
+
+    .player-seat {
+      background: rgba(13, 27, 42, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--r-xl);
+      padding: var(--s-5);
+      text-align: center;
+      transition: all var(--d-base) ease-out;
+    }
+
+    .player-seat:hover {
+      background: rgba(13, 27, 42, 0.7);
+      border-color: var(--border-bright);
+    }
+
+    .player-seat.active {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: var(--brand);
+    }
+
+    .seat-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-2xs);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--fg4);
+      margin-bottom: var(--s-2);
+    }
+
+    .player-cards {
+      display: flex;
+      justify-content: center;
+      gap: var(--s-3);
+      margin-bottom: var(--s-4);
+      flex-wrap: wrap;
+    }
+
+    .player-card {
+      width: 60px;
+      height: 90px;
+      background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: #1A1A1A;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(226, 232, 240, 0.3);
+    }
+
+    .player-value {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-lg);
+      color: var(--fg1);
+      margin-bottom: var(--s-3);
+    }
+
+    .player-balance {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-base);
+      color: var(--win);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ============================================================
+       CHIPS
+       ============================================================ */
+    .chips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--s-6);
+      margin: var(--s-8) 0;
+    }
+
+    .chip-showcase {
+      text-align: center;
+    }
+
+    .chip {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto var(--s-4) auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: white;
+      box-shadow: var(--shadow-chip);
+      transition: transform var(--d-base) var(--ease-spring);
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chip:hover {
+      transform: scale(1.1);
+    }
+
+    .chip-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      color: var(--fg2);
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       COLOR SWATCHES
+       ============================================================ */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--s-6);
+      margin: var(--s-8) 0;
+    }
+
+    .color-swatch {
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .swatch-color {
+      width: 100%;
+      height: 120px;
+      transition: transform var(--d-base) ease-out;
+    }
+
+    .swatch-color:hover {
+      transform: scale(1.02);
+    }
+
+    .swatch-info {
+      background: var(--bg-panel);
+      padding: var(--s-4);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .swatch-name {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--fg3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--s-2);
+    }
+
+    .swatch-hex {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      color: var(--fg4);
+      cursor: pointer;
+      user-select: all;
+    }
+
+    /* ============================================================
+       BUTTONS & ACTIONS
+       ============================================================ */
+    .action-buttons {
+      display: flex;
+      gap: var(--s-4);
+      flex-wrap: wrap;
+      margin: var(--s-6) 0;
+    }
+
+    .btn {
+      padding: var(--s-3) var(--s-5);
+      border-radius: var(--r-lg);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: var(--text-base);
+      border: none;
+      cursor: pointer;
+      transition: all var(--d-base) var(--ease-spring);
+      box-shadow: var(--shadow-button);
+      text-transform: none;
+    }
+
+    .btn-primary {
+      background: var(--brand);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.04);
+      box-shadow: var(--glow-brand);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.96);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--brand);
+      border: 1.5px solid var(--brand);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(245, 158, 11, 0.1);
+      transform: scale(1.04);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.96);
+    }
+
+    .btn-win {
+      background: var(--win);
+      color: white;
+    }
+
+    .btn-win:hover {
+      box-shadow: var(--glow-win);
+      transform: scale(1.04);
+    }
+
+    .btn-loss {
+      background: var(--loss);
+      color: white;
+    }
+
+    .btn-loss:hover {
+      box-shadow: var(--glow-loss);
+      transform: scale(1.04);
+    }
+
+    /* ============================================================
+       OUTCOME BADGES
+       ============================================================ */
+    .outcome-banner {
+      padding: var(--s-6);
+      border-radius: var(--r-2xl);
+      margin: var(--s-6) 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 600;
+      box-shadow: var(--shadow-card);
+      animation: slideIn var(--d-slow) var(--ease-spring);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .outcome-win {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--win);
+      color: var(--win);
+      box-shadow: var(--glow-win);
+    }
+
+    .outcome-loss {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--loss);
+      color: var(--loss);
+      box-shadow: var(--glow-loss);
+    }
+
+    .outcome-push {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid var(--push);
+      color: var(--push);
+      box-shadow: var(--glow-gold);
+    }
+
+    .outcome-glyph {
+      font-size: 1.5rem;
+      margin-right: var(--s-4);
+    }
+
+    .outcome-label {
+      flex: 1;
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+    }
+
+    .outcome-amount {
+      font-family: var(--font-mono);
+      font-size: var(--text-lg);
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        max-height: none;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+      }
+
+      .main {
+        padding: var(--s-6);
+      }
+
+      .card {
+        width: 60px;
+        height: 90px;
+        font-size: 1.5rem;
+      }
+
+      .players-zone {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ============================================================
+       SCROLLBAR
+       ============================================================ */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(245, 158, 11, 0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(245, 158, 11, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+      <div class="logo">
+        <span class="logo-glyph">♠</span> ACE
+      </div>
+
+      <div class="nav-section">
+        <label class="nav-label">Tables</label>
+        <button class="nav-item active" data-view="table-1">Single Seat (Desktop)</button>
+        <button class="nav-item" data-view="table-multi">Multi-Seat Layout</button>
+        <button class="nav-item" data-view="table-landscape">Landscape View</button>
+      </div>
+
+      <div class="nav-section">
+        <label class="nav-label">Components</label>
+        <button class="nav-item" data-view="chips">Chip Denominations</button>
+        <button class="nav-item" data-view="outcomes">Outcome States</button>
+        <button class="nav-item" data-view="buttons">Action Buttons</button>
+      </div>
+
+      <div class="nav-section">
+        <label class="nav-label">Design Tokens</label>
+        <button class="nav-item" data-view="colors">Colors & Palette</button>
+        <button class="nav-item" data-view="typography">Typography</button>
+        <button class="nav-item" data-view="spacing">Spacing & Radii</button>
+      </div>
+
+      <div class="nav-section">
+        <label class="nav-label">Documentation</label>
+        <button class="nav-item" data-view="guide">Design Guide</button>
+        <button class="nav-item" data-view="tokens">CSS Tokens</button>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+      <!-- TABLE: Single Seat (Desktop) -->
+      <div id="table-1" class="view active">
+        <h1>Single Seat — Desktop</h1>
+        <p>Premium blackjack table with dealer and player hand. Responsive design with card deal animations.</p>
+
+        <div class="table-preview">
+          <div style="width: 100%;">
+            <!-- DEALER ZONE -->
+            <div class="dealer-zone">
+              <div class="dealer-label">Dealer</div>
+              <div class="dealer-hand">
+                <div class="card back">♠</div>
+                <div class="card">K</div>
+              </div>
+            </div>
+
+            <!-- PLAYERS ZONE -->
+            <div style="margin-top: var(--s-8); display: flex; justify-content: center; gap: var(--s-6); flex-wrap: wrap;">
+              <!-- PLAYER 1 -->
+              <div class="player-seat active">
+                <div class="seat-label">Player 1</div>
+                <div class="player-cards">
+                  <div class="player-card">A</div>
+                  <div class="player-card">K</div>
+                </div>
+                <div class="player-value">BLACKJACK</div>
+                <div class="player-balance">$250</div>
+              </div>
+
+              <!-- PLAYER 2 -->
+              <div class="player-seat">
+                <div class="seat-label">Player 2</div>
+                <div class="player-cards">
+                  <div class="player-card">7</div>
+                  <div class="player-card">8</div>
+                </div>
+                <div class="player-value">15</div>
+                <div class="player-balance">$1,200</div>
+              </div>
+
+              <!-- PLAYER 3 -->
+              <div class="player-seat">
+                <div class="seat-label">Player 3</div>
+                <div class="player-cards">
+                  <div class="player-card">5</div>
+                  <div class="player-card">6</div>
+                </div>
+                <div class="player-value">11</div>
+                <div class="player-balance">$500</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-primary">Hit</button>
+          <button class="btn btn-primary">Stand</button>
+          <button class="btn btn-primary">Double</button>
+          <button class="btn btn-secondary">Split</button>
+        </div>
+      </div>
+
+      <!-- TABLE: Multi-Seat Layout -->
+      <div id="table-multi" class="view">
+        <h1>Multi-Seat Layout</h1>
+        <p>Support for up to 5 concurrent players with individual hand zones and betting areas.</p>
+
+        <div class="table-preview">
+          <div style="width: 100%;">
+            <div class="dealer-zone">
+              <div class="dealer-label">Dealer</div>
+              <div class="dealer-hand">
+                <div class="card back">♠</div>
+                <div class="card">9</div>
+              </div>
+            </div>
+
+            <div class="players-zone" style="margin-top: var(--s-8);">
+              <div class="player-seat">
+                <div class="seat-label">Seat 1</div>
+                <div class="player-cards">
+                  <div class="player-card">J</div>
+                  <div class="player-card">5</div>
+                </div>
+                <div class="player-value">15</div>
+                <div class="player-balance">$500</div>
+              </div>
+
+              <div class="player-seat">
+                <div class="seat-label">Seat 2</div>
+                <div class="player-cards">
+                  <div class="player-card">3</div>
+                  <div class="player-card">3</div>
+                </div>
+                <div class="player-value">6</div>
+                <div class="player-balance">$250</div>
+              </div>
+
+              <div class="player-seat">
+                <div class="seat-label">Seat 3</div>
+                <div class="player-cards">
+                  <div class="player-card">Q</div>
+                  <div class="player-card">Q</div>
+                </div>
+                <div class="player-value">20</div>
+                <div class="player-balance">$2,000</div>
+              </div>
+
+              <div class="player-seat">
+                <div class="seat-label">Seat 4</div>
+                <div class="player-cards">
+                  <div class="player-card">9</div>
+                  <div class="player-card">9</div>
+                </div>
+                <div class="player-value">18</div>
+                <div class="player-balance">$750</div>
+              </div>
+
+              <div class="player-seat">
+                <div class="seat-label">Seat 5</div>
+                <div class="player-cards">
+                  <div class="player-card">2</div>
+                  <div class="player-card">K</div>
+                </div>
+                <div class="player-value">12</div>
+                <div class="player-balance">$1,500</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE: Landscape View -->
+      <div id="table-landscape" class="view">
+        <h1>Landscape Layout</h1>
+        <p>Optimized for wide displays with side-by-side player zones and dealer area.</p>
+
+        <div class="table-preview" style="min-height: 500px;">
+          <div style="width: 100%; display: grid; grid-template-columns: 1fr 2fr 1fr; gap: var(--s-8); align-items: center;">
+            <!-- LEFT PLAYERS -->
+            <div style="display: flex; flex-direction: column; gap: var(--s-4);">
+              <div class="player-seat">
+                <div class="seat-label">Seat 1</div>
+                <div class="player-cards">
+                  <div class="player-card">K</div>
+                  <div class="player-card">Q</div>
+                </div>
+                <div class="player-value">20</div>
+              </div>
+              <div class="player-seat">
+                <div class="seat-label">Seat 2</div>
+                <div class="player-cards">
+                  <div class="player-card">7</div>
+                  <div class="player-card">7</div>
+                </div>
+                <div class="player-value">14</div>
+              </div>
+            </div>
+
+            <!-- CENTER DEALER -->
+            <div style="text-align: center;">
+              <div class="dealer-zone">
+                <div class="dealer-label">Dealer</div>
+                <div class="dealer-hand">
+                  <div class="card back">♠</div>
+                  <div class="card">6</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT PLAYERS -->
+            <div style="display: flex; flex-direction: column; gap: var(--s-4);">
+              <div class="player-seat">
+                <div class="seat-label">Seat 3</div>
+                <div class="player-cards">
+                  <div class="player-card">A</div>
+                  <div class="player-card">K</div>
+                </div>
+                <div class="player-value">BLACKJACK</div>
+              </div>
+              <div class="player-seat">
+                <div class="seat-label">Seat 4</div>
+                <div class="player-cards">
+                  <div class="player-card">10</div>
+                  <div class="player-card">5</div>
+                </div>
+                <div class="player-value">15</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHIPS -->
+      <div id="chips" class="view">
+        <h1>Chip Denominations</h1>
+        <p>ACE Premium supports 7 denominations with unique colors for quick visual recognition.</p>
+
+        <div class="chips-grid">
+          <div class="chip-showcase">
+            <div class="chip" style="background: var(--chip-1);">$1</div>
+            <div class="chip-label">$1 Gray</div>
+          </div>
+
+          <div class="chip-showcase">
+            <div class="chip" style="background: var(--chip-5);">$5</div>
+            <div class="chip-label">$5 Red</div>
+          </div>
+
+          <div class="chip-showcase">
+            <div class="chip" style="background: var(--chip-10);">$10</div>
+            <div class="chip-label">$10 Blue</div>
+          </div>
+
+          <div class="chip-showcase">
+            <div class="chip" style="background: var(--chip-25);">$25</div>
+            <div class="chip-label">$25 Amber</div>
+          </div>
+
+          <div class="chip-showcase">
+            <div class="chip" style="background: var(--chip-50);">$50</div>
+            <div class="chip-label">$50 Green</div>
+          </div>
+
+          <div class="chip-showcase">
+            <div class="chip" style="background: var(--chip-100); border: 2px solid var(--gold);">$100</div>
+            <div class="chip-label">$100 Black/Gold</div>
+          </div>
+
+          <div class="chip-showcase">
+            <div class="chip" style="background: var(--chip-500);">$500</div>
+            <div class="chip-label">$500 Purple</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OUTCOMES -->
+      <div id="outcomes" class="view">
+        <h1>Outcome States</h1>
+        <p>Visual feedback for win, loss, push, and blackjack outcomes with glyphs and glows.</p>
+
+        <h3>Win</h3>
+        <div class="outcome-banner outcome-win">
+          <div style="display: flex; align-items: center;">
+            <span class="outcome-glyph">✦</span>
+            <span class="outcome-label">You Win!</span>
+          </div>
+          <div class="outcome-amount">+$250</div>
+        </div>
+
+        <h3>Blackjack (Natural)</h3>
+        <div class="outcome-banner outcome-win" style="box-shadow: var(--glow-gold);">
+          <div style="display: flex; align-items: center;">
+            <span class="outcome-glyph">♠</span>
+            <span class="outcome-label">Blackjack!</span>
+          </div>
+          <div class="outcome-amount">+$375</div>
+        </div>
+
+        <h3>Loss</h3>
+        <div class="outcome-banner outcome-loss">
+          <div style="display: flex; align-items: center;">
+            <span class="outcome-glyph">✕</span>
+            <span class="outcome-label">Dealer Wins</span>
+          </div>
+          <div class="outcome-amount">-$100</div>
+        </div>
+
+        <h3>Push (Tie)</h3>
+        <div class="outcome-banner outcome-push">
+          <div style="display: flex; align-items: center;">
+            <span class="outcome-glyph">⇌</span>
+            <span class="outcome-label">Push</span>
+          </div>
+          <div class="outcome-amount">$0</div>
+        </div>
+      </div>
+
+      <!-- BUTTONS -->
+      <div id="buttons" class="view">
+        <h1>Action Buttons</h1>
+        <p>Primary and secondary button styles with hover and active states.</p>
+
+        <h3>Primary Actions</h3>
+        <div class="action-buttons">
+          <button class="btn btn-primary">Hit</button>
+          <button class="btn btn-primary">Stand</button>
+          <button class="btn btn-primary">Double</button>
+          <button class="btn btn-primary">Split</button>
+        </div>
+
+        <h3>Hero CTA</h3>
+        <div class="action-buttons">
+          <button class="btn btn-primary" style="padding: var(--s-4) var(--s-8); font-size: var(--text-xl);">DEAL</button>
+        </div>
+
+        <h3>Secondary Actions</h3>
+        <div class="action-buttons">
+          <button class="btn btn-secondary">No Thanks</button>
+          <button class="btn btn-secondary">Decline</button>
+        </div>
+
+        <h3>Outcome Actions</h3>
+        <div class="action-buttons">
+          <button class="btn btn-win">You Win!</button>
+          <button class="btn btn-loss">Dealer Wins</button>
+        </div>
+      </div>
+
+      <!-- COLORS -->
+      <div id="colors" class="view">
+        <h1>Color Palette</h1>
+        <p>Complete ACE brand color system with semantic groupings.</p>
+
+        <h2>Brand — Amber Gold</h2>
+        <div class="color-grid">
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #F59E0B;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Brand</div>
+              <div class="swatch-hex">#F59E0B</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #FBBF24;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Brand Light</div>
+              <div class="swatch-hex">#FBBF24</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #D97706;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Brand Dark</div>
+              <div class="swatch-hex">#D97706</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #FFD700;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Gold</div>
+              <div class="swatch-hex">#FFD700</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Surfaces — Deep Navy</h2>
+        <div class="color-grid">
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #050A0F;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">BG</div>
+              <div class="swatch-hex">#050A0F</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #0D1B2A;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">BG Card</div>
+              <div class="swatch-hex">#0D1B2A</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #111F30;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">BG Panel</div>
+              <div class="swatch-hex">#111F30</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #162840;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">BG Elevated</div>
+              <div class="swatch-hex">#162840</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Felt — Casino Green</h2>
+        <div class="color-grid">
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #0F5132;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Felt Light</div>
+              <div class="swatch-hex">#0F5132</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #0A3D26;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Felt</div>
+              <div class="swatch-hex">#0A3D26</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #073520;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Felt Dark</div>
+              <div class="swatch-hex">#073520</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Outcomes</h2>
+        <div class="color-grid">
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #10B981;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Win</div>
+              <div class="swatch-hex">#10B981</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #EF4444;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Loss</div>
+              <div class="swatch-hex">#EF4444</div>
+            </div>
+          </div>
+          <div class="color-swatch">
+            <div class="swatch-color" style="background: #F59E0B;"></div>
+            <div class="swatch-info">
+              <div class="swatch-name">Push</div>
+              <div class="swatch-hex">#F59E0B</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPOGRAPHY -->
+      <div id="typography" class="view">
+        <h1>Typography System</h1>
+        <p>Hierarchical type scale using three typeface families: Outfit (display), Inter (body), JetBrains Mono (mono).</p>
+
+        <h2>Display — Outfit</h2>
+        <div style="padding: var(--s-6); background: var(--bg-elevated); border-radius: var(--r-xl); margin: var(--s-6) 0;">
+          <div style="font-family: var(--font-display); font-weight: 900; font-size: 3rem; color: var(--fg1); letter-spacing: -0.04em; line-height: 1;">ACE</div>
+          <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--fg4); text-transform: uppercase; letter-spacing: 0.15em; margin-top: var(--s-3);">Outfit 900 · 48px · -0.04em</div>
+        </div>
+
+        <h3>Heading Scales</h3>
+        <div style="padding: var(--s-6); background: var(--bg-elevated); border-radius: var(--r-xl); margin: var(--s-6) 0;">
+          <div style="font-family: var(--font-display); font-weight: 900; font-size: 2.25rem; color: var(--fg1); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: var(--s-4);">H1 · 36px</div>
+          <div style="font-family: var(--font-display); font-weight: 800; font-size: 1.875rem; color: var(--fg2); letter-spacing: -0.015em; line-height: 1.1; margin-bottom: var(--s-4);">H2 · 30px</div>
+          <div style="font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--fg2); line-height: 1.2; margin-bottom: var(--s-4);">H3 · 24px</div>
+        </div>
+
+        <h2>Body — Inter</h2>
+        <div style="padding: var(--s-6); background: var(--bg-elevated); border-radius: var(--r-xl); margin: var(--s-6) 0;">
+          <p style="font-family: var(--font-sans); font-size: 1rem; color: var(--fg2); line-height: 1.6; margin-bottom: var(--s-4);">This is body text at 16px. It uses Inter at 400 weight with a 1.6 line height for optimal readability in longer passages.</p>
+          <p style="font-family: var(--font-sans); font-size: 0.875rem; color: var(--fg3); line-height: 1.5;">This is small text at 14px for secondary information and captions.</p>
+        </div>
+
+        <h2>Mono — JetBrains Mono</h2>
+        <div style="padding: var(--s-6); background: var(--bg-elevated); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono);">
+          <div style="color: var(--fg3); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: var(--s-4);">LABEL · 12px · 0.18em</div>
+          <div style="color: var(--fg2); font-size: var(--text-base); margin-bottom: var(--s-3);">$1,250</div>
+          <div style="color: var(--fg2); font-size: var(--text-base);">function dealCards() { ... }</div>
+        </div>
+      </div>
+
+      <!-- SPACING & RADII -->
+      <div id="spacing" class="view">
+        <h1>Spacing & Radii</h1>
+        <p>4px base unit system for consistent spacing. Radii from 6px (cards) to 40px (felt table signature).</p>
+
+        <h2>Spacing Scale</h2>
+        <div style="padding: var(--s-6); background: var(--bg-elevated); border-radius: var(--r-xl); margin: var(--s-6) 0;">
+          <div style="display: grid; gap: var(--s-4); margin-bottom: var(--s-4);">
+            <div style="display: flex; align-items: center; gap: var(--s-4);">
+              <div style="width: 16px; height: 16px; background: var(--brand); border-radius: 2px;"></div>
+              <div style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">--s-1: 4px</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--s-4);">
+              <div style="width: 32px; height: 16px; background: var(--brand); border-radius: 2px;"></div>
+              <div style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">--s-2: 8px</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--s-4);">
+              <div style="width: 48px; height: 16px; background: var(--brand); border-radius: 2px;"></div>
+              <div style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">--s-3: 12px</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--s-4);">
+              <div style="width: 64px; height: 16px; background: var(--brand); border-radius: 2px;"></div>
+              <div style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">--s-4: 16px</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--s-4);">
+              <div style="width: 128px; height: 16px; background: var(--brand); border-radius: 2px;"></div>
+              <div style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">--s-8: 32px</div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Corner Radii</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s-6); margin: var(--s-8) 0;">
+          <div style="text-align: center;">
+            <div style="width: 100%; height: 80px; background: var(--brand); border-radius: 6px; margin-bottom: var(--s-3);"></div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--fg3);">--r-sm: 6px</div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--fg4); margin-top: var(--s-2);">Cards</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 100%; height: 80px; background: var(--brand); border-radius: 12px; margin-bottom: var(--s-3);"></div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--fg3);">--r-lg: 12px</div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--fg4); margin-top: var(--s-2);">Buttons</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 100%; height: 80px; background: var(--brand); border-radius: 20px; margin-bottom: var(--s-3);"></div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--fg3);">--r-2xl: 20px</div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--fg4); margin-top: var(--s-2);">Panels</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="width: 100%; height: 80px; background: var(--brand); border-radius: 40px; margin-bottom: var(--s-3);"></div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--fg3);">--r-5xl: 40px</div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--fg4); margin-top: var(--s-2);">Felt (Signature)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESIGN GUIDE -->
+      <div id="guide" class="view">
+        <h1>Design System Guide</h1>
+        <p>Core principles and constraints for designing on the ACE platform.</p>
+
+        <h2>Core Constraints</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0;">
+          <ol style="margin-left: var(--s-6); line-height: 2;">
+            <li><strong>Glyphs over emoji.</strong> Always. ♠ ♥ ♦ ♣ ✦ ✕ ⇌ ◈ — never 🃏 🎰.</li>
+            <li><strong>Numbers are tabular-nums with $.</strong> $1,250, +$50, never 1.25k.</li>
+            <li><strong>Pronoun is "You".</strong> Never "the player".</li>
+            <li><strong>Action buttons:</strong> Title Case (Hit). Hero CTA: DEAL in caps.</li>
+            <li><strong>Felt radius is 40px+</strong> with gold rim and inset shadow — that's the signature.</li>
+            <li><strong>Outcomes:</strong> Win = green glow, Loss = red, Push = amber, BJ = gold gradient.</li>
+            <li><strong>Chip denominations:</strong> $1 gray, $5 red, $10 blue, $25 amber, $50 green, $100 black/gold, $500 purple.</li>
+          </ol>
+        </div>
+
+        <h2>Voice & Tone</h2>
+        <p><strong>Confident, terse, casino-floor.</strong> Direct verbs. Never apologetic.</p>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          Place your bet to begin · Confirm Bet — $25 · Insurance costs $12 · pays 2:1 · Dealer shows Ace · New Round
+        </div>
+
+        <h2>Type Stack</h2>
+        <ul style="margin-left: var(--s-6); line-height: 2; color: var(--fg2);">
+          <li><strong>Display:</strong> Outfit (700/800/900) — wordmarks, hero CTAs, balance, hand badges</li>
+          <li><strong>Body:</strong> Inter (400/500/600) — everything else</li>
+          <li><strong>Mono:</strong> JetBrains Mono (500/700) — eyebrows, labels, dollar amounts, hand values</li>
+        </ul>
+
+        <h2>Color Philosophy</h2>
+        <p><strong>Deep night sky over green felt, lit by amber gold.</strong> Backgrounds are nearly-black navy (#050A0F) with a soft radial wash. The felt is classic casino green. All accents are warm gold. Outcome colors are saturated green/red, not pastel. Imagery skews cool with warm gold highlights — never warm overall.</p>
+      </div>
+
+      <!-- CSS TOKENS -->
+      <div id="tokens" class="view">
+        <h1>CSS Variables Reference</h1>
+        <p>Complete list of design tokens available as CSS custom properties.</p>
+
+        <h2>Import</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3); overflow-x: auto; white-space: pre;">@import 'colors_and_type.css';</div>
+
+        <h2>Brand Colors</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          <div>--brand: #F59E0B;</div>
+          <div>--brand-light: #FBBF24;</div>
+          <div>--brand-dark: #D97706;</div>
+          <div>--gold: #FFD700;</div>
+        </div>
+
+        <h2>Surfaces</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          <div>--bg: #050A0F;</div>
+          <div>--bg-card: #0D1B2A;</div>
+          <div>--bg-panel: #111F30;</div>
+          <div>--bg-elevated: #162840;</div>
+        </div>
+
+        <h2>Felt</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          <div>--felt: #0A3D26;</div>
+          <div>--felt-light: #0F5132;</div>
+          <div>--felt-dark: #073520;</div>
+        </div>
+
+        <h2>Outcomes</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          <div>--win: #10B981;</div>
+          <div>--loss: #EF4444;</div>
+          <div>--push: #F59E0B;</div>
+        </div>
+
+        <h2>Chip Denominations</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          <div>--chip-1: #6B7280;   /* $1 gray */</div>
+          <div>--chip-5: #EF4444;   /* $5 red */</div>
+          <div>--chip-10: #3B82F6;  /* $10 blue */</div>
+          <div>--chip-25: #F59E0B;  /* $25 amber */</div>
+          <div>--chip-50: #10B981;  /* $50 green */</div>
+          <div>--chip-100: #1A1A1A; /* $100 black */</div>
+          <div>--chip-500: #7C3AED; /* $500 purple */</div>
+        </div>
+
+        <h2>Typography</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          <div>--font-sans: 'Inter';</div>
+          <div>--font-display: 'Outfit';</div>
+          <div>--font-mono: 'JetBrains Mono';</div>
+        </div>
+
+        <h2>Motion</h2>
+        <div style="background: var(--bg-elevated); padding: var(--s-6); border-radius: var(--r-xl); margin: var(--s-6) 0; font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg3);">
+          <div>--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);</div>
+          <div>--d-fast: 150ms;</div>
+          <div>--d-base: 250ms;</div>
+          <div>--d-card-flip: 600ms;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    const views = document.querySelectorAll('.view');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        const viewId = e.target.dataset.view;
+
+        // Update active nav item
+        navItems.forEach(ni => ni.classList.remove('active'));
+        e.target.classList.add('active');
+
+        // Update active view
+        views.forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+
+        // Scroll to top
+        document.querySelector('.main').scrollTop = 0;
+      });
+    });
+
+    // Make hex values copyable
+    document.querySelectorAll('.swatch-hex').forEach(hex => {
+      hex.addEventListener('click', (e) => {
+        const text = e.target.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          const original = e.target.textContent;
+          e.target.textContent = 'Copied!';
+          setTimeout(() => {
+            e.target.textContent = original;
+          }, 1500);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

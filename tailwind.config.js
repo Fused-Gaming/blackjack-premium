@@ -232,6 +232,27 @@ export default {
         '4xl': '2rem',
         '5xl': '2.5rem',
       },
+
+      transitionDuration: {
+        '150': '150ms',
+        '250': '250ms',
+        '500': '500ms',
+        '600': '600ms',
+      },
+
+      transitionTimingFunction: {
+        'spring': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+        'flip': 'cubic-bezier(0.4, 0, 0.2, 1)',
+      },
+
+      spacing: {
+        'clamp-xs': 'clamp(4px, 0.5vw, 8px)',
+        'clamp-sm': 'clamp(8px, 1vw, 12px)',
+        'clamp-md': 'clamp(12px, 1.5vw, 20px)',
+        'clamp-lg': 'clamp(16px, 2.5vw, 32px)',
+        'clamp-xl': 'clamp(24px, 4vw, 48px)',
+        'clamp-2xl': 'clamp(32px, 5vw, 64px)',
+      },
     },
   },
   plugins: [],
