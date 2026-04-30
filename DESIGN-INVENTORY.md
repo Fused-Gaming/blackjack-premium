@@ -155,24 +155,6 @@
 
 ---
 
-### Data Files
-
-#### 1. **activities.csv** (10.4 KB)
-- Activity log data
-- User action tracking
-- Game event records
-
-#### 2. **btc_payouts.csv** (5.2 KB)
-- Bitcoin payout information
-- Denomination and payout data
-
-#### 3. **btc_rewards_fpps.csv** (95 bytes)
-- FPPS reward calculations
-
-#### 4. **btc_rewards_score.csv** (138 KB)
-- Reward scoring data
-- Player statistics
-
 ---
 
 ## 🎨 Design System Summary
