@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './LandingPage.module.css';
 
 interface LandingPageProps {
@@ -5,16 +6,32 @@ interface LandingPageProps {
 }
 
 export const LandingPage = ({ onEnter }: LandingPageProps) => {
+  const [isInteracting, setIsInteracting] = React.useState(false);
+
   const handleEnter = () => {
     onEnter?.();
   };
+
+  const handleLogoInteraction = () => {
+    setIsInteracting(true);
+    setTimeout(() => setIsInteracting(false), 600);
+  };
+
+  React.useEffect(() => {
+    const handleMouseMove = () => {
+      handleLogoInteraction();
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   return (
     <div className={styles.container}>
       {/* Main Content Group - Grouped elements with controlled sizing */}
       <div className={styles.contentGroup}>
         {/* Logo Section */}
-        <div className={styles.logoWrapper} onClick={handleEnter}>
+        <div className={`${styles.logoWrapper} ${isInteracting ? styles.interacting : ''}`} onClick={handleEnter}>
           <svg
             className={styles.logoSvg}
             width="300"
@@ -40,8 +57,10 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               </filter>
             </defs>
 
-            {/* Card background with rounded corners (like a playing card) */}
-            <rect x="5" y="5" width="90" height="150" rx="8" ry="8" fill="url(#cardGradient)" />
+            {/* Card group - all elements properly layered */}
+            <g className={styles.cardGroup}>
+              {/* Card background with rounded corners (like a playing card) */}
+              <rect x="5" y="5" width="90" height="150" rx="8" ry="8" fill="url(#cardGradient)" />
 
             {/* Card border - elegant outline with subtle glow */}
             <rect
@@ -128,6 +147,7 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               <circle cx="10" cy="148" r="1.2" />
               {/* Bottom-right corner */}
               <circle cx="90" cy="148" r="1.2" />
+            </g>
             </g>
           </svg>
         </div>
