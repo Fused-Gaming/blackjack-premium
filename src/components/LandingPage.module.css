@@ -5,14 +5,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(24px, 5vw, 48px);
-  padding: clamp(20px, 3vw, 32px);
   width: 100%;
   height: 100vh;
+  padding: clamp(16px, 3vw, 24px);
   text-align: center;
   background: var(--bg-radial);
   animation: fadeInPage var(--d-slow) var(--ease-out);
   overflow: hidden;
+}
+
+.contentGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 32px);
+  max-height: 90vh;
+  max-width: 100%;
+  animation: fadeInPage var(--d-slow) var(--ease-out);
 }
 
 /* ─────────────────────────────────────────────────────────────── */
@@ -35,14 +45,13 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .logoWrapper {
-  width: clamp(180px, 45vw, 300px);
-  height: clamp(180px, 45vw, 300px);
+  width: clamp(140px, 35vw, 280px);
+  height: clamp(140px, 35vw, 280px);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   animation: logoFloatIn 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  margin: clamp(20px, 5vw, 40px) auto;
-  padding: clamp(16px, 3vw, 32px);
 }
 
 @keyframes logoFloatIn {
@@ -59,17 +68,17 @@
 .logoSvg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 34px rgba(245, 158, 11, 0.35)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.2));
+  filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.23)) drop-shadow(0 0 13px rgba(245, 158, 11, 0.13));
   animation: logoPulseGlow 3s ease-in-out infinite;
 }
 
 @keyframes logoPulseGlow {
   0%,
   100% {
-    filter: drop-shadow(0 0 34px rgba(245, 158, 11, 0.35)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.2));
+    filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.23)) drop-shadow(0 0 13px rgba(245, 158, 11, 0.13));
   }
   50% {
-    filter: drop-shadow(0 0 51px rgba(245, 158, 11, 0.65)) drop-shadow(0 0 30px rgba(245, 158, 11, 0.3));
+    filter: drop-shadow(0 0 33px rgba(245, 158, 11, 0.42)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.2));
   }
 }
 
@@ -79,13 +88,13 @@
 
 @keyframes logoInteractiveGlow {
   0% {
-    filter: drop-shadow(0 0 34px rgba(245, 158, 11, 0.3)) brightness(1);
+    filter: drop-shadow(0 0 22px rgba(245, 158, 11, 0.2)) brightness(1);
   }
   50% {
-    filter: drop-shadow(0 0 68px rgba(245, 158, 11, 0.8)) brightness(1.1);
+    filter: drop-shadow(0 0 44px rgba(245, 158, 11, 0.52)) brightness(1.08);
   }
   100% {
-    filter: drop-shadow(0 0 51px rgba(245, 158, 11, 0.6)) brightness(1);
+    filter: drop-shadow(0 0 33px rgba(245, 158, 11, 0.39)) brightness(1);
   }
 }
 
@@ -94,15 +103,16 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .brandmark {
-  font-size: clamp(14px, 2.2vw, 18px);
+  font-size: clamp(12px, 2vw, 16px);
   font-weight: 600;
-  letter-spacing: clamp(2px, 0.3vw, 3px);
+  letter-spacing: clamp(1.5px, 0.2vw, 2.5px);
   color: var(--brand);
   text-transform: uppercase;
   font-family: var(--font-display);
-  margin-bottom: clamp(12px, 2vw, 16px);
   animation: brandmarkFadeIn 1.8s var(--ease-out);
-  line-height: 1.4;
+  line-height: 1.3;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 @keyframes brandmarkFadeIn {
@@ -143,8 +153,8 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .ctaWrapper {
-  margin-top: 1rem;
   animation: ctaFadeIn 2.2s var(--ease-out);
+  flex-shrink: 0;
 }
 
 @keyframes ctaFadeIn {
@@ -163,10 +173,10 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .ctaButton {
-  padding: clamp(12px, 2vw, 18px) clamp(28px, 6vw, 48px);
-  font-size: clamp(12px, 1.8vw, 15px);
+  padding: clamp(10px, 1.8vw, 14px) clamp(24px, 5vw, 40px);
+  font-size: clamp(11px, 1.6vw, 13px);
   font-weight: 600;
-  letter-spacing: clamp(1px, 0.2vw, 2px);
+  letter-spacing: clamp(0.5px, 0.15vw, 1.5px);
   color: var(--bg);
   background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
   border: 2px solid var(--brand);
@@ -178,7 +188,8 @@
   overflow: hidden;
   box-shadow: var(--shadow-button);
   font-family: var(--font-display);
-  line-height: 1.3;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .ctaButton::before {
