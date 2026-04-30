@@ -72,9 +72,6 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
       {/* Brandmark */}
       <div className={styles.brandmark}>ACE Blackjack Premium</div>
 
-      {/* Spacer */}
-      <div className={styles.spacer} />
-
       {/* Call to Action Button */}
       <div className={styles.ctaWrapper}>
         <button className={styles.ctaButton} onClick={handleEnter}>

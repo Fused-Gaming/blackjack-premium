@@ -6,14 +6,13 @@
   align-items: center;
   justify-content: center;
   gap: clamp(24px, 5vw, 48px);
-  padding: clamp(16px, 4vw, 32px);
-  max-width: 600px;
+  padding: clamp(20px, 3vw, 32px);
   width: 100%;
+  height: 100vh;
   text-align: center;
-  margin: 0 auto;
-  min-height: 100vh;
   background: var(--bg-radial);
   animation: fadeInPage var(--d-slow) var(--ease-out);
+  overflow: hidden;
 }
 
 /* ─────────────────────────────────────────────────────────────── */
@@ -60,17 +59,17 @@
 .logoSvg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 34px rgba(245, 158, 11, 0.3));
+  filter: drop-shadow(0 0 34px rgba(245, 158, 11, 0.35)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.2));
   animation: logoPulseGlow 3s ease-in-out infinite;
 }
 
 @keyframes logoPulseGlow {
   0%,
   100% {
-    filter: drop-shadow(0 0 34px rgba(245, 158, 11, 0.3));
+    filter: drop-shadow(0 0 34px rgba(245, 158, 11, 0.35)) drop-shadow(0 0 20px rgba(245, 158, 11, 0.2));
   }
   50% {
-    filter: drop-shadow(0 0 51px rgba(245, 158, 11, 0.6));
+    filter: drop-shadow(0 0 51px rgba(245, 158, 11, 0.65)) drop-shadow(0 0 30px rgba(245, 158, 11, 0.3));
   }
 }
 
@@ -138,14 +137,6 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────── */
-/* Spacer */
-/* ─────────────────────────────────────────────────────────────── */
-
-.spacer {
-  height: 0;
-  opacity: 0;
-}
 
 /* ─────────────────────────────────────────────────────────────── */
 /* CTA Button Section */
