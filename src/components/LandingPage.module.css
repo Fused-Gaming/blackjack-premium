@@ -45,8 +45,8 @@
 /* ─────────────────────────────────────────────────────────────── */
 
 .logoWrapper {
-  width: clamp(140px, 35vw, 280px);
-  height: clamp(140px, 35vw, 280px);
+  width: clamp(100px, 28vw, 200px);
+  aspect-ratio: 100 / 140;
   flex-shrink: 0;
   display: flex;
   align-items: center;

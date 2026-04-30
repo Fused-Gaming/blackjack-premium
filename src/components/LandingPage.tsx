@@ -19,16 +19,29 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
             className={styles.logoSvg}
             width="300"
             height="300"
-            viewBox="0 0 32 32"
+            viewBox="0 0 100 140"
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
-              <linearGradient id="aceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="var(--bg-panel)" stopOpacity="1" />
-                <stop offset="100%" stopColor="var(--bg)" stopOpacity="1" />
+              {/* Card back pattern gradient */}
+              <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#1a3f52" stopOpacity="1" />
+                <stop offset="50%" stopColor="#0f2a38" stopOpacity="1" />
+                <stop offset="100%" stopColor="#08171f" stopOpacity="1" />
               </linearGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+
+              {/* Subtle inner glow */}
+              <filter id="cardGlow">
+                <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              {/* Spade glow */}
+              <filter id="spadeGlow">
+                <feGaussianBlur stdDeviation="1" result="coloredBlur" />
                 <feMerge>
                   <feMergeNode in="coloredBlur" />
                   <feMergeNode in="SourceGraphic" />
@@ -36,27 +49,61 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               </filter>
             </defs>
 
-            {/* Main background */}
-            <rect width="32" height="32" rx="6" fill="url(#aceGradient)" />
+            {/* Card background with rounded corners (like a playing card) */}
+            <rect x="5" y="5" width="90" height="130" rx="8" ry="8" fill="url(#cardGradient)" />
 
-            {/* Border accent */}
+            {/* Card border - elegant outline */}
             <rect
-              width="32"
-              height="32"
-              rx="6"
+              x="5"
+              y="5"
+              width="90"
+              height="130"
+              rx="8"
+              ry="8"
               fill="none"
               stroke="var(--brand)"
-              strokeWidth="0.5"
-              opacity="0.5"
+              strokeWidth="1.2"
+              opacity="0.6"
             />
 
-            {/* Spade symbol with glow */}
-            <g filter="url(#glow)">
+            {/* Inner card edge highlight (like real playing cards) */}
+            <rect
+              x="6.5"
+              y="6.5"
+              width="87"
+              height="127"
+              rx="7"
+              ry="7"
+              fill="none"
+              stroke="var(--brand)"
+              strokeWidth="0.4"
+              opacity="0.3"
+            />
+
+            {/* Card back pattern - subtle diagonal lines */}
+            <g opacity="0.08" stroke="var(--brand)" strokeWidth="0.3">
+              <line x1="10" y1="10" x2="90" y2="10" />
+              <line x1="10" y1="20" x2="90" y2="20" />
+              <line x1="10" y1="30" x2="90" y2="30" />
+              <line x1="10" y1="40" x2="90" y2="40" />
+              <line x1="10" y1="50" x2="90" y2="50" />
+              <line x1="10" y1="60" x2="90" y2="60" />
+              <line x1="10" y1="70" x2="90" y2="70" />
+              <line x1="10" y1="80" x2="90" y2="80" />
+              <line x1="10" y1="90" x2="90" y2="90" />
+              <line x1="10" y1="100" x2="90" y2="100" />
+              <line x1="10" y1="110" x2="90" y2="110" />
+              <line x1="10" y1="120" x2="90" y2="120" />
+              <line x1="10" y1="130" x2="90" y2="130" />
+            </g>
+
+            {/* Spade symbol with subtle glow - centered on card */}
+            <g filter="url(#spadeGlow)">
               <text
-                x="16"
-                y="24"
+                x="50"
+                y="80"
                 fontFamily="Georgia, serif"
-                fontSize="22"
+                fontSize="48"
                 fill="var(--brand)"
                 textAnchor="middle"
                 fontWeight="bold"
@@ -65,9 +112,17 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
               </text>
             </g>
 
-            {/* Accent dots */}
-            <circle cx="5" cy="5" r="1.5" fill="var(--brand)" opacity="0.6" />
-            <circle cx="27" cy="27" r="1.5" fill="var(--brand)" opacity="0.6" />
+            {/* Subtle corner decorations (like on playing cards) */}
+            <g opacity="0.4" fill="var(--brand)">
+              {/* Top-left corner */}
+              <circle cx="10" cy="12" r="1.2" />
+              {/* Top-right corner */}
+              <circle cx="90" cy="12" r="1.2" />
+              {/* Bottom-left corner */}
+              <circle cx="10" cy="128" r="1.2" />
+              {/* Bottom-right corner */}
+              <circle cx="90" cy="128" r="1.2" />
+            </g>
           </svg>
         </div>
 
