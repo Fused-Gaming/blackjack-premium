@@ -65,7 +65,7 @@ export function BetControls() {
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={handleClear}
                 whileTap={{ scale: 0.93 }}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-text-muted hover:text-text border border-border hover:border-border-bright transition-all"
+                className="px-4 py-2 rounded-[var(--r-lg)] text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--text)] border border-[var(--border)] hover:border-[var(--border-bright)] transition-all duration-[var(--d-base)]"
               >
                 Clear
               </motion.button>
@@ -78,7 +78,7 @@ export function BetControls() {
                 onClick={handleDouble}
                 disabled={currentBet * 2 > balance}
                 whileTap={{ scale: 0.93 }}
-                className="px-4 py-2 rounded-xl text-sm font-semibold text-brand border border-brand/30 hover:bg-brand/8 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-4 py-2 rounded-[var(--r-lg)] text-sm font-semibold text-[var(--brand)] border border-[color:var(--brand)] hover:bg-[color:var(--brand)] hover:bg-opacity-8 transition-all duration-[var(--d-base)] disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 2×
               </motion.button>
@@ -94,10 +94,11 @@ export function BetControls() {
             animate={{ scale: 1, opacity: 1 }}
             className="flex flex-col items-center min-w-[80px]"
           >
-            <span className="text-2xs font-mono text-text-muted uppercase tracking-widest leading-none">Bet</span>
+            <span className="text-2xs font-mono text-[var(--text-muted)] uppercase tracking-widest leading-none">Bet</span>
             <span className={`font-display font-bold text-2xl leading-tight tabular-nums ${
-              currentBet > 0 ? 'text-brand' : 'text-text-muted/40'
-            }`}>
+              currentBet > 0 ? 'text-[var(--brand)]' : 'text-[var(--text-muted)]'
+            }`}
+            style={{ opacity: currentBet > 0 ? 1 : 0.4 }}>
               ${currentBet}
             </span>
           </motion.div>
@@ -109,7 +110,7 @@ export function BetControls() {
           disabled={!canAdd}
           whileHover={canAdd ? { scale: 1.04 } : {}}
           whileTap={canAdd ? { scale: 0.95 } : {}}
-          className="px-5 py-2.5 rounded-xl text-sm font-bold bg-background-elevated hover:bg-background-panel border border-border hover:border-border-bright text-text transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-5 py-2.5 rounded-[var(--r-lg)] text-sm font-bold bg-[var(--bg-elevated)] hover:bg-[var(--bg-panel)] border border-[var(--border)] hover:border-[var(--border-bright)] text-[var(--text)] transition-all duration-[var(--d-base)] disabled:opacity-40 disabled:cursor-not-allowed"
         >
           +${selectedChip}
         </motion.button>
@@ -126,8 +127,8 @@ export function BetControls() {
             exit={{ opacity: 0, y: -8 }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
-            className="w-full py-3.5 rounded-xl font-display font-bold text-lg text-white transition-all shadow-glow-win"
-            style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)' }}
+            className="w-full py-3.5 rounded-[var(--r-lg)] font-display font-bold text-lg text-white transition-all duration-[var(--d-base)] shadow-glow-win"
+            style={{ background: 'linear-gradient(135deg, var(--win) 0%, var(--win-dark) 100%)' }}
           >
             Confirm Bet — ${currentBet}
           </motion.button>
@@ -142,8 +143,8 @@ export function BetControls() {
             exit={{ opacity: 0, scale: 0.92 }}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
-            className="w-full py-4 rounded-xl font-display font-black text-2xl tracking-widest text-background transition-all animate-glow-pulse-gold"
-            style={{ background: 'linear-gradient(135deg, #FBBF24 0%, #F59E0B 60%, #D97706 100%)' }}
+            className="w-full py-4 rounded-[var(--r-lg)] font-display font-black text-2xl tracking-widest text-[var(--bg)] transition-all duration-[var(--d-base)] animate-glow-pulse-gold"
+            style={{ background: 'linear-gradient(135deg, var(--brand-light) 0%, var(--brand) 60%, var(--brand-dark) 100%)' }}
           >
             DEAL
           </motion.button>
