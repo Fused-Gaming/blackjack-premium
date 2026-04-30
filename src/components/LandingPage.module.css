@@ -582,25 +582,30 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 101;
+  perspective: 1200px;
   animation: cardEnter 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 @keyframes cardEnter {
   0% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+    transform: translate(-50%, -50%) scale(1) rotateX(0deg);
   }
-  40% {
+  25% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1) rotateY(360deg);
+    transform: translate(-50%, calc(-50% + 5px)) scale(1.05) rotateX(90deg);
   }
-  70% {
+  50% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.15) rotateY(720deg);
+    transform: translate(-50%, -50%) scale(1.15) rotateX(180deg);
+  }
+  75% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% - 3px)) scale(1.1) rotateX(270deg);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8) rotateY(1080deg);
+    transform: translate(-50%, -50%) scale(0.8) rotateX(360deg);
   }
 }
 
@@ -615,23 +620,39 @@
 
 @keyframes cardSpin {
   0% {
-    transform: rotateZ(0deg) rotateX(0deg) rotateY(0deg);
+    transform: rotateX(0deg) rotateZ(0deg);
     filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.4));
   }
+  12% {
+    transform: rotateX(45deg) rotateZ(0deg);
+    filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.5));
+  }
   25% {
-    transform: rotateZ(90deg) rotateX(15deg) rotateY(45deg);
+    transform: rotateX(90deg) rotateZ(0deg);
     filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.6));
   }
+  37% {
+    transform: rotateX(135deg) rotateZ(0deg);
+    filter: drop-shadow(0 0 28px rgba(245, 158, 11, 0.55));
+  }
   50% {
-    transform: rotateZ(180deg) rotateX(30deg) rotateY(90deg);
+    transform: rotateX(180deg) rotateZ(0deg);
     filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.8));
   }
-  75% {
-    transform: rotateZ(270deg) rotateX(45deg) rotateY(135deg);
+  62% {
+    transform: rotateX(225deg) rotateZ(0deg);
     filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.7));
   }
+  75% {
+    transform: rotateX(270deg) rotateZ(0deg);
+    filter: drop-shadow(0 0 32px rgba(245, 158, 11, 0.65));
+  }
+  87% {
+    transform: rotateX(315deg) rotateZ(0deg);
+    filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.5));
+  }
   100% {
-    transform: rotateZ(360deg) rotateX(60deg) rotateY(180deg);
+    transform: rotateX(360deg) rotateZ(0deg);
     filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.3));
   }
 }
@@ -645,13 +666,16 @@
   0% {
     transform: rotate(0deg) scale(1);
   }
-  30% {
-    transform: rotate(180deg) scale(1.05);
+  25% {
+    transform: rotate(90deg) scale(1.08) translateY(-2px);
   }
-  60% {
-    transform: rotate(360deg) scale(1.1);
+  50% {
+    transform: rotate(180deg) scale(1.15) translateY(0);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.08) translateY(-1px);
   }
   100% {
-    transform: rotate(540deg) scale(1);
+    transform: rotate(360deg) scale(1) translateY(0);
   }
 }
