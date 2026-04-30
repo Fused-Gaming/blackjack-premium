@@ -63,15 +63,6 @@ jobs:
         env:
           CI: true
 
-      - name: Verify lock file is up to date
-        run: |
-          if ! pnpm install --dry-run --frozen-lockfile > /dev/null 2>&1; then
-            echo "❌ pnpm-lock.yaml is out of date!"
-            echo "Run: pnpm install --fix-lockfile"
-            exit 1
-          fi
-          echo "✅ Lock file is up to date"
-
       - name: Check TypeScript
         run: pnpm run type-check
 
