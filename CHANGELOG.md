@@ -15,16 +15,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 8+ smooth animations using design tokens
   - Callback-based navigation to game interface
   
-- **Landing Page Styling** (`src/components/LandingPage.module.css`)
+- **Landing Page Styling Enhancements** (`src/components/LandingPage.module.css`)
   - Complete animation suite (page entrance, logo glow, brandmark fade, button interactions)
   - Full design token integration (colors, typography, spacing, shadows, motion)
+  - Responsive fluid scaling using CSS clamp() for all viewport sizes
+  - Logo glow reduced by 15% for improved visual clarity (40px→34px, 60px→51px)
+  - Proper margins and bleed areas based on screen resolution
   - Accessibility support (keyboard navigation, reduced motion)
   - WCAG AA color contrast compliance
 
 - **App Navigation Integration**
   - Landing page as main entry point
   - State-based navigation between landing and game
-  - "Back to Home" button on game interface
+  - Back button repositioned to top-right to prevent overlap with logo
+  - Fixed viewport constraints to eliminate unwanted scrolling
+
+- **Open Graph Endpoint** 
+  - `/public/og-preview.html`: Dedicated OG preview endpoint for rich social media sharing
+  - Updated index.html with enhanced Open Graph and Twitter Card metadata
+  - Added `/public/robots.txt` for proper search engine crawling
 
 - **CSS Module Type Definitions** (`src/vite-env.d.ts`)
   - TypeScript declarations for CSS modules
@@ -34,8 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `DESIGN-INVENTORY.md`: Complete catalog of design assets and tokens
   - `LANDING-PAGE-IMPLEMENTATION.md`: Comprehensive implementation guide
 
-- Added a professionally designed Open Graph preview image for `https://demo.vln.gg/social/og-vln-demo.svg`.
-- Standardized root endpoint social metadata across Open Graph and Twitter/X tags in `index.html`.
+- Professionally designed Open Graph preview image at `public/social/og-vln-demo.svg` (1200×630).
+- Standardized social metadata across Open Graph and Twitter/X tags in `index.html`.
 
 ### Fixed
 
