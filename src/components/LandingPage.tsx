@@ -58,7 +58,7 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
 
     setTimeout(() => {
       onEnter?.();
-    }, 3200);
+    }, 2000);
   };
 
   const handleLogoInteraction = () => {
@@ -237,73 +237,6 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
       {/* Welcome Greeting Overlay */}
       {showGreeting && (
         <div className={styles.greetingOverlay}>
-          {/* Spinning Card Animation */}
-          <div className={styles.spinningCardContainer}>
-            <svg
-              className={styles.spinningCard}
-              width="120"
-              height="160"
-              viewBox="0 0 100 160"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#0d0d0d" stopOpacity="1" />
-                  <stop offset="50%" stopColor="#0a0a0a" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#1a1520" stopOpacity="1" />
-                </linearGradient>
-                <filter id="cardOuterGlow">
-                  <feGaussianBlur stdDeviation="1.2" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              <g className={styles.spinningCardGroup}>
-                <rect x="5" y="5" width="90" height="150" rx="8" ry="8" fill="url(#cardGradient)" />
-                <rect
-                  x="5"
-                  y="5"
-                  width="90"
-                  height="150"
-                  rx="8"
-                  ry="8"
-                  fill="none"
-                  stroke="var(--brand)"
-                  strokeWidth="1.2"
-                  opacity="0.6"
-                  filter="url(#cardOuterGlow)"
-                />
-                <text
-                  x="50"
-                  y="75"
-                  fontFamily="Georgia, serif"
-                  fontSize="48"
-                  fill="#FFA500"
-                  textAnchor="middle"
-                  fontWeight="bold"
-                >
-                  ♠
-                </text>
-                <text
-                  x="50"
-                  y="115"
-                  fontFamily="var(--font-display), Outfit, sans-serif"
-                  fontSize="14"
-                  fill="var(--brand)"
-                  textAnchor="middle"
-                  fontWeight="bold"
-                  letterSpacing="2"
-                >
-                  ACE
-                </text>
-              </g>
-            </svg>
-          </div>
-
-          {/* Greeting Content */}
           <div className={styles.greetingContent}>
             <h1 className={styles.greetingTitle}>{currentGreeting.title}</h1>
             <p className={styles.greetingMessage}>{currentGreeting.message}</p>
