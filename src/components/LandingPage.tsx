@@ -114,9 +114,9 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
             <text
               x="50"
               y="75"
-              fontFamily="Apple Color Emoji, Segoe UI Symbol, Arial Unicode MS, serif"
+              fontFamily="Georgia, serif"
               fontSize="48"
-              fill="var(--brand)"
+              fill="#FFA500"
               textAnchor="middle"
               fontWeight="bold"
             >
