@@ -37,7 +37,7 @@ export function Chip({ value, selected = false, onClick, disabled = false, class
         ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'cursor-pointer hover:shadow-glow-gold'}
         ${className}
       `}
-      style={selected ? { ringColor: 'var(--gold)' } : {}}
+      style={selected ? { boxShadow: '0 0 0 4px var(--gold)' } : {}}
     >
       {/* Inner highlight */}
       <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent" />
