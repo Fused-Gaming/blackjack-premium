@@ -23,11 +23,11 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
-              {/* Card back pattern gradient */}
+              {/* Card back pattern gradient - dark black with subtle mystery */}
               <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1a3f52" stopOpacity="1" />
-                <stop offset="50%" stopColor="#0f2a38" stopOpacity="1" />
-                <stop offset="100%" stopColor="#08171f" stopOpacity="1" />
+                <stop offset="0%" stopColor="#0d0d0d" stopOpacity="1" />
+                <stop offset="50%" stopColor="#0a0a0a" stopOpacity="1" />
+                <stop offset="100%" stopColor="#1a1520" stopOpacity="1" />
               </linearGradient>
 
               {/* Very subtle card outer glow */}
