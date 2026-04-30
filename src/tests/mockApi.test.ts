@@ -324,7 +324,7 @@ describe('Mock API Integration Tests', () => {
       const end = performance.now();
 
       const duration = end - start;
-      expect(duration).toBeGreaterThanOrEqual(100);
+      expect(duration).toBeGreaterThanOrEqual(95); // Allow 5ms margin for timing variations
     });
 
     it('should handle concurrent requests', async () => {

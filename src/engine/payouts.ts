@@ -127,7 +127,7 @@ export function validateBet(
   minBet: number = 1,
   maxBet: number = 1000
 ): { valid: boolean; error?: string } {
-  // Check for invalid values first (NaN, Infinity, negative, zero)
+  // Check for invalid values first (NaN, Infinity, non-positive)
   if (!Number.isFinite(amount) || amount <= 0) {
     return { valid: false, error: 'Invalid bet amount' };
   }
