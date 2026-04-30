@@ -2,6 +2,8 @@
 
 A professional, secure, and engaging blackjack game with premium branding, smooth animations, and transparent gameplay mechanics.
 
+<img width="1280" height="752" alt="IMG_4100" src="https://github.com/user-attachments/assets/9fc5d675-0e23-4cce-8876-877a279023df" />
+
 ## Features
 
 ### Gameplay
