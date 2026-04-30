@@ -457,8 +457,10 @@
 
 .greetingContent {
   text-align: center;
-  animation: greetingScaleUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: greetingScaleUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s both;
   padding: clamp(20px, 5vw, 40px);
+  position: relative;
+  z-index: 102;
 }
 
 @keyframes greetingScaleUp {
@@ -480,7 +482,7 @@
   margin: 0;
   font-family: var(--font-display);
   text-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-  animation: titleReveal 0.8s ease-out 0.2s both;
+  animation: titleReveal 0.8s ease-out 1.4s both;
 }
 
 @keyframes titleReveal {
@@ -501,7 +503,7 @@
   margin: clamp(12px, 2vw, 20px) 0;
   letter-spacing: 1px;
   font-family: var(--font-display);
-  animation: messageReveal 0.8s ease-out 0.4s both;
+  animation: messageReveal 0.8s ease-out 1.6s both;
 }
 
 @keyframes messageReveal {
@@ -520,7 +522,7 @@
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--brand), transparent);
   margin: clamp(16px, 2vw, 24px) auto;
-  animation: dividerExpand 0.8s ease-out 0.6s both;
+  animation: dividerExpand 0.8s ease-out 1.8s both;
 }
 
 @keyframes dividerExpand {
@@ -541,7 +543,7 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   font-weight: 500;
-  animation: subtextReveal 0.8s ease-out 0.8s both;
+  animation: subtextReveal 0.8s ease-out 2.0s both;
 }
 
 @keyframes subtextReveal {
@@ -556,7 +558,7 @@
 }
 
 .greetingOverlay {
-  animation: greetingFadeOut 0.6s ease-in 2.2s both;
+  animation: greetingFadeOut 0.6s ease-in 2.6s both;
 }
 
 @keyframes greetingFadeOut {
@@ -567,5 +569,89 @@
   to {
     opacity: 0;
     backdrop-filter: blur(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Spinning Card Animation */
+/* ─────────────────────────────────────────────────────────────── */
+
+.spinningCardContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  animation: cardEnter 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes cardEnter {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1) rotateY(360deg);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15) rotateY(720deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8) rotateY(1080deg);
+  }
+}
+
+.spinningCard {
+  width: 120px;
+  height: 160px;
+  filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.6));
+  animation: cardSpin 2.4s ease-in forwards;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+@keyframes cardSpin {
+  0% {
+    transform: rotateZ(0deg) rotateX(0deg) rotateY(0deg);
+    filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.4));
+  }
+  25% {
+    transform: rotateZ(90deg) rotateX(15deg) rotateY(45deg);
+    filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.6));
+  }
+  50% {
+    transform: rotateZ(180deg) rotateX(30deg) rotateY(90deg);
+    filter: drop-shadow(0 0 40px rgba(245, 158, 11, 0.8));
+  }
+  75% {
+    transform: rotateZ(270deg) rotateX(45deg) rotateY(135deg);
+    filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.7));
+  }
+  100% {
+    transform: rotateZ(360deg) rotateX(60deg) rotateY(180deg);
+    filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.3));
+  }
+}
+
+.spinningCardGroup {
+  transform-origin: 50% 50%;
+  animation: cardRotate 2.4s ease-in forwards;
+}
+
+@keyframes cardRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  30% {
+    transform: rotate(180deg) scale(1.05);
+  }
+  60% {
+    transform: rotate(360deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(540deg) scale(1);
   }
 }
