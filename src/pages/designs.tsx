@@ -109,6 +109,7 @@ export default function DesignsPage() {
   );
 
   const tabItems = [
+    { id: 'fairness-receipt', label: 'Fairness Receipt' },
     { id: 'overview', label: 'Overview' },
     { id: 'brand-guidelines', label: 'Brand Guidelines' },
     { id: 'animations', label: 'Animations' },
@@ -322,6 +323,153 @@ export default function DesignsPage() {
                       <p className="text-slate-400 text-sm mt-1">Confident, terse, professional voice</p>
                     </li>
                   </ul>
+                </div>
+              </section>
+            )}
+
+            {/* Fairness Receipt Tab - Sales Pitch */}
+            {activeTab === 'fairness-receipt' && (
+              <section className="space-y-12 max-w-6xl">
+                {/* Hero Section */}
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <p className="text-amber-400 font-semibold text-lg tracking-widest uppercase">
+                      Proof-of-Play
+                    </p>
+                    <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
+                      The house always proves.
+                    </h1>
+                    <p className="text-xl text-slate-300 leading-relaxed max-w-3xl">
+                      ACE turns every round into evidence. Transparent, auditable, verifiable blackjack where you never have to trust—you can always verify.
+                    </p>
+                  </div>
+
+                  {/* Fairness Receipt Mockup */}
+                  <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-emerald-500/50 rounded-xl p-8 space-y-8">
+                    {/* Receipt Header */}
+                    <div className="space-y-2 border-b border-slate-700 pb-6">
+                      <p className="text-sm text-slate-400 uppercase tracking-widest">Receipt ID</p>
+                      <p className="text-4xl font-bold text-emerald-400">Hand #A9F2</p>
+                      <p className="text-sm text-slate-400">Verification passed</p>
+                    </div>
+
+                    {/* Verification Checkpoints */}
+                    <div className="space-y-4">
+                      <p className="text-sm text-slate-400 uppercase tracking-widest font-semibold">Verification Checkpoints</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-slate-900/50 border border-emerald-500/30 rounded-lg p-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl text-emerald-400">✓</span>
+                            <span className="text-slate-200 font-semibold">Shoe commitment locked</span>
+                          </div>
+                          <p className="text-xs text-slate-500 ml-7">Initial deck state hashed</p>
+                        </div>
+                        <div className="bg-slate-900/50 border border-emerald-500/30 rounded-lg p-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl text-emerald-400">✓</span>
+                            <span className="text-slate-200 font-semibold">CSPRNG source recorded</span>
+                          </div>
+                          <p className="text-xs text-slate-500 ml-7">Cryptographic randomness seed</p>
+                        </div>
+                        <div className="bg-slate-900/50 border border-emerald-500/30 rounded-lg p-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl text-emerald-400">✓</span>
+                            <span className="text-slate-200 font-semibold">Fisher–Yates shuffle path captured</span>
+                          </div>
+                          <p className="text-xs text-slate-500 ml-7">Complete algorithmic trace</p>
+                        </div>
+                        <div className="bg-slate-900/50 border border-emerald-500/30 rounded-lg p-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl text-emerald-400">✓</span>
+                            <span className="text-slate-200 font-semibold">Player actions logged</span>
+                          </div>
+                          <p className="text-xs text-slate-500 ml-7">Every decision recorded</p>
+                        </div>
+                        <div className="bg-slate-900/50 border border-emerald-500/30 rounded-lg p-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl text-emerald-400">✓</span>
+                            <span className="text-slate-200 font-semibold">Dealer rule execution replayable</span>
+                          </div>
+                          <p className="text-xs text-slate-500 ml-7">Deterministic game logic</p>
+                        </div>
+                        <div className="bg-slate-900/50 border border-emerald-500/30 rounded-lg p-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl text-emerald-400">✓</span>
+                            <span className="text-slate-200 font-semibold">Payout math verified</span>
+                          </div>
+                          <p className="text-xs text-slate-500 ml-7">Transparent calculation</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="border-t border-slate-700 pt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <button className="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold py-3 px-4 rounded-lg transition-colors text-sm">
+                        Replay hand
+                      </button>
+                      <button className="bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold py-3 px-4 rounded-lg transition-colors text-sm">
+                        Open the ACE kit
+                      </button>
+                      <button className="border border-slate-500 hover:border-slate-300 text-slate-300 hover:text-white font-bold py-3 px-4 rounded-lg transition-colors text-sm">
+                        Inspect proof receipt
+                      </button>
+                      <button className="border border-emerald-500 hover:border-emerald-400 text-emerald-400 hover:text-emerald-300 font-bold py-3 px-4 rounded-lg transition-colors text-sm">
+                        Play verified hand
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Why This Matters */}
+                <div className="space-y-8 border-t border-slate-700 pt-12">
+                  <h2 className="text-3xl font-bold text-amber-400">Why This Matters</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-4">
+                      <h3 className="text-xl font-bold text-emerald-400">No Server Manipulation</h3>
+                      <p className="text-slate-300 leading-relaxed">
+                        Every shuffle is recorded. Every card drawn is logged. No way for outcomes to be altered after the fact.
+                      </p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-4">
+                      <h3 className="text-xl font-bold text-emerald-400">Verifiable Fairness</h3>
+                      <p className="text-slate-300 leading-relaxed">
+                        Access your hand receipt anytime. Replay the entire deal. Verify the math. Check the shuffle. It's all yours.
+                      </p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-4">
+                      <h3 className="text-xl font-bold text-emerald-400">Regulatory Compliance</h3>
+                      <p className="text-slate-300 leading-relaxed">
+                        Meet gaming authority requirements with auditable, verifiable game outcomes that stand up to scrutiny.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Technical Foundation */}
+                <div className="space-y-8 border-t border-slate-700 pt-12">
+                  <h2 className="text-3xl font-bold text-amber-400">Technical Foundation</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-3">
+                      <p className="text-sm text-amber-400 font-semibold uppercase tracking-widest">Shuffle Algorithm</p>
+                      <p className="text-2xl font-bold text-white">Fisher–Yates</p>
+                      <p className="text-slate-300 text-sm">Cryptographically secure Fisher–Yates shuffle with CSPRNG entropy source ensures uniform distribution of card permutations.</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-3">
+                      <p className="text-sm text-amber-400 font-semibold uppercase tracking-widest">Randomness Source</p>
+                      <p className="text-2xl font-bold text-white">CSPRNG</p>
+                      <p className="text-slate-300 text-sm">Cryptographically Secure Pseudo-Random Number Generator provides unpredictable entropy that cannot be replayed or predicted.</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-3">
+                      <p className="text-sm text-amber-400 font-semibold uppercase tracking-widest">Audit Trail</p>
+                      <p className="text-2xl font-bold text-white">Proof Log</p>
+                      <p className="text-slate-300 text-sm">Complete game state at each decision point. Full card state visible to player. Deterministic replay with any CSPRNG seed.</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-3">
+                      <p className="text-sm text-amber-400 font-semibold uppercase tracking-widest">Game Rules</p>
+                      <p className="text-2xl font-bold text-white">Blackjack</p>
+                      <p className="text-slate-300 text-sm">Standard Las Vegas rules. Dealer stands on 17. Push on 21. Transparent payout logic with no hidden modifiers.</p>
+                    </div>
+                  </div>
                 </div>
               </section>
             )}
