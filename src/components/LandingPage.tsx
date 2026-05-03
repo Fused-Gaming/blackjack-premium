@@ -61,12 +61,12 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
     }, 2000);
   };
 
-  const handleLogoInteraction = () => {
+  const handleLogoInteraction = React.useCallback(() => {
     if (!isEntering) {
       setIsInteracting(true);
       setTimeout(() => setIsInteracting(false), 600);
     }
-  };
+  }, [isEntering]);
 
   React.useEffect(() => {
     const handleMouseMove = () => {
@@ -75,7 +75,7 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isEntering]);
+  }, [handleLogoInteraction]);
 
   return (
     <div className={`${styles.container} ${isEntering ? styles.entering : ''}`}>
