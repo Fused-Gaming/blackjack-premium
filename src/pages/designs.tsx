@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import AnimationShowcase from '../components/kit/AnimationShowcase';
+import { DESIGN_KIT_VERSION } from '../data/designKitVersion';
 
 /**
  * Design System Explorer
@@ -102,7 +104,7 @@ export default function DesignsPage() {
       <nav className="border-b border-slate-700 bg-slate-800/50 sticky top-[88px] z-40">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex gap-8">
-            {['overview', 'tokens', 'components', 'layouts'].map(tab => (
+            {['overview', 'animations', 'tokens', 'components', 'layouts'].map(tab => (
               <button
                 key={tab}
                 onClick={() => {
@@ -180,6 +182,14 @@ export default function DesignsPage() {
                 </li>
               </ul>
             </div>
+          </section>
+        )}
+
+        {/* Animations Tab */}
+        {activeTab === 'animations' && (
+          <section className="space-y-8">
+            <h2 className="text-3xl font-bold text-amber-400 mb-8">Animations & State Machine</h2>
+            <AnimationShowcase />
           </section>
         )}
 
@@ -284,7 +294,7 @@ export default function DesignsPage() {
       {/* Footer */}
       <footer className="border-t border-slate-700 mt-20 py-12 bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-6 text-center text-slate-400">
-          <p>ACE Blackjack Premium Design System v1.0</p>
+          <p>ACE Blackjack Premium Design System v{DESIGN_KIT_VERSION}</p>
           <p className="text-sm mt-2">Dynamic design kit • Extensible architecture • Ready for feature development</p>
         </div>
       </footer>
