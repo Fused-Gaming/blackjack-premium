@@ -17,6 +17,55 @@
         "CLAUDE_FLOW_MEMORY_BACKEND": "hybrid"
       },
       "autoStart": false
+    },
+    "skillSync": {
+      "command": "npx",
+      "args": [
+        "@h4shed/skill-syncpulse"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "autoStart": true
+    },
+    "mcpCore": {
+      "command": "npx",
+      "args": [
+        "@h4shed/mcp-core"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "autoStart": true
+    },
+    "toolCommander": {
+      "command": "npx",
+      "args": [
+        "@h4shed/tool-commander"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "autoStart": true
+    },
+    "skillStyleDictionary": {
+      "command": "npx",
+      "args": [
+        "@h4shed/skill-style-dictionary-system"
+      ],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "autoStart": false
     }
+  },
+  "swarmConfig": {
+    "orchestrator": "enabled",
+    "autoStart": true,
+    "healthCheck": true,
+    "logLevel": "info",
+    "topology": "hierarchical-mesh",
+    "maxAgents": 15,
+    "sessionTracking": true
   }
 }
