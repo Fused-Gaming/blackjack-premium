@@ -68,5 +68,15 @@
       "destination": "/og-preview.html",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/designs",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/designs/:path*",
+      "destination": "/index.html"
+    }
   ]
 }
