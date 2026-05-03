@@ -2,6 +2,9 @@ import { useState } from 'react';
 import AnimationShowcase from '../components/kit/AnimationShowcase';
 import NotificationGallery from '../components/kit/NotificationGallery';
 import { DESIGN_KIT_VERSION } from '../data/designKitVersion';
+import { colorTokens } from '../data/colorTokens';
+import { spacingTokens } from '../data/spacingTokens';
+import { interfaceComponents } from '../data/interfaceComponents';
 
 /**
  * Design System Explorer
@@ -33,13 +36,19 @@ export default function DesignsPage() {
   const [selectedLayout, setSelectedLayout] = useState('single-seat');
 
   const designTokens: DesignToken[] = [
-    // Brand Colors
-    { name: 'Primary Gold', value: '#D4AF37', category: 'colors' },
-    { name: 'Navy Dark', value: '#050A0F', category: 'colors' },
-    { name: 'Casino Green', value: '#165B33', category: 'colors' },
-    { name: 'Success Green', value: '#10B981', category: 'colors' },
-    { name: 'Alert Red', value: '#EF4444', category: 'colors' },
-    { name: 'Warning Yellow', value: '#FBBF24', category: 'colors' },
+    // Colors from mockup
+    { name: 'Deep Navy', value: '#05080c', category: 'colors' },
+    { name: 'Panel Dark', value: '#0d131a', category: 'colors' },
+    { name: 'Casino Green', value: '#1f6d4e', category: 'colors' },
+    { name: 'Deep Green', value: '#123e31', category: 'colors' },
+    { name: 'Bright Gold', value: '#f5d77f', category: 'colors' },
+    { name: 'Gold Brass', value: '#bf9a4c', category: 'colors' },
+    { name: 'Bright Green', value: '#25ff9a', category: 'colors' },
+    { name: 'Cyan', value: '#4ce8ff', category: 'colors' },
+    { name: 'Bright Red', value: '#ff4769', category: 'colors' },
+    { name: 'Purple', value: '#c78bff', category: 'colors' },
+    { name: 'Gold White', value: '#fff7dc', category: 'colors' },
+    { name: 'Muted Gray', value: '#9caaa5', category: 'colors' },
 
     // Typography
     { name: 'Display Font', value: 'Outfit', category: 'typography' },
@@ -103,7 +112,10 @@ export default function DesignsPage() {
     { id: 'overview', label: 'Overview' },
     { id: 'animations', label: 'Animations' },
     { id: 'notifications', label: 'Notifications' },
-    { id: 'tokens', label: 'Tokens' },
+    { id: 'tokens', label: 'Design Tokens' },
+    { id: 'colors', label: 'Colors' },
+    { id: 'spacing', label: 'Spacing & Sizing' },
+    { id: 'interface', label: 'Interface Components' },
     { id: 'components', label: 'Components' },
     { id: 'layouts', label: 'Layouts' },
   ];
@@ -177,6 +189,28 @@ export default function DesignsPage() {
                     Categories
                   </h3>
                   {['colors', 'typography', 'spacing'].map(category => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${
+                        selectedCategory === category
+                          ? 'bg-amber-400/20 text-amber-400'
+                          : 'text-slate-300 hover:bg-slate-700/50'
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Quick Filter for Colors Tab */}
+              {activeTab === 'colors' && (
+                <div className="space-y-2">
+                  <h3 className="text-xs font-semibold uppercase text-slate-400 px-2">
+                    Categories
+                  </h3>
+                  {Object.keys(colorTokens).map(category => (
                     <button
                       key={category}
                       onClick={() => setSelectedCategory(category)}
@@ -497,6 +531,134 @@ export default function DesignsPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </section>
+            )}
+
+            {/* Colors Tab */}
+            {activeTab === 'colors' && (
+              <section className="space-y-8 max-w-6xl">
+                <h2 className="text-3xl font-bold text-amber-400">Color Palette</h2>
+                <p className="text-slate-300">All color tokens from the 1920x1080 blackjack interface mockup</p>
+
+                <div className="space-y-12">
+                  {Object.entries(colorTokens).map(([category, colors]) => (
+                    <div key={category}>
+                      <h3 className="text-xl font-semibold text-amber-400 mb-6 capitalize">{category}</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {typeof colors === 'object' && Object.entries(colors).map(([key, colorData]: [string, { value: string; name?: string; use?: string }]) => (
+                          <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                            <div className="flex items-center gap-3 mb-3">
+                              <div
+                                className="w-12 h-12 rounded border border-slate-600"
+                                style={{ backgroundColor: colorData.value }}
+                              ></div>
+                              <div>
+                                <p className="font-semibold text-white">{colorData.name || key}</p>
+                                <p className="text-sm text-slate-400">{colorData.value}</p>
+                              </div>
+                            </div>
+                            <p className="text-xs text-slate-400 mt-2">{colorData.use}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Spacing & Sizing Tab */}
+            {activeTab === 'spacing' && (
+              <section className="space-y-8 max-w-6xl">
+                <h2 className="text-3xl font-bold text-amber-400">Spacing & Sizing Scale</h2>
+
+                <div className="space-y-12">
+                  {/* Spacing Scale */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-amber-400 mb-6">Spacing Scale (4px base)</h3>
+                    <div className="space-y-4">
+                      {Object.entries(spacingTokens.spacing || {}).map(([key, data]: [string, { value: string; use: string }]) => (
+                        <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                          <div className="flex items-center gap-4">
+                            <div
+                              className="bg-amber-400"
+                              style={{ width: data.value, height: '40px' }}
+                            ></div>
+                            <div>
+                              <p className="font-semibold text-white capitalize">{key}</p>
+                              <p className="text-sm text-slate-400">{data.value} - {data.use}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Border Radius */}
+                  <div>
+                    <h3 className="text-xl font-semibold text-amber-400 mb-6">Border Radius</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {Object.entries(spacingTokens.radius || {}).map(([key, data]: [string, { value: string; use: string }]) => (
+                        <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                          <div className="mb-3">
+                            <div
+                              className="w-full h-16 bg-gradient-to-br from-amber-400 to-amber-600"
+                              style={{ borderRadius: data.value }}
+                            ></div>
+                          </div>
+                          <p className="font-semibold text-white capitalize">{key}</p>
+                          <p className="text-sm text-slate-400">{data.value} - {data.use}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Interface Components Tab */}
+            {activeTab === 'interface' && (
+              <section className="space-y-8 max-w-6xl">
+                <h2 className="text-3xl font-bold text-amber-400">Interface Components</h2>
+                <p className="text-slate-300">From 1920x1080 Blackjack Table Mockup</p>
+
+                <div className="space-y-8">
+                  {Object.entries(interfaceComponents).map(([key, componentData]) => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const component = componentData as any;
+                    return (
+                    <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                      <h3 className="text-lg font-semibold text-amber-400 mb-2 capitalize">
+                        {key.replace(/([A-Z])/g, ' $1').trim()}
+                      </h3>
+                      <p className="text-slate-300 mb-4">{component.description}</p>
+
+                      {component.position && (
+                        <p className="text-sm text-slate-400 mb-2"><strong>Position:</strong> {component.position}</p>
+                      )}
+
+                      {component.content && typeof component.content === 'string' && (
+                        <p className="text-sm text-slate-400 mb-2"><strong>Content:</strong> {component.content}</p>
+                      )}
+
+                      {(component.variants || component.panels || component.buttons) && (
+                        <div className="mt-4 space-y-3">
+                          {(component.variants || component.panels || component.buttons || []).map(
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            (item: any, idx: number) => (
+                            <div key={idx} className="bg-slate-900/50 rounded p-3 text-sm">
+                              <p className="font-semibold text-amber-300">{item.name || item.label || `Item ${idx + 1}`}</p>
+                              {item.content && <p className="text-slate-400 mt-1">{item.content}</p>}
+                              {item.description && <p className="text-slate-400 mt-1">{item.description}</p>}
+                              {item.color && <p className="text-slate-400 mt-1">Color: {item.color}</p>}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                  })}
                 </div>
               </section>
             )}
