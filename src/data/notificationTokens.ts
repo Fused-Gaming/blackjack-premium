@@ -1,9 +1,39 @@
+import { colorTokens } from './colorTokens';
+
 export const notificationTokens = {
   outcomes: {
-    win: { label: 'Win', color: '#10B981', icon: '✓', bgColor: 'bg-green-900/30', borderColor: 'border-green-500/50' },
-    loss: { label: 'Loss', color: '#EF4444', icon: '✗', bgColor: 'bg-red-900/30', borderColor: 'border-red-500/50' },
-    push: { label: 'Push', color: '#F59E0B', icon: '=', bgColor: 'bg-yellow-900/30', borderColor: 'border-yellow-500/50' },
-    blackjack: { label: 'Blackjack!', color: '#34D399', icon: '★', bgColor: 'bg-emerald-900/30', borderColor: 'border-emerald-500/50' },
+    win: {
+      label: 'Win',
+      color: colorTokens.semantic.win.value,
+      icon: '✓',
+      bgColor: 'bg-emerald-900/30',
+      borderColor: 'border-emerald-500/50',
+      gradient: 'from-emerald-900/30 to-teal-900/30'
+    },
+    loss: {
+      label: 'Loss',
+      color: colorTokens.semantic.loss.value,
+      icon: '✗',
+      bgColor: 'bg-red-900/30',
+      borderColor: 'border-red-500/50',
+      gradient: 'from-red-900/30 to-orange-900/30'
+    },
+    push: {
+      label: 'Push',
+      color: colorTokens.semantic.push.value,
+      icon: '=',
+      bgColor: 'bg-amber-900/30',
+      borderColor: 'border-amber-500/50',
+      gradient: 'from-amber-900/30 to-yellow-900/30'
+    },
+    blackjack: {
+      label: 'Blackjack!',
+      color: colorTokens.semantic['blackjack-win'].value,
+      icon: '★',
+      bgColor: 'bg-emerald-900/40',
+      borderColor: 'border-emerald-400/60',
+      gradient: 'from-emerald-900/40 to-green-900/40'
+    },
   },
   phases: [
     { id: 'betting', label: 'Betting', description: 'Place your bets' },

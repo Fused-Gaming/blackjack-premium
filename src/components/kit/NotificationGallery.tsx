@@ -105,15 +105,19 @@ export default function NotificationGallery() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: 20, opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="bg-amber-400/20 border border-amber-400/50 rounded-lg p-6"
+                style={{
+                  backgroundColor: `${notificationTokens.outcomes.win.color}20`,
+                  borderColor: `${notificationTokens.outcomes.win.color}50`
+                }}
+                className="border rounded-lg p-6"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-amber-400/30 border border-amber-400 rounded-full flex items-center justify-center">
-                    <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: `${notificationTokens.outcomes.win.color}30`, borderColor: notificationTokens.outcomes.win.color, borderWidth: '1px' }}>
+                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: notificationTokens.outcomes.win.color }}></div>
                   </div>
                   <div>
-                    <p className="font-semibold text-amber-400 text-lg">{currentPhase.label}</p>
-                    <p className="text-sm text-amber-200">{currentPhase.description}</p>
+                    <p className="text-lg font-semibold" style={{ color: notificationTokens.outcomes.win.color }}>{currentPhase.label}</p>
+                    <p className="text-sm" style={{ color: `${notificationTokens.outcomes.win.color}cc` }}>{currentPhase.description}</p>
                   </div>
                 </div>
               </motion.div>
@@ -166,7 +170,7 @@ export default function NotificationGallery() {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.8, opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gradient-to-r from-green-900/30 to-emerald-900/30 border border-green-500/50 rounded-lg p-8 text-center"
+                  className={`bg-gradient-to-r ${notificationTokens.outcomes.win.gradient} border border-emerald-500/50 rounded-lg p-8 text-center`}
                 >
                   <p className="text-5xl font-bold text-green-400 mb-2">
                     {notificationTokens.streakFormat(streakCount)}
@@ -209,7 +213,7 @@ export default function NotificationGallery() {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.8, opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gradient-to-r from-red-900/30 to-orange-900/30 border border-red-500/50 rounded-lg p-8 text-center"
+                  className={`bg-gradient-to-r ${notificationTokens.outcomes.loss.gradient} border border-red-500/50 rounded-lg p-8 text-center`}
                 >
                   <p className="text-5xl font-bold text-red-400 mb-2">
                     {notificationTokens.streakFormat(streakCount)}
