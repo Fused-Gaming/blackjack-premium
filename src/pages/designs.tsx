@@ -110,6 +110,7 @@ export default function DesignsPage() {
 
   const tabItems = [
     { id: 'overview', label: 'Overview' },
+    { id: 'brand-guidelines', label: 'Brand Guidelines' },
     { id: 'animations', label: 'Animations' },
     { id: 'notifications', label: 'Notifications' },
     { id: 'tokens', label: 'Design Tokens' },
@@ -320,6 +321,155 @@ export default function DesignsPage() {
                       <p className="text-slate-400 text-sm mt-1">Confident, terse, professional voice</p>
                     </li>
                   </ul>
+                </div>
+              </section>
+            )}
+
+            {/* Brand Guidelines Tab */}
+            {activeTab === 'brand-guidelines' && (
+              <section className="space-y-12 max-w-6xl">
+                <div className="space-y-4">
+                  <h2 className="text-3xl font-bold text-amber-400">Brand Guidelines</h2>
+                  <p className="text-slate-300 text-lg">The ACE card is the cornerstone of our brand identity — a premium, sophisticated playing card that represents excellence and prestige in blackjack gaming.</p>
+                </div>
+
+                {/* Primary Brand Card */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 bg-slate-800/50 border border-slate-700 rounded-lg p-8">
+                    <h3 className="text-2xl font-semibold text-amber-400 mb-6">Primary Brand Card (1200×630)</h3>
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 rounded-lg p-8 flex items-center justify-center min-h-96">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1200 630" className="max-w-full h-auto" style={{ maxWidth: '600px' }}>
+                        <defs>
+                          <radialGradient id="bgGlow" cx="50%" cy="40%" r="60%">
+                            <stop offset="0%" stopColor="#1A1410"/>
+                            <stop offset="50%" stopColor="#050A0F"/>
+                            <stop offset="100%" stopColor="#000000"/>
+                          </radialGradient>
+                          <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stopColor="#FFF6CC"/>
+                            <stop offset="20%" stopColor="#FBBF24"/>
+                            <stop offset="45%" stopColor="#D79210"/>
+                            <stop offset="75%" stopColor="#FFE08A"/>
+                            <stop offset="100%" stopColor="#A96500"/>
+                          </linearGradient>
+                          <radialGradient id="goldInner" cx="50%" cy="40%" r="60%">
+                            <stop offset="0%" stopColor="#FFF2B8" stopOpacity="0.9"/>
+                            <stop offset="100%" stopColor="#D79210" stopOpacity="0.2"/>
+                          </radialGradient>
+                          <filter id="goldGlow" x="-100%" y="-100%" width="300%" height="300%">
+                            <feGaussianBlur stdDeviation="8" result="blur"/>
+                            <feMerge>
+                              <feMergeNode in="blur"/>
+                              <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                          </filter>
+                          <filter id="noise">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+                            <feColorMatrix type="saturate" values="0"/>
+                            <feComponentTransfer>
+                              <feFuncA type="table" tableValues="0 0 0.04"/>
+                            </feComponentTransfer>
+                          </filter>
+                        </defs>
+                        <rect width="1200" height="630" fill="url(#bgGlow)"/>
+                        <g transform="translate(600 315)">
+                          <ellipse cx="0" cy="210" rx="260" ry="36" fill="#000" opacity="0.45"/>
+                          <rect x="-160" y="-240" width="320" height="460" rx="28" fill="#0B0F14" stroke="url(#gold)" strokeWidth="3"/>
+                          <rect x="-148" y="-228" width="296" height="436" rx="22" fill="none" stroke="url(#goldInner)" strokeWidth="1.2" opacity="0.6"/>
+                          <g stroke="url(#gold)" strokeWidth="1.8" fill="none" opacity="0.9">
+                            <path d="M-140 -210 h30 M-140 -210 v30"/>
+                            <path d="M140 -210 h-30 M140 -210 v30"/>
+                            <path d="M-140 190 h30 M-140 190 v-30"/>
+                            <path d="M140 190 h-30 M140 190 v-30"/>
+                          </g>
+                          <g filter="url(#goldGlow)">
+                            <text x="0" y="-40" textAnchor="middle" fontFamily="Georgia, serif" fontSize="140" fontWeight="700" fill="url(#gold)">♠</text>
+                          </g>
+                          <text x="0" y="70" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="64" fontWeight="900" letterSpacing="12" fill="url(#gold)">ACE</text>
+                          <text x="0" y="120" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="26" fontWeight="700" letterSpacing="10" fill="#F8D981">BLACKJACK</text>
+                          <g>
+                            <line x1="-90" y1="150" x2="-30" y2="150" stroke="url(#gold)" strokeWidth="1.5"/>
+                            <text x="0" y="155" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="18" fontWeight="800" letterSpacing="6" fill="#FBBF24">PREMIUM</text>
+                            <line x1="30" y1="150" x2="90" y2="150" stroke="url(#gold)" strokeWidth="1.5"/>
+                          </g>
+                        </g>
+                        <rect width="1200" height="630" filter="url(#noise)" opacity="0.15"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                      <h4 className="font-semibold text-amber-400 mb-2">Dimensions</h4>
+                      <p className="text-sm text-slate-300">1200 × 630 px</p>
+                      <p className="text-xs text-slate-400 mt-1">Open Graph standard for social media</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                      <h4 className="font-semibold text-amber-400 mb-2">Primary Colors</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded bg-amber-400 border border-slate-600"></div>
+                          <span className="text-sm text-slate-300">#FBBF24 Premium Gold</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded bg-[#050A0F] border border-slate-600"></div>
+                          <span className="text-sm text-slate-300">#050A0F Deep Navy</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                      <h4 className="font-semibold text-amber-400 mb-2">Usage</h4>
+                      <ul className="text-sm text-slate-300 space-y-1">
+                        <li>✓ Social media cards</li>
+                        <li>✓ Marketing materials</li>
+                        <li>✓ Open Graph tags</li>
+                        <li>✓ Brand documentation</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Brand Principles */}
+                <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-8 space-y-6">
+                  <h3 className="text-2xl font-semibold text-amber-400">Card Brand Principles</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">♠ Suit Symbol</h4>
+                      <p className="text-sm text-slate-300">Spade suit with premium gold gradient glow. Always rendered with geometric precision and premium typography.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">ACE Typography</h4>
+                      <p className="text-sm text-slate-300">Bold, uppercase, letter-spaced. Conveys strength, confidence, and casino expertise. Font: Outfit/Inter.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">BLACKJACK Subtitle</h4>
+                      <p className="text-sm text-slate-300">Complementary text in bright gold. Identifies the game and reinforces the premium positioning.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">PREMIUM Badge</h4>
+                      <p className="text-sm text-slate-300">Premium badge with decorative lines. Signals luxury, quality, and exclusivity in the offering.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">Dark Background</h4>
+                      <p className="text-sm text-slate-300">Deep navy with radial glow creates depth and luxury. Ensures gold text stands out with maximum contrast.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">Grain Overlay</h4>
+                      <p className="text-sm text-slate-300">Subtle noise texture adds sophistication and texture. Creates a premium, artisanal feel at any scale.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Export & Download */}
+                <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-8 space-y-4">
+                  <h3 className="text-2xl font-semibold text-amber-400">Download & Customization</h3>
+                  <p className="text-slate-300">Edit the card design in the ACE SVG Editor with live preview, export as SVG or high-quality PNG, and customize colors, text, and styling.</p>
+                  <a
+                    href="/ace-svg-editor.html"
+                    className="inline-block px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold rounded-lg transition-colors"
+                  >
+                    Open ACE SVG Editor →
+                  </a>
                 </div>
               </section>
             )}
