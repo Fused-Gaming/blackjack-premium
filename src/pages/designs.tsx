@@ -359,8 +359,12 @@ export default function DesignsPage() {
                       }`}
                     >
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                        <div className="w-full h-48 bg-gradient-to-br from-slate-700 to-slate-800 rounded border border-slate-600 flex items-center justify-center">
-                          <span className="text-slate-400 text-sm">{layout.name} Layout</span>
+                        <div className="w-full bg-slate-900/50 rounded border border-slate-600 overflow-hidden">
+                          <img
+                            src="/layouts/table.svg"
+                            alt={`${layout.name} Layout Preview`}
+                            className="w-full h-auto object-contain"
+                          />
                         </div>
                         <div className="lg:col-span-2 space-y-3">
                           <h3 className="text-lg font-semibold text-amber-400">
