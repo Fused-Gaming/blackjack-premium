@@ -943,41 +943,122 @@ export default function DesignsPage() {
 
             {/* Layouts Tab */}
             {activeTab === 'layouts' && (
-              <section className="space-y-8 max-w-6xl">
-                <h2 className="text-3xl font-bold text-amber-400">Layout Configurations</h2>
+              <section className="space-y-12 max-w-6xl">
+                <div className="space-y-4">
+                  <h2 className="text-3xl font-bold text-amber-400">Layout Configurations</h2>
+                  <p className="text-slate-300">Game table layouts optimized for different screen sizes and player counts</p>
+                </div>
 
+                {/* Single Player Preview - Prominent */}
                 <div className="space-y-6">
-                  {layoutOptions.map(layout => (
-                    <div
-                      key={layout.className}
-                      className={`border-2 rounded-lg p-6 transition-colors ${
-                        selectedLayout === layout.className
-                          ? 'border-amber-400 bg-amber-400/10'
-                          : 'border-slate-700 bg-slate-800/50'
-                      }`}
-                    >
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                        <div className="w-full bg-slate-900/50 rounded border border-slate-600 overflow-hidden">
-                          <img
-                            src="/layouts/table.svg"
-                            alt={`${layout.name} Layout Preview`}
-                            className="w-full h-auto object-contain"
-                          />
-                        </div>
-                        <div className="lg:col-span-2 space-y-3">
-                          <h3 className="text-lg font-semibold text-amber-400">
-                            {layout.name}
-                          </h3>
-                          <p className="text-slate-300">{layout.description}</p>
-                          {selectedLayout === layout.className && (
-                            <div className="mt-4 p-3 bg-amber-400/10 border border-amber-400/30 rounded text-sm text-amber-200">
-                              ✓ Currently previewing this layout
+                  <h3 className="text-2xl font-semibold text-emerald-400">Single Player Mode</h3>
+                  <div className="border-2 border-emerald-500/50 bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg p-8">
+                    <div className="space-y-6">
+                      {/* Single Player Layout Diagram */}
+                      <div className="bg-slate-900/50 rounded-lg border border-slate-700 aspect-video flex flex-col items-center justify-center p-8 relative overflow-hidden">
+                        <div className="relative w-full h-full flex flex-col items-center justify-between">
+                          {/* Dealer Area */}
+                          <div className="space-y-3 text-center">
+                            <div className="text-sm text-slate-400 uppercase tracking-widest">Dealer</div>
+                            <div className="flex gap-2 justify-center">
+                              <div className="w-16 h-24 bg-gradient-to-br from-emerald-900/30 to-slate-900 border border-emerald-500/50 rounded-lg flex items-center justify-center">
+                                <span className="text-2xl">🂠</span>
+                              </div>
+                              <div className="w-16 h-24 bg-gradient-to-br from-emerald-900/30 to-slate-900 border border-emerald-500/50 rounded-lg flex items-center justify-center">
+                                <span className="text-2xl">🂠</span>
+                              </div>
                             </div>
-                          )}
+                            <div className="text-sm text-emerald-300 font-semibold">Total: 17</div>
+                          </div>
+
+                          {/* Green Felt Line */}
+                          <div className="w-full h-px bg-gradient-to-r from-transparent via-emerald-500/30 to-transparent my-8"></div>
+
+                          {/* Player Area */}
+                          <div className="space-y-4 w-full max-w-xs">
+                            <div className="text-center">
+                              <div className="text-sm text-slate-400 uppercase tracking-widest">Your Hand</div>
+                            </div>
+                            <div className="flex gap-2 justify-center">
+                              <div className="w-16 h-24 bg-gradient-to-br from-amber-900/30 to-slate-900 border-2 border-amber-500/50 rounded-lg flex items-center justify-center">
+                                <span className="text-2xl">🂡</span>
+                              </div>
+                              <div className="w-16 h-24 bg-gradient-to-br from-amber-900/30 to-slate-900 border-2 border-amber-500/50 rounded-lg flex items-center justify-center">
+                                <span className="text-2xl">🂮</span>
+                              </div>
+                            </div>
+                            <div className="text-center text-sm text-amber-300 font-semibold">Total: 21</div>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex gap-3 justify-center mt-8">
+                            <button className="px-3 py-1 text-xs bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold rounded transition-colors">Hit</button>
+                            <button className="px-3 py-1 text-xs bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded transition-colors">Stand</button>
+                            <button className="px-3 py-1 text-xs bg-purple-500 hover:bg-purple-600 text-white font-bold rounded transition-colors">Double</button>
+                            <button className="px-3 py-1 text-xs bg-slate-600 hover:bg-slate-500 text-white font-bold rounded transition-colors">Split</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Single Player Rules */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 space-y-2">
+                          <p className="text-sm font-semibold text-emerald-400">Optimal For</p>
+                          <p className="text-sm text-slate-300">Desktop browsers, tablets, and responsive mobile displays</p>
+                        </div>
+                        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 space-y-2">
+                          <p className="text-sm font-semibold text-emerald-400">Player Count</p>
+                          <p className="text-sm text-slate-300">1 player vs dealer with focused, distraction-free UI</p>
+                        </div>
+                        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 space-y-2">
+                          <p className="text-sm font-semibold text-emerald-400">Key Features</p>
+                          <p className="text-sm text-slate-300">Centered dealer/player positions, large readable cards, prominent action buttons</p>
+                        </div>
+                        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 space-y-2">
+                          <p className="text-sm font-semibold text-emerald-400">Betting</p>
+                          <p className="text-sm text-slate-300">Bottom of screen with chip denominations and auto-bet options</p>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                </div>
+
+                {/* Multi-Seat & Landscape Options */}
+                <div className="space-y-6">
+                  <h3 className="text-2xl font-semibold text-amber-400">Additional Layouts</h3>
+                  <div className="space-y-6">
+                    {layoutOptions.map(layout => (
+                      <div
+                        key={layout.className}
+                        className={`border-2 rounded-lg p-6 transition-colors ${
+                          selectedLayout === layout.className
+                            ? 'border-amber-400 bg-amber-400/10'
+                            : 'border-slate-700 bg-slate-800/50'
+                        }`}
+                      >
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                          <div className="w-full bg-slate-900/50 rounded border border-slate-600 overflow-hidden">
+                            <img
+                              src="/layouts/table.svg"
+                              alt={`${layout.name} Layout Preview`}
+                              className="w-full h-auto object-contain"
+                            />
+                          </div>
+                          <div className="lg:col-span-2 space-y-3">
+                            <h3 className="text-lg font-semibold text-amber-400">
+                              {layout.name}
+                            </h3>
+                            <p className="text-slate-300">{layout.description}</p>
+                            {selectedLayout === layout.className && (
+                              <div className="mt-4 p-3 bg-amber-400/10 border border-amber-400/30 rounded text-sm text-amber-200">
+                                ✓ Currently previewing this layout
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </section>
             )}
