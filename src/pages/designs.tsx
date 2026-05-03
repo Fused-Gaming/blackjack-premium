@@ -605,8 +605,8 @@ export default function DesignsPage() {
                       <h3 className="text-xl font-semibold text-amber-400 mb-2">Standard 52-Card Deck</h3>
                       <p className="text-slate-300 mb-4">{components[3].description}</p>
                       <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-4 mb-6">
-                        <p className="text-sm font-semibold text-emerald-300 mb-2">🎰 8-Deck Shoe Configuration</p>
-                        <p className="text-sm text-slate-300">This game uses an 8-deck shoe (416 total cards). A fresh shuffle is performed for each hand, ensuring randomized gameplay and fair distribution of card probabilities.</p>
+                        <p className="text-sm font-semibold text-emerald-300 mb-2">🎰 Provably Fair 8-Deck Shoe</p>
+                        <p className="text-sm text-slate-300">Fresh shoe for each hand (416 cards) with cryptographically secure shuffle. Every outcome is verifiable—zero server manipulation, 100% transparent fairness.</p>
                       </div>
                     </div>
                     <div className="bg-slate-900/50 rounded-lg p-6">
@@ -777,14 +777,17 @@ export default function DesignsPage() {
 
                   {/* Deck Shoe */}
                   <div className="bg-emerald-900/20 border border-emerald-500/50 rounded-lg p-6">
-                    <h3 className="text-xl font-semibold text-emerald-400 mb-4">🎰 8-Deck Shoe System</h3>
+                    <h3 className="text-xl font-semibold text-emerald-400 mb-4">🎰 Provably Fair Shuffle System</h3>
                     <ul className="space-y-2 text-slate-300 text-sm">
                       <li className="flex justify-between"><span>Standard Deck Size:</span> <span className="text-amber-300">52 cards</span></li>
-                      <li className="flex justify-between"><span>Number of Decks:</span> <span className="text-amber-300">8 decks</span></li>
-                      <li className="flex justify-between"><span>Total Cards in Shoe:</span> <span className="text-amber-300">416 cards</span></li>
-                      <li className="flex justify-between"><span>Shuffle:</span> <span className="text-amber-300">Fresh shuffle before each hand</span></li>
-                      <li className="flex justify-between"><span>Penetration:</span> <span className="text-amber-300">75% (312 cards dealt, 104 remain)</span></li>
+                      <li className="flex justify-between"><span>Shoe Configuration:</span> <span className="text-amber-300">8 decks (416 cards)</span></li>
+                      <li className="flex justify-between"><span>Shuffle Timing:</span> <span className="text-amber-300">New shoe for each hand</span></li>
+                      <li className="flex justify-between"><span>Shuffle Algorithm:</span> <span className="text-amber-300">Cryptographically secure randomization</span></li>
+                      <li className="flex justify-between"><span>Fairness Verification:</span> <span className="text-amber-300">Player-verifiable game outcomes</span></li>
                     </ul>
+                    <div className="mt-4 pt-4 border-t border-emerald-500/30">
+                      <p className="text-xs text-emerald-200 leading-relaxed">Each hand begins with a fresh 8-deck shoe using provably fair shuffle mechanics. All randomization is cryptographically secure and independently verifiable, ensuring complete transparency and fairness with zero server-side manipulation.</p>
+                    </div>
                   </div>
                 </div>
               </section>
