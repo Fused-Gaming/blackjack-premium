@@ -546,7 +546,7 @@ export default function DesignsPage() {
                     <div key={category}>
                       <h3 className="text-xl font-semibold text-amber-400 mb-6 capitalize">{category}</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {typeof colors === 'object' && Object.entries(colors).map(([key, colorData]: any) => (
+                        {typeof colors === 'object' && Object.entries(colors).map(([key, colorData]: [string, { value: string; name?: string; use?: string }]) => (
                           <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
                             <div className="flex items-center gap-3 mb-3">
                               <div
@@ -578,7 +578,7 @@ export default function DesignsPage() {
                   <div>
                     <h3 className="text-xl font-semibold text-amber-400 mb-6">Spacing Scale (4px base)</h3>
                     <div className="space-y-4">
-                      {Object.entries(spacingTokens.spacing || {}).map(([key, data]: any) => (
+                      {Object.entries(spacingTokens.spacing || {}).map(([key, data]: [string, { value: string; use: string }]) => (
                         <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
                           <div className="flex items-center gap-4">
                             <div
@@ -599,7 +599,7 @@ export default function DesignsPage() {
                   <div>
                     <h3 className="text-xl font-semibold text-amber-400 mb-6">Border Radius</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {Object.entries(spacingTokens.radius || {}).map(([key, data]: any) => (
+                      {Object.entries(spacingTokens.radius || {}).map(([key, data]: [string, { value: string; use: string }]) => (
                         <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
                           <div className="mb-3">
                             <div
@@ -624,7 +624,10 @@ export default function DesignsPage() {
                 <p className="text-slate-300">From 1920x1080 Blackjack Table Mockup</p>
 
                 <div className="space-y-8">
-                  {Object.entries(interfaceComponents).map(([key, component]: any) => (
+                  {Object.entries(interfaceComponents).map(([key, componentData]) => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const component = componentData as any;
+                    return (
                     <div key={key} className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
                       <h3 className="text-lg font-semibold text-amber-400 mb-2 capitalize">
                         {key.replace(/([A-Z])/g, ' $1').trim()}
@@ -641,7 +644,9 @@ export default function DesignsPage() {
 
                       {(component.variants || component.panels || component.buttons) && (
                         <div className="mt-4 space-y-3">
-                          {(component.variants || component.panels || component.buttons || []).map((item: any, idx: number) => (
+                          {(component.variants || component.panels || component.buttons || []).map(
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            (item: any, idx: number) => (
                             <div key={idx} className="bg-slate-900/50 rounded p-3 text-sm">
                               <p className="font-semibold text-amber-300">{item.name || item.label || `Item ${idx + 1}`}</p>
                               {item.content && <p className="text-slate-400 mt-1">{item.content}</p>}
@@ -652,7 +657,8 @@ export default function DesignsPage() {
                         </div>
                       )}
                     </div>
-                  ))}
+                  );
+                  })}
                 </div>
               </section>
             )}
