@@ -110,6 +110,7 @@ export default function DesignsPage() {
 
   const tabItems = [
     { id: 'overview', label: 'Overview' },
+    { id: 'brand-guidelines', label: 'Brand Guidelines' },
     { id: 'animations', label: 'Animations' },
     { id: 'notifications', label: 'Notifications' },
     { id: 'tokens', label: 'Design Tokens' },
@@ -117,6 +118,7 @@ export default function DesignsPage() {
     { id: 'spacing', label: 'Spacing & Sizing' },
     { id: 'interface', label: 'Interface Components' },
     { id: 'components', label: 'Components' },
+    { id: 'game-rules', label: 'Game Rules' },
     { id: 'layouts', label: 'Layouts' },
   ];
 
@@ -324,6 +326,155 @@ export default function DesignsPage() {
               </section>
             )}
 
+            {/* Brand Guidelines Tab */}
+            {activeTab === 'brand-guidelines' && (
+              <section className="space-y-12 max-w-6xl">
+                <div className="space-y-4">
+                  <h2 className="text-3xl font-bold text-amber-400">Brand Guidelines</h2>
+                  <p className="text-slate-300 text-lg">The ACE card is the cornerstone of our brand identity — a premium, sophisticated playing card that represents excellence and prestige in blackjack gaming.</p>
+                </div>
+
+                {/* Primary Brand Card */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  <div className="lg:col-span-2 bg-slate-800/50 border border-slate-700 rounded-lg p-8">
+                    <h3 className="text-2xl font-semibold text-amber-400 mb-6">Primary Brand Card (1200×630)</h3>
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 rounded-lg p-8 flex items-center justify-center min-h-96">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1200 630" className="max-w-full h-auto" style={{ maxWidth: '600px' }}>
+                        <defs>
+                          <radialGradient id="bgGlow" cx="50%" cy="40%" r="60%">
+                            <stop offset="0%" stopColor="#1A1410"/>
+                            <stop offset="50%" stopColor="#050A0F"/>
+                            <stop offset="100%" stopColor="#000000"/>
+                          </radialGradient>
+                          <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stopColor="#FFF6CC"/>
+                            <stop offset="20%" stopColor="#FBBF24"/>
+                            <stop offset="45%" stopColor="#D79210"/>
+                            <stop offset="75%" stopColor="#FFE08A"/>
+                            <stop offset="100%" stopColor="#A96500"/>
+                          </linearGradient>
+                          <radialGradient id="goldInner" cx="50%" cy="40%" r="60%">
+                            <stop offset="0%" stopColor="#FFF2B8" stopOpacity="0.9"/>
+                            <stop offset="100%" stopColor="#D79210" stopOpacity="0.2"/>
+                          </radialGradient>
+                          <filter id="goldGlow" x="-100%" y="-100%" width="300%" height="300%">
+                            <feGaussianBlur stdDeviation="8" result="blur"/>
+                            <feMerge>
+                              <feMergeNode in="blur"/>
+                              <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                          </filter>
+                          <filter id="noise">
+                            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+                            <feColorMatrix type="saturate" values="0"/>
+                            <feComponentTransfer>
+                              <feFuncA type="table" tableValues="0 0 0.04"/>
+                            </feComponentTransfer>
+                          </filter>
+                        </defs>
+                        <rect width="1200" height="630" fill="url(#bgGlow)"/>
+                        <g transform="translate(600 315)">
+                          <ellipse cx="0" cy="210" rx="260" ry="36" fill="#000" opacity="0.45"/>
+                          <rect x="-160" y="-240" width="320" height="460" rx="28" fill="#0B0F14" stroke="url(#gold)" strokeWidth="3"/>
+                          <rect x="-148" y="-228" width="296" height="436" rx="22" fill="none" stroke="url(#goldInner)" strokeWidth="1.2" opacity="0.6"/>
+                          <g stroke="url(#gold)" strokeWidth="1.8" fill="none" opacity="0.9">
+                            <path d="M-140 -210 h30 M-140 -210 v30"/>
+                            <path d="M140 -210 h-30 M140 -210 v30"/>
+                            <path d="M-140 190 h30 M-140 190 v-30"/>
+                            <path d="M140 190 h-30 M140 190 v-30"/>
+                          </g>
+                          <g filter="url(#goldGlow)">
+                            <text x="0" y="-40" textAnchor="middle" fontFamily="Georgia, serif" fontSize="140" fontWeight="700" fill="url(#gold)">♠</text>
+                          </g>
+                          <text x="0" y="70" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="64" fontWeight="900" letterSpacing="12" fill="url(#gold)">ACE</text>
+                          <text x="0" y="120" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="26" fontWeight="700" letterSpacing="10" fill="#F8D981">BLACKJACK</text>
+                          <g>
+                            <line x1="-90" y1="150" x2="-30" y2="150" stroke="url(#gold)" strokeWidth="1.5"/>
+                            <text x="0" y="155" textAnchor="middle" fontFamily="Inter, sans-serif" fontSize="18" fontWeight="800" letterSpacing="6" fill="#FBBF24">PREMIUM</text>
+                            <line x1="30" y1="150" x2="90" y2="150" stroke="url(#gold)" strokeWidth="1.5"/>
+                          </g>
+                        </g>
+                        <rect width="1200" height="630" filter="url(#noise)" opacity="0.15"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                      <h4 className="font-semibold text-amber-400 mb-2">Dimensions</h4>
+                      <p className="text-sm text-slate-300">1200 × 630 px</p>
+                      <p className="text-xs text-slate-400 mt-1">Open Graph standard for social media</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                      <h4 className="font-semibold text-amber-400 mb-2">Primary Colors</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded bg-amber-400 border border-slate-600"></div>
+                          <span className="text-sm text-slate-300">#FBBF24 Premium Gold</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded bg-[#050A0F] border border-slate-600"></div>
+                          <span className="text-sm text-slate-300">#050A0F Deep Navy</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                      <h4 className="font-semibold text-amber-400 mb-2">Usage</h4>
+                      <ul className="text-sm text-slate-300 space-y-1">
+                        <li>✓ Social media cards</li>
+                        <li>✓ Marketing materials</li>
+                        <li>✓ Open Graph tags</li>
+                        <li>✓ Brand documentation</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Brand Principles */}
+                <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-8 space-y-6">
+                  <h3 className="text-2xl font-semibold text-amber-400">Card Brand Principles</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">♠ Suit Symbol</h4>
+                      <p className="text-sm text-slate-300">Spade suit with premium gold gradient glow. Always rendered with geometric precision and premium typography.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">ACE Typography</h4>
+                      <p className="text-sm text-slate-300">Bold, uppercase, letter-spaced. Conveys strength, confidence, and casino expertise. Font: Outfit/Inter.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">BLACKJACK Subtitle</h4>
+                      <p className="text-sm text-slate-300">Complementary text in bright gold. Identifies the game and reinforces the premium positioning.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">PREMIUM Badge</h4>
+                      <p className="text-sm text-slate-300">Premium badge with decorative lines. Signals luxury, quality, and exclusivity in the offering.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">Dark Background</h4>
+                      <p className="text-sm text-slate-300">Deep navy with radial glow creates depth and luxury. Ensures gold text stands out with maximum contrast.</p>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-amber-300">Grain Overlay</h4>
+                      <p className="text-sm text-slate-300">Subtle noise texture adds sophistication and texture. Creates a premium, artisanal feel at any scale.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Export & Download */}
+                <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-8 space-y-4">
+                  <h3 className="text-2xl font-semibold text-amber-400">Download & Customization</h3>
+                  <p className="text-slate-300">Edit the card design in the ACE SVG Editor with live preview, export as SVG or high-quality PNG, and customize colors, text, and styling.</p>
+                  <a
+                    href="/ace-svg-editor.html"
+                    className="inline-block px-6 py-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-semibold rounded-lg transition-colors"
+                  >
+                    Open ACE SVG Editor →
+                  </a>
+                </div>
+              </section>
+            )}
+
             {/* Animations Tab */}
             {activeTab === 'animations' && (
               <section className="space-y-8 max-w-6xl">
@@ -448,28 +599,50 @@ export default function DesignsPage() {
                     </div>
                   </div>
 
-                  {/* Playing Cards */}
+                  {/* Playing Cards - 52 Card Standard Deck */}
                   <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-                    <h3 className="text-xl font-semibold text-amber-400 mb-2">Playing Cards</h3>
-                    <p className="text-slate-300 mb-4">{components[3].description}</p>
-                    <div className="bg-slate-900/50 rounded-lg p-6">
-                      <div className="flex gap-4 justify-center flex-wrap">
-                        {[
-                          { rank: 'A', suit: '♠', color: 'text-black' },
-                          { rank: 'K', suit: '♥', color: 'text-red-600' },
-                          { rank: 'Q', suit: '♦', color: 'text-red-600' },
-                          { rank: 'J', suit: '♣', color: 'text-black' },
-                          { rank: '10', suit: '♠', color: 'text-black' },
-                        ].map((card, idx) => (
-                          <div
-                            key={idx}
-                            className="w-20 h-28 bg-white rounded-lg border-2 border-slate-300 flex flex-col items-center justify-center shadow-lg"
-                          >
-                            <div className={`text-lg font-bold ${card.color}`}>{card.rank}</div>
-                            <div className={`text-2xl ${card.color}`}>{card.suit}</div>
-                          </div>
-                        ))}
+                    <div className="mb-6">
+                      <h3 className="text-xl font-semibold text-amber-400 mb-2">Standard 52-Card Deck</h3>
+                      <p className="text-slate-300 mb-4">{components[3].description}</p>
+                      <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-4 mb-6">
+                        <p className="text-sm font-semibold text-emerald-300 mb-2">🎰 Provably Fair 8-Deck Shoe</p>
+                        <p className="text-sm text-slate-300">Fresh shoe for each hand (416 cards) with cryptographically secure shuffle. Every outcome is verifiable—zero server manipulation, 100% transparent fairness.</p>
                       </div>
+                    </div>
+                    <div className="bg-slate-900/50 rounded-lg p-6">
+                      <div className="flex gap-2 justify-center flex-wrap">
+                        {(() => {
+                          const suits = [
+                            { symbol: '♠', name: 'Spades', color: 'text-black' },
+                            { symbol: '♥', name: 'Hearts', color: 'text-red-600' },
+                            { symbol: '♦', name: 'Diamonds', color: 'text-red-600' },
+                            { symbol: '♣', name: 'Clubs', color: 'text-black' }
+                          ];
+                          const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+                          const cards = [];
+
+                          for (const suit of suits) {
+                            for (const rank of ranks) {
+                              cards.push({ rank, suit: suit.symbol, color: suit.color, suitName: suit.name });
+                            }
+                          }
+
+                          return cards.map((card, idx) => (
+                            <div
+                              key={idx}
+                              className="w-16 h-24 bg-white rounded-lg border-2 border-slate-300 flex flex-col items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+                              title={`${card.rank}${card.suitName}`}
+                            >
+                              <div className={`text-sm font-bold ${card.color}`}>{card.rank}</div>
+                              <div className={`text-xl ${card.color}`}>{card.suit}</div>
+                            </div>
+                          ));
+                        })()}
+                      </div>
+                    </div>
+                    <div className="mt-4 text-sm text-slate-400 flex justify-between">
+                      <span>Total: 52 cards (4 suits × 13 ranks)</span>
+                      <span>8-Deck Shoe: 416 cards</span>
                     </div>
                   </div>
 
@@ -488,6 +661,132 @@ export default function DesignsPage() {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Game Rules Tab */}
+            {activeTab === 'game-rules' && (
+              <section className="space-y-8 max-w-6xl">
+                <h2 className="text-3xl font-bold text-amber-400">Blackjack Game Rules</h2>
+
+                <div className="space-y-8">
+                  {/* Objective */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-4">🎯 Objective</h3>
+                    <p className="text-slate-300 mb-3">Beat the dealer's hand by getting as close to 21 as possible without going over. A hand that exceeds 21 is called a "bust" and you lose immediately.</p>
+                  </div>
+
+                  {/* Card Values */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-4">💳 Card Values</h3>
+                    <ul className="space-y-3 text-slate-300">
+                      <li className="flex justify-between">
+                        <span><span className="text-amber-300 font-semibold">Number Cards (2-10)</span></span>
+                        <span>Face value (2 = 2 points, 10 = 10 points)</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span><span className="text-amber-300 font-semibold">Face Cards (J, Q, K)</span></span>
+                        <span>10 points each</span>
+                      </li>
+                      <li className="flex justify-between">
+                        <span><span className="text-amber-300 font-semibold">Ace (A)</span></span>
+                        <span>1 or 11 points (player's choice)</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Gameplay Flow */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-4">🎲 Gameplay Flow</h3>
+                    <div className="space-y-4">
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-amber-300 mb-2">1. Place Bet</p>
+                        <p className="text-slate-300">Select your wager using the betting chips before the deal begins.</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-amber-300 mb-2">2. Deal Cards</p>
+                        <p className="text-slate-300">Both player and dealer receive two cards each. Player cards are face-up; dealer shows one card face-up, one face-down.</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-amber-300 mb-2">3. Player Decision</p>
+                        <p className="text-slate-300">Choose to Hit (draw another card), Stand (keep current hand), Double Down (double bet and draw one card), or Split (if you have two cards of the same value).</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-amber-300 mb-2">4. Dealer Play</p>
+                        <p className="text-slate-300">Dealer reveals their hidden card and must hit on 16 or less, stand on 17 or more (hard) or 18+ (soft).</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-amber-300 mb-2">5. Outcome</p>
+                        <p className="text-slate-300">Compare hands. Win if your total is higher than dealer's without busting. Push (tie) if totals match.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Player Actions */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-4">🎮 Player Actions</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-blue-400 mb-2">Hit</p>
+                        <p className="text-sm text-slate-300">Draw another card to increase your hand total.</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-red-400 mb-2">Stand</p>
+                        <p className="text-sm text-slate-300">Keep your current hand and end your turn.</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-amber-400 mb-2">Double Down</p>
+                        <p className="text-sm text-slate-300">Double your bet and receive exactly one more card.</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4">
+                        <p className="font-semibold text-purple-400 mb-2">Split</p>
+                        <p className="text-sm text-slate-300">Separate two identical-value cards into two separate hands.</p>
+                      </div>
+                      <div className="bg-slate-900/50 rounded-lg p-4 md:col-span-2">
+                        <p className="font-semibold text-orange-400 mb-2">Insurance</p>
+                        <p className="text-sm text-slate-300">Optional side bet (up to half your original bet) offered when dealer shows an Ace. Pays 2:1 if dealer has blackjack.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Winning Conditions */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-4">✓ Winning Conditions</h3>
+                    <ul className="space-y-3 text-slate-300">
+                      <li className="flex items-start gap-3">
+                        <span className="text-green-400 text-xl">✓</span>
+                        <span><span className="text-amber-300 font-semibold">Natural Blackjack:</span> First two cards totaling 21 (Ace + 10-value card). Pays 3:2</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <span className="text-green-400 text-xl">✓</span>
+                        <span><span className="text-amber-300 font-semibold">Higher Hand:</span> Your total beats dealer's without busting. Pays 1:1</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <span className="text-green-400 text-xl">✓</span>
+                        <span><span className="text-amber-300 font-semibold">Dealer Bust:</span> Dealer exceeds 21 while your hand stands. You win automatically</span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <span className="text-green-400 text-xl">✓</span>
+                        <span><span className="text-amber-300 font-semibold">Push (Tie):</span> Your hand equals dealer's hand. Bet is returned</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Deck Shoe */}
+                  <div className="bg-emerald-900/20 border border-emerald-500/50 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-emerald-400 mb-4">🎰 Provably Fair Shuffle System</h3>
+                    <ul className="space-y-2 text-slate-300 text-sm">
+                      <li className="flex justify-between"><span>Standard Deck Size:</span> <span className="text-amber-300">52 cards</span></li>
+                      <li className="flex justify-between"><span>Shoe Configuration:</span> <span className="text-amber-300">8 decks (416 cards)</span></li>
+                      <li className="flex justify-between"><span>Shuffle Timing:</span> <span className="text-amber-300">New shoe for each hand</span></li>
+                      <li className="flex justify-between"><span>Shuffle Algorithm:</span> <span className="text-amber-300">Cryptographically secure randomization</span></li>
+                      <li className="flex justify-between"><span>Fairness Verification:</span> <span className="text-amber-300">Player-verifiable game outcomes</span></li>
+                    </ul>
+                    <div className="mt-4 pt-4 border-t border-emerald-500/30">
+                      <p className="text-xs text-emerald-200 leading-relaxed">Each hand begins with a fresh 8-deck shoe using provably fair shuffle mechanics. All randomization is cryptographically secure and independently verifiable, ensuring complete transparency and fairness with zero server-side manipulation.</p>
                     </div>
                   </div>
                 </div>

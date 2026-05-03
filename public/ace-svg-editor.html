@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACE SVG Brand Card Editor</title>
+  <style>
+    :root {
+      --bg: #050A0F;
+      --panel: #0D1118;
+      --panel-2: #111827;
+      --border: rgba(251, 191, 36, 0.24);
+      --gold: #FBBF24;
+      --gold-2: #FFE08A;
+      --text: #E5E7EB;
+      --muted: #9CA3AF;
+      --danger: #EF4444;
+      --success: #10B981;
+      --shadow: 0 24px 70px rgba(0,0,0,.42);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 45% 20%, rgba(251,191,36,.16), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(255,224,138,.08), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5, 10, 15, .9);
+    }
+
+    .toolbar { display:flex; gap:8px; }
+
+    button, select, input {
+      border:1px solid var(--border);
+      background:#0B1018;
+      color:var(--text);
+      border-radius:10px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+
+    button.primary {
+      background:linear-gradient(135deg,var(--gold-2),var(--gold));
+      color:#111;
+      border:0;
+    }
+
+    main {
+      display:grid;
+      grid-template-columns: 45% 1fr;
+      gap:16px;
+      padding:16px;
+    }
+
+    textarea {
+      width:100%;
+      height:80vh;
+      background:#05070B;
+      color:#D1D5DB;
+      font-family:monospace;
+      padding:12px;
+      border:0;
+    }
+
+    .canvas {
+      display:grid;
+      place-items:center;
+      background:#070B11;
+      padding:20px;
+    }
+
+    .svg-stage {
+      transform-origin:center;
+    }
+
+    .svg-stage svg {
+      width:100%;
+      height:auto;
+      shape-rendering:geometricPrecision;
+      text-rendering:optimizeLegibility;
+      image-rendering:optimizeQuality;
+    }
+
+    .controls {
+      display:flex;
+      gap:10px;
+      padding:10px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div>ACE SVG Editor — High Quality Mode</div>
+  <div class="toolbar">
+    <button class="primary" id="applyBtn">Apply</button>
+    <button id="copyBtn">Copy</button>
+    <button id="downloadBtn">SVG</button>
+    <button id="pngBtn">PNG</button>
+    <button id="resetBtn">Reset</button>
+  </div>
+</header>
+
+<main>
+  <textarea id="svgInput"></textarea>
+
+  <div>
+    <div class="controls">
+      <label>Zoom <input id="zoom" type="range" min="50" max="200" value="100"></label>
+      <label>Export Scale <input id="scale" type="range" min="1" max="4" value="2"></label>
+      <label>Background
+        <select id="bgMode">
+          <option value="dark">Dark</option>
+          <option value="transparent">Transparent</option>
+        </select>
+      </label>
+    </div>
+    <div class="canvas">
+      <div id="svgStage" class="svg-stage"></div>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+const originalSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img">
+  <defs>
+    <!-- Background Glow -->
+    <radialGradient id="bgGlow" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#1A1410"/>
+      <stop offset="50%" stop-color="#050A0F"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+
+    <!-- Premium Gold Gradient (more contrast) -->
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF6CC"/>
+      <stop offset="20%" stop-color="#FBBF24"/>
+      <stop offset="45%" stop-color="#D79210"/>
+      <stop offset="75%" stop-color="#FFE08A"/>
+      <stop offset="100%" stop-color="#A96500"/>
+    </linearGradient>
+
+    <!-- Inner Glow -->
+    <radialGradient id="goldInner" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#FFF2B8" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#D79210" stop-opacity="0.2"/>
+    </radialGradient>
+
+    <!-- Strong Glow -->
+    <filter id="goldGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle Noise Texture -->
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0 0.04"/>
+      </feComponentTransfer>
+    </filter>
+
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGlow)"/>
+
+  <!-- Card -->
+  <g transform="translate(600 315)">
+
+    <!-- Shadow -->
+    <ellipse cx="0" cy="210" rx="260" ry="36" fill="#000" opacity="0.45"/>
+
+    <!-- Card Body -->
+    <rect x="-160" y="-240" width="320" height="460" rx="28"
+          fill="#0B0F14" stroke="url(#gold)" stroke-width="3"/>
+
+    <!-- Inner Border Glow -->
+    <rect x="-148" y="-228" width="296" height="436" rx="22"
+          fill="none" stroke="url(#goldInner)" stroke-width="1.2" opacity="0.6"/>
+
+    <!-- Corner Details -->
+    <g stroke="url(#gold)" stroke-width="1.8" fill="none" opacity="0.9">
+      <path d="M-140 -210 h30 M-140 -210 v30"/>
+      <path d="M140 -210 h-30 M140 -210 v30"/>
+      <path d="M-140 190 h30 M-140 190 v-30"/>
+      <path d="M140 190 h-30 M140 190 v-30"/>
+    </g>
+
+    <!-- Spade -->
+    <g filter="url(#goldGlow)">
+      <text x="0" y="-40" text-anchor="middle"
+            font-family="Georgia, serif"
+            font-size="140" font-weight="700"
+            fill="url(#gold)">♠</text>
+    </g>
+
+    <!-- ACE -->
+    <text x="0" y="70" text-anchor="middle"
+          font-family="Inter, sans-serif"
+          font-size="64" font-weight="900"
+          letter-spacing="12"
+          fill="url(#gold)">ACE</text>
+
+    <!-- BLACKJACK -->
+    <text x="0" y="120" text-anchor="middle"
+          font-family="Inter, sans-serif"
+          font-size="26" font-weight="700"
+          letter-spacing="10"
+          fill="#F8D981">BLACKJACK</text>
+
+    <!-- Premium Line -->
+    <g>
+      <line x1="-90" y1="150" x2="-30" y2="150" stroke="url(#gold)" stroke-width="1.5"/>
+      <text x="0" y="155" text-anchor="middle"
+            font-family="Inter, sans-serif"
+            font-size="18" font-weight="800"
+            letter-spacing="6"
+            fill="#FBBF24">PREMIUM</text>
+      <line x1="30" y1="150" x2="90" y2="150" stroke="url(#gold)" stroke-width="1.5"/>
+    </g>
+
+  </g>
+
+  <!-- Grain Overlay -->
+  <rect width="1200" height="630" filter="url(#noise)" opacity="0.15"/>
+</svg>`;
+
+const input = document.getElementById('svgInput');
+const stage = document.getElementById('svgStage');
+input.value = originalSvg;
+
+function render(){
+  stage.innerHTML = input.value;
+}
+
+function downloadSVG(){
+  const blob = new Blob([input.value],{type:'image/svg+xml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ace.svg';
+  a.click();
+}
+
+function downloadPNG(){
+  const scale = document.getElementById('scale').value;
+  const svgData = new Blob([input.value], {type:'image/svg+xml'});
+  const url = URL.createObjectURL(svgData);
+
+  const img = new Image();
+  img.onload = function(){
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width * scale;
+    canvas.height = img.height * scale;
+    const ctx = canvas.getContext('2d');
+
+    if(document.getElementById('bgMode').value === 'dark'){
+      ctx.fillStyle = '#020407';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+    }
+
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    const png = canvas.toDataURL('image/png');
+
+    const a = document.createElement('a');
+    a.href = png;
+    a.download = 'ace.png';
+    a.click();
+  };
+  img.src = url;
+}
+
+// EVENTS
+
+document.getElementById('applyBtn').onclick = render;
+document.getElementById('copyBtn').onclick = ()=>navigator.clipboard.writeText(input.value);
+document.getElementById('downloadBtn').onclick = downloadSVG;
+document.getElementById('pngBtn').onclick = downloadPNG;
+document.getElementById('resetBtn').onclick = ()=>{input.value = originalSvg; render();};
+
+document.getElementById('zoom').oninput = e=>{
+  stage.style.transform = `scale(${e.target.value/100})`;
+};
+
+render();
+</script>
+</body>
+</html>

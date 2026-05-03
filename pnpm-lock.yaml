@@ -18,8 +18,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1(zod@4.4.2)
       '@h4shed/skill-syncpulse':
-        specifier: ^0.2.0
-        version: 0.2.0(zod@4.4.2)
+        specifier: ^0.1.7
+        version: 0.1.7
       '@h4shed/tool-commander':
         specifier: ^11.0.1
         version: 11.0.1(commander@14.0.3)
@@ -421,8 +421,8 @@ packages:
   '@h4shed/skill-style-dictionary-system@1.0.1':
     resolution: {integrity: sha512-0+gHZLsQzfDRTBd9b2Bif40q3qVmyEpKfCVJEOWPPqcfpA9CP+u9ytCcY31Lf4Oc/+5Jq+6TFQCGH4ROSKZNtg==}
 
-  '@h4shed/skill-syncpulse@0.2.0':
-    resolution: {integrity: sha512-wCreYI4Innk1Bst039Z7UsB19MEZ5hPLRWUP3bgLTeFUeiQtwLA6PmlwoGte32fcpcxhWn33Sb1W1Zwzd13lgg==}
+  '@h4shed/skill-syncpulse@0.1.7':
+    resolution: {integrity: sha512-AxqGR9gunIvvgD1bb6hQuH5npWvoYU/r+gR9UODySzEKyFAPuyCZY5DvuhO0yLmM++9pE8esa6dXTBBbGc1cTw==}
 
   '@h4shed/tool-commander@11.0.1':
     resolution: {integrity: sha512-Qb6iDQmEYp7MJCEdKOGL/lJSOxjF90+dcU2P/UhvV1mDps8lPT6U8pUnJeCsI7yZHMoDJP3fyyVBD30FqdM2Pw==}
@@ -1951,10 +1951,6 @@ packages:
   node-releases@2.0.38:
     resolution: {integrity: sha512-3qT/88Y3FbH/Kx4szpQQ4HzUbVrHPKTLVpVocKiLfoYvw9XSGOX2FmD2d6DrXbVYyAQTF2HeF6My8jmzx7/CRw==}
 
-  nodemailer@6.10.1:
-    resolution: {integrity: sha512-Z+iLaBGVaSjbIzQ4pX6XV41HrooLsQ10ZWPUehGmuantvzWoDVBnmsdUcOIDM1t+yPor5pDhVlDESgOMEGxhHA==}
-    engines: {node: '>=6.0.0'}
-
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
@@ -3027,14 +3023,7 @@ snapshots:
       - supports-color
       - zod
 
-  '@h4shed/skill-syncpulse@0.2.0(zod@4.4.2)':
-    dependencies:
-      '@h4shed/mcp-core': 1.0.11(zod@4.4.2)
-      nodemailer: 6.10.1
-    transitivePeerDependencies:
-      - '@cfworker/json-schema'
-      - supports-color
-      - zod
+  '@h4shed/skill-syncpulse@0.1.7': {}
 
   '@h4shed/tool-commander@11.0.1(commander@14.0.3)':
     dependencies:
@@ -4581,8 +4570,6 @@ snapshots:
   negotiator@1.0.0: {}
 
   node-releases@2.0.38: {}
-
-  nodemailer@6.10.1: {}
 
   normalize-path@3.0.0: {}
 
