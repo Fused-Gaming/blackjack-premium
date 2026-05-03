@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import AnimationShowcase from '../components/kit/AnimationShowcase';
+import NotificationGallery from '../components/kit/NotificationGallery';
+import { DESIGN_KIT_VERSION } from '../data/designKitVersion';
 
 /**
  * Design System Explorer
@@ -98,6 +101,8 @@ export default function DesignsPage() {
 
   const tabItems = [
     { id: 'overview', label: 'Overview' },
+    { id: 'animations', label: 'Animations' },
+    { id: 'notifications', label: 'Notifications' },
     { id: 'tokens', label: 'Tokens' },
     { id: 'components', label: 'Components' },
     { id: 'layouts', label: 'Layouts' },
@@ -215,7 +220,7 @@ export default function DesignsPage() {
                   Info
                 </h3>
                 <div className="text-xs text-slate-400 px-4 py-3 bg-slate-900/50 rounded-lg">
-                  <p className="font-semibold text-amber-400 mb-1">Design System v1.0</p>
+                  <p className="font-semibold text-amber-400 mb-1">Design System v{DESIGN_KIT_VERSION}</p>
                   <p>Dynamic, extensible design kit ready for feature development</p>
                 </div>
               </div>
@@ -285,6 +290,22 @@ export default function DesignsPage() {
               </section>
             )}
 
+            {/* Animations Tab */}
+            {activeTab === 'animations' && (
+              <section className="space-y-8 max-w-6xl">
+                <h2 className="text-3xl font-bold text-amber-400 mb-8">Animations & State Machine</h2>
+                <AnimationShowcase />
+              </section>
+            )}
+
+            {/* Notifications Tab */}
+            {activeTab === 'notifications' && (
+              <section className="space-y-8 max-w-6xl">
+                <h2 className="text-3xl font-bold text-amber-400 mb-8">Notifications & Outcome Indicators</h2>
+                <NotificationGallery />
+              </section>
+            )}
+
             {/* Design Tokens Tab */}
             {activeTab === 'tokens' && (
               <section className="space-y-8 max-w-6xl">
@@ -322,23 +343,119 @@ export default function DesignsPage() {
               <section className="space-y-8 max-w-6xl">
                 <h2 className="text-3xl font-bold text-amber-400">Component Library</h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {components.map(component => (
-                    <div
-                      key={component.name}
-                      className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 hover:border-amber-400/50 transition-colors"
-                    >
-                      <h3 className="text-xl font-semibold text-amber-400 mb-2">
-                        {component.name}
-                      </h3>
-                      <p className="text-slate-300">{component.description}</p>
-                      {component.code && (
-                        <pre className="mt-4 text-xs bg-slate-900/50 p-3 rounded border border-slate-700 overflow-x-auto">
-                          <code>{component.code}</code>
-                        </pre>
-                      )}
+                <div className="space-y-6">
+                  {/* Chip Selector */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-2">Chip Selector</h3>
+                    <p className="text-slate-300 mb-4">{components[0].description}</p>
+                    <div className="bg-slate-900/50 rounded-lg p-6">
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {['$1', '$5', '$10', '$25', '$50', '$100', '$500'].map((chip, idx) => (
+                          <div
+                            key={chip}
+                            className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-white cursor-pointer transition-transform hover:scale-110"
+                            style={{
+                              background: `linear-gradient(135deg, ${['#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#D4AF37'][idx]} 0%, ${['#DC2626', '#1E40AF', '#059669', '#D97706', '#6D28D9', '#BE185D', '#B8860B'][idx]} 100%)`,
+                            }}
+                          >
+                            {chip}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-2">Action Buttons</h3>
+                    <p className="text-slate-300 mb-4">{components[1].description}</p>
+                    <div className="bg-slate-900/50 rounded-lg p-6">
+                      <div className="flex flex-wrap gap-3 justify-center">
+                        {['Hit', 'Stand', 'Double', 'Split', 'Insurance'].map((action, idx) => (
+                          <button
+                            key={action}
+                            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+                              idx === 0
+                                ? 'bg-blue-600 hover:bg-blue-500 text-white'
+                                : idx === 1
+                                ? 'bg-red-600 hover:bg-red-500 text-white'
+                                : idx === 2
+                                ? 'bg-amber-600 hover:bg-amber-500 text-white'
+                                : idx === 3
+                                ? 'bg-purple-600 hover:bg-purple-500 text-white'
+                                : 'bg-orange-600 hover:bg-orange-500 text-white'
+                            }`}
+                          >
+                            {action}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Outcome States */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-2">Outcome States</h3>
+                    <p className="text-slate-300 mb-4">{components[2].description}</p>
+                    <div className="bg-slate-900/50 rounded-lg p-6">
+                      <div className="grid grid-cols-2 gap-4">
+                        {[
+                          { label: 'Win', icon: '✓', color: 'bg-green-900/30 border-green-500' },
+                          { label: 'Loss', icon: '✗', color: 'bg-red-900/30 border-red-500' },
+                          { label: 'Push', icon: '=', color: 'bg-yellow-900/30 border-yellow-500' },
+                          { label: 'Blackjack', icon: '★', color: 'bg-emerald-900/30 border-emerald-500' },
+                        ].map((outcome) => (
+                          <div key={outcome.label} className={`${outcome.color} border rounded-lg p-4 text-center`}>
+                            <div className="text-2xl mb-2">{outcome.icon}</div>
+                            <p className="font-semibold text-white text-sm">{outcome.label}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Playing Cards */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-2">Playing Cards</h3>
+                    <p className="text-slate-300 mb-4">{components[3].description}</p>
+                    <div className="bg-slate-900/50 rounded-lg p-6">
+                      <div className="flex gap-4 justify-center flex-wrap">
+                        {[
+                          { rank: 'A', suit: '♠', color: 'text-black' },
+                          { rank: 'K', suit: '♥', color: 'text-red-600' },
+                          { rank: 'Q', suit: '♦', color: 'text-red-600' },
+                          { rank: 'J', suit: '♣', color: 'text-black' },
+                          { rank: '10', suit: '♠', color: 'text-black' },
+                        ].map((card, idx) => (
+                          <div
+                            key={idx}
+                            className="w-20 h-28 bg-white rounded-lg border-2 border-slate-300 flex flex-col items-center justify-center shadow-lg"
+                          >
+                            <div className={`text-lg font-bold ${card.color}`}>{card.rank}</div>
+                            <div className={`text-2xl ${card.color}`}>{card.suit}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Multi-Seat Table */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+                    <h3 className="text-xl font-semibold text-amber-400 mb-2">Multi-Seat Table</h3>
+                    <p className="text-slate-300 mb-4">{components[4].description}</p>
+                    <div className="bg-slate-900/50 rounded-lg p-6">
+                      <div className="flex items-center justify-center gap-8 flex-wrap">
+                        {['Seat 1', 'Seat 2', 'Seat 3', 'Seat 4', 'Seat 5'].map((seat, idx) => (
+                          <div key={seat} className="flex flex-col items-center gap-2">
+                            <div className="w-12 h-12 rounded-full bg-amber-400/20 border border-amber-400 flex items-center justify-center text-sm font-semibold text-amber-400">
+                              {idx + 1}
+                            </div>
+                            <p className="text-xs text-slate-400">{seat}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </section>
             )}
@@ -387,7 +504,7 @@ export default function DesignsPage() {
 
           {/* Footer */}
           <footer className="border-t border-slate-700 mt-20 py-12 bg-slate-900/50 text-center text-slate-400 flex-shrink-0">
-            <p>ACE Blackjack Premium Design System v1.0</p>
+            <p>ACE Blackjack Premium Design System v{DESIGN_KIT_VERSION}</p>
             <p className="text-sm mt-2">Dynamic design kit • Extensible architecture • Responsive layout</p>
           </footer>
         </main>
