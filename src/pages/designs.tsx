@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import AnimationShowcase from '../components/kit/AnimationShowcase';
+import NotificationGallery from '../components/kit/NotificationGallery';
 import { DESIGN_KIT_VERSION } from '../data/designKitVersion';
 
 /**
@@ -104,7 +105,7 @@ export default function DesignsPage() {
       <nav className="border-b border-slate-700 bg-slate-800/50 sticky top-[88px] z-40">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex gap-8">
-            {['overview', 'animations', 'tokens', 'components', 'layouts'].map(tab => (
+            {['overview', 'animations', 'notifications', 'tokens', 'components', 'layouts'].map(tab => (
               <button
                 key={tab}
                 onClick={() => {
@@ -190,6 +191,14 @@ export default function DesignsPage() {
           <section className="space-y-8">
             <h2 className="text-3xl font-bold text-amber-400 mb-8">Animations & State Machine</h2>
             <AnimationShowcase />
+          </section>
+        )}
+
+        {/* Notifications Tab */}
+        {activeTab === 'notifications' && (
+          <section className="space-y-8">
+            <h2 className="text-3xl font-bold text-amber-400 mb-8">Notifications & Outcome Indicators</h2>
+            <NotificationGallery />
           </section>
         )}
 
