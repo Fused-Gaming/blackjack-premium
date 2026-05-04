@@ -1,6 +1,6 @@
 # Execution Plan: Game Mode Tables & States
 
-## Status: Phase 3 Complete (Phases 1-3 ✅)
+## Status: Phase 3 Complete + Betting Integration (Phases 1-3 ✅)
 
 ### Completed Work
 
@@ -22,6 +22,14 @@
 - Created BettingPhase component
 - Parallel betting status display
 - Design Kit version bumped to 2.1
+
+#### Phase 3.5: BettingPhase Integration ✅
+- Integrated BettingPhase into Table component
+- Conditional rendering: BettingPhase shown during 'bettingOpen' phase
+- Smooth phase transitions between betting and dealing
+- Enhanced BetControls for multiplayer seat support
+- Added UI indicator for current betting seat
+- Maintains single-player bet flow
 
 ---
 
@@ -234,14 +242,28 @@ Empty → Betting → Locked → Waiting → Active → Acted → Resolved
 
 ---
 
+## Completed: BettingPhase Integration (PR #199)
+
+**✅ Successfully integrated BettingPhase into Table component**
+
+Enabled:
+1. ✅ Users see all players' betting status during bettingOpen phase
+2. ✅ Real-time bet amount updates as bets are placed
+3. ✅ Ready indicator when all bets placed
+4. ✅ DEAL button triggers lockBets() and phase transition
+5. ✅ Enhanced BetControls for multiplayer seat support
+6. ✅ Smooth Framer Motion transitions between phases
+
+PR Status: Open, awaiting CI checks
+
 ## Next Immediate Step
 
-**Integrate BettingPhase into Table component and wire it to the bettingOpen phase state.**
+**Implement Dealing Phase with card deal animations**
 
 This will enable:
-1. Users to see all players' betting status
-2. Real-time bet amount updates
-3. Ready indicator when all bets placed
-4. DEAL button becomes available
+1. Card deal animation (parallel to all seats)
+2. Card placement in seat zones
+3. Dealer upcard reveal
+4. Animation timing and sequencing
 
-Expected completion: 30 minutes
+Expected completion: 45-60 minutes
