@@ -4,10 +4,14 @@
  * Replace with actual MP3 files for production
  */
 
+interface WindowWithAudioContext extends Window {
+  webkitAudioContext?: typeof AudioContext;
+}
+
 export function generateBeep(frequency = 440, duration = 200, volume = 0.3): Promise<void> {
   return new Promise((resolve) => {
     try {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContext = window.AudioContext || (window as WindowWithAudioContext).webkitAudioContext;
       if (!AudioContext) {
         // Web Audio not supported
         resolve();
