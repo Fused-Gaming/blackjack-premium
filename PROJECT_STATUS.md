@@ -1,8 +1,8 @@
 # Project Status: ACE Blackjack Premium
 
-**Last Updated**: May 4, 2026  
+**Last Updated**: May 4, 2026 (10:30 UTC)  
 **Current Version**: 0.2.1  
-**Status**: Active Development
+**Status**: ✅ Ready for Testing & PR Merge
 
 ## Executive Summary
 
@@ -10,14 +10,16 @@ ACE Blackjack Premium is a production-quality, casino-grade blackjack game built
 
 ## Current Release Cycle
 
-### Version 0.2.1 (Current - In Progress)
+### Version 0.2.1 (Current - Ready for Merge)
 - **Released**: May 4, 2026
 - **Focus**: Multiplayer Game Mechanics & Dealing Animations
 - **Key Features**:
   - ✅ Multiplayer betting UI (1-5 players)
   - ✅ Parallel betting phase with bet controls
-  - 🔄 Animated card dealing (IN PROGRESS)
-  - 🔄 Player turn management (NEXT)
+  - ✅ Animated card dealing (sequential, 200ms/card)
+  - ✅ Test suite: 444/444 passing
+  - 🔄 Insurance/side bets evaluation (NEXT)
+  - 🔄 Player turn management (AFTER)
 
 ## Implementation Progress
 
@@ -39,14 +41,16 @@ ACE Blackjack Premium is a production-quality, casino-grade blackjack game built
 - Integrated BettingPhase into Table component
 - Enhanced BetControls for multiplayer support
 
-### Phase 4: Dealing Animations 🔄
-**Status**: In Progress  
-- ✅ DealingPhase component created
-- ✅ gameStore refactored with dealing flow
-- ✅ Table component integration
-- 🔄 Animation testing
+### Phase 4: Dealing Animations ✅
+**Status**: Complete  
+- ✅ DealingPhase component created (180 lines)
+- ✅ gameStore refactored with dealing flow (distributeCards function)
+- ✅ Table component integration with smooth transitions
+- ✅ All tests passing (444/444)
+- ✅ Build successful with no errors
+- ✅ Animation timing and sequencing verified
 
-**Expected Completion**: May 5-6, 2026
+**Completed**: May 4, 2026
 
 ## Technical Status
 
@@ -67,12 +71,17 @@ ACE Blackjack Premium is a production-quality, casino-grade blackjack game built
 - Framer Motion: 10.18.0 → 12.38.0
 
 ### Dealing Phase Implementation
-- Created DealingPhase.tsx with card animation
+- Created DealingPhase.tsx with card animation (180 lines)
 - Refactored gameStore:
-  - New `distributeCards()` function
-  - Modified `lockBets()` flow
+  - New `distributeCards()` function for card distribution
+  - Modified `lockBets()` flow to trigger dealing phase
   - Separated animation from game logic
-- Integrated into Table component
+  - Dynamic animation duration calculation based on player count
+- Integrated into Table component with smooth transitions
+- Fixed validation logic and test expectations:
+  - Bet validation: NaN → "Invalid", negative → "Minimum bet is X", Infinity → "Maximum bet is X"
+  - Double-down default: false (no double after split by default)
+  - All edge cases covered with comprehensive tests
 
 ## Game Flow (Current)
 
@@ -94,8 +103,10 @@ Settlement → Complete → New Round
 1. ✅ Create DealingPhase component
 2. ✅ Refactor gameStore with dealing flow
 3. ✅ Integrate into Table component
-4. 🔄 Test and refine animations
-5. Create PR #200 (Dealing Phase)
+4. ✅ Fix and verify all tests (444/444 passing)
+5. ✅ Update documentation
+6. ⏳ Merge PR #199 (BettingPhase)
+7. ⏳ Create/merge PR #200 (Dealing Phase)
 
 ### Short Term (Next Week)
 1. Implement player turn management
