@@ -10,7 +10,7 @@ export function BetControls() {
   const [selectedChip, setSelectedChip] = useState<number>(25);
   const [currentBet, setCurrentBet] = useState(0);
 
-  if (phase === 'playerTurns' || phase === 'dealerTurn' || phase === 'complete' || phase === 'settlement') {
+  if (phase === 'dealing' || phase === 'playerTurns' || phase === 'dealerTurn' || phase === 'complete' || phase === 'settlement') {
     return null;
   }
 

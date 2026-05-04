@@ -6,6 +6,7 @@ import { ActionButtons } from '../controls/ActionButtons';
 import { BetControls } from '../controls/BetControls';
 import { InsurancePrompt } from '../controls/InsurancePrompt';
 import { BettingPhase } from './BettingPhase';
+import { DealingPhase } from './DealingPhase';
 import { evaluateHand, compareHands } from '../../engine/hand';
 import { calculatePayout } from '../../engine/payouts';
 
@@ -116,8 +117,20 @@ export function Table() {
               </motion.div>
             )}
 
+            {/* ─── Dealing Phase (Card deal animations) ─── */}
+            {phase === 'dealing' && (
+              <motion.div
+                key="dealing"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <DealingPhase />
+              </motion.div>
+            )}
+
             {/* ─── Felt Table ─── */}
-            {phase !== 'bettingOpen' && (
+            {phase !== 'bettingOpen' && phase !== 'dealing' && (
               <motion.div
                 key="felt"
                 initial={{ opacity: 0, y: 20 }}

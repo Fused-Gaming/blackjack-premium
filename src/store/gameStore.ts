@@ -59,6 +59,7 @@ interface GameStore extends GameState {
   initializeSeats: (num: number) => void;
   placeBet: (seatId: string, amount: number, sideBetAmount?: number) => void;
   lockBets: () => void;
+  distributeCards: () => void;
   startGame: () => void;
   hit: () => void;
   stand: () => void;
@@ -622,13 +623,77 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       playerSeats: updatedSeats,
-      phase: 'bettingLocked',
-      message: 'Bets locked. Dealing...',
+      phase: 'dealing',
+      message: 'Dealing cards...',
     });
 
+    // Wait for dealing animation to complete, then distribute cards
+    const animationDuration = (state.numPlayers * 4 + 2) * 200 + 500; // Time for all cards + final delay
     setTimeout(() => {
-      get().startGame();
-    }, 1000);
+      get().distributeCards();
+    }, animationDuration);
+  },
+
+  distributeCards: () => {
+    const state = get();
+
+    // Check if any bets placed
+    const hasActiveBets = Object.values(state.playerSeats).some(seat => seat.active && seat.hands[0].bet > 0);
+
+    if (!hasActiveBets) {
+      set({ message: 'Please place a bet first' });
+      return;
+    }
+
+    // Create and shuffle new deck
+    let deck = shuffleDeck(createShoe(6));
+    let dealerHand: Card[] = [];
+    const updatedSeats = { ...state.playerSeats };
+    const turnQueue: Array<{ seatId: string; handIndex: number }> = [];
+
+    // Deal initial cards - 2 to each active seat, 2 to dealer
+    for (const seatId of Object.keys(updatedSeats)) {
+      if (updatedSeats[seatId].active) {
+        const result1 = dealCard(deck, true);
+        const result2 = dealCard(result1.remainingDeck, true);
+
+        updatedSeats[seatId].hands[0] = addCardToHand(
+          addCardToHand(updatedSeats[seatId].hands[0], result1.card),
+          result2.card
+        );
+
+        // Add to turn queue for sequential play
+        turnQueue.push({ seatId, handIndex: 0 });
+
+        deck = result2.remainingDeck;
+      }
+    }
+
+    // Deal dealer cards (1 up, 1 down)
+    const dealerCard1 = dealCard(deck, true);
+    const dealerCard2 = dealCard(dealerCard1.remainingDeck, false);
+    dealerHand = [dealerCard1.card, dealerCard2.card];
+    deck = dealerCard2.remainingDeck;
+
+    // Check for dealer ace (insurance opportunity)
+    const shouldOfferInsurance = dealerHand[0].rank === 'A';
+
+    set({
+      deck,
+      dealerHand,
+      playerSeats: updatedSeats,
+      turnQueue,
+      currentTurnIndex: -1, // Will be incremented before first turn
+      phase: shouldOfferInsurance ? 'insurance' : 'sideBetEvaluation',
+      message: shouldOfferInsurance ? 'Dealer showing Ace. Insurance?' : 'Evaluating side bets...',
+    });
+
+    // Auto-proceed to side bet evaluation
+    if (!shouldOfferInsurance) {
+      setTimeout(() => {
+        get().checkForBlackjacks();
+      }, BLACKJACK_CHECK_DELAY);
+    }
   },
 
   evaluateSideBets: () => {
