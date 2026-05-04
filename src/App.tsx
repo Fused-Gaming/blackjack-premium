@@ -51,12 +51,16 @@ function App() {
       <div className="flex-1 flex flex-col overflow-hidden max-h-[calc(100vh-64px)]">
         <Table />
       </div>
+
+      {/* Back to Landing Button - Bottom Left */}
       <button
         onClick={() => setGameStarted(false)}
-        className="fixed top-4 left-4 z-50 px-4 py-2 text-sm font-medium text-text-bright bg-bg-card border border-border rounded-lg hover:bg-bg-panel transition-colors duration-250"
+        className="fixed bottom-4 left-4 z-50 px-4 py-2 text-sm font-medium text-text-bright bg-bg-card border border-border rounded-lg hover:bg-bg-panel transition-colors duration-250"
       >
         ← Back
       </button>
+
+      {/* Design Kit Button - Bottom Right */}
       <button
         onClick={() => navigateTo('/designs')}
         className="fixed bottom-4 right-4 z-50 px-4 py-2 text-sm font-medium text-text-bright bg-bg-card border border-border rounded-lg hover:bg-bg-panel transition-colors duration-250"
