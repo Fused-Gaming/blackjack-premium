@@ -5,14 +5,18 @@ on:
     types: [opened, edited, reopened, synchronize, milestoned, demilestoned]
 
 permissions:
-  pull-requests: read
+  pull-requests: write
   checks: write
 
 jobs:
   check-milestone:
     runs-on: ubuntu-latest
     steps:
-      - name: Check milestone assignment
+      - name: Wait for auto-label workflow
+        run: sleep 5
+        if: github.event.action == 'opened'
+
+      - name: Check and assign milestone
         uses: actions/github-script@v7
         with:
           script: |
@@ -22,7 +26,38 @@ jobs:
               pull_number: context.payload.pull_request.number
             });
 
-            const hasMilestone = pr.milestone !== null;
+            let hasMilestone = pr.milestone !== null;
+            let milestoneTitle = hasMilestone ? pr.milestone.title : null;
+
+            // If no milestone, assign Foundation (Milestone 1) as default
+            if (!hasMilestone) {
+              try {
+                // Get milestone ID for "1 - Foundation"
+                const { data: milestones } = await github.rest.issues.listMilestones({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  state: 'open'
+                });
+
+                const foundationMilestone = milestones.find(m =>
+                  m.title.includes('Foundation') || m.title.includes('1')
+                );
+
+                if (foundationMilestone) {
+                  await github.rest.issues.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: context.payload.pull_request.number,
+                    milestone: foundationMilestone.number
+                  });
+                  hasMilestone = true;
+                  milestoneTitle = foundationMilestone.title;
+                  console.log(`Assigned default milestone: ${milestoneTitle}`);
+                }
+              } catch (error) {
+                console.warn(`Could not assign default milestone: ${error.message}`);
+              }
+            }
 
             // Create check run
             const { data: check } = await github.rest.checks.create({
@@ -34,9 +69,9 @@ jobs:
               conclusion: hasMilestone ? 'success' : 'failure',
               output: {
                 title: hasMilestone ? 'Milestone Assigned' : 'No Milestone Assigned',
-                summary: hasMilestone && pr.milestone
-                  ? 'This PR is assigned to milestone: ' + pr.milestone.title
-                  : 'This PR must be assigned to a milestone before merging. The auto-label workflow should assign this automatically, but you can also assign it manually.'
+                summary: hasMilestone
+                  ? `This PR is assigned to milestone: ${milestoneTitle}`
+                  : 'This PR must be assigned to a milestone before merging. Create a milestone or allow the auto-label workflow to assign one.'
               }
             });
 

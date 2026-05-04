@@ -4,6 +4,11 @@
 # Automatically installs and updates swarm orchestration packages
 # Runs on every session to ensure latest versions and proper configuration
 
+# Skip initialization in CI environment
+if [ -n "$CI" ] || [ -n "$SKIP_SWARM_INIT" ]; then
+  exit 0
+fi
+
 set -e
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

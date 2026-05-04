@@ -198,7 +198,7 @@ describe('Hand Functions', () => {
         isSplit: true,
       };
 
-      expect(canDouble(hand)).toBe(false);
+      expect(canDouble(hand, false)).toBe(false);
     });
 
     it('should not allow double when already doubled', () => {
@@ -222,7 +222,7 @@ describe('Hand Functions', () => {
         isSplit: true,
       };
 
-      expect(canDouble(hand)).toBe(false);
+      expect(canDouble(hand, false)).toBe(false);
     });
   });
 
