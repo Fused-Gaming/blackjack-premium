@@ -202,14 +202,14 @@ describe('Payout Calculations', () => {
       const result = validateBet(-50, 1000, 10, 500);
 
       expect(result.valid).toBe(false);
-      expect(result.error).toBe('Invalid bet amount');
+      expect(result.error).toBe('Minimum bet is 10');
     });
 
     it('should reject zero bet', () => {
       const result = validateBet(0, 1000, 10, 500);
 
       expect(result.valid).toBe(false);
-      expect(result.error).toBe('Invalid bet amount');
+      expect(result.error).toBe('Minimum bet is 10');
     });
 
     it('should reject NaN bet', () => {
@@ -223,7 +223,7 @@ describe('Payout Calculations', () => {
       const result = validateBet(Infinity, 1000, 10, 500);
 
       expect(result.valid).toBe(false);
-      expect(result.error).toBe('Invalid bet amount');
+      expect(result.error).toBe('Maximum bet is 500');
     });
 
     it('should accept bet at minimum limit', () => {
