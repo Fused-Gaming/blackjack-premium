@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AnimationShowcase from '../components/kit/AnimationShowcase';
 import NotificationGallery from '../components/kit/NotificationGallery';
+import TableLayoutPreview from '../components/kit/TableLayoutPreview';
 import { DESIGN_KIT_VERSION } from '../data/designKitVersion';
 import { colorTokens } from '../data/colorTokens';
 import { spacingTokens } from '../data/spacingTokens';
@@ -120,6 +121,7 @@ export default function DesignsPage() {
     { id: 'interface', label: 'Interface Components' },
     { id: 'components', label: 'Components' },
     { id: 'game-rules', label: 'Game Rules' },
+    { id: 'game-tables', label: 'Game Tables' },
     { id: 'layouts', label: 'Layouts' },
   ];
 
@@ -942,6 +944,12 @@ export default function DesignsPage() {
             )}
 
             {/* Layouts Tab */}
+            {activeTab === 'game-tables' && (
+              <section>
+                <TableLayoutPreview />
+              </section>
+            )}
+
             {activeTab === 'layouts' && (
               <section className="space-y-8 max-w-6xl">
                 <h2 className="text-3xl font-bold text-amber-400">Layout Configurations</h2>
