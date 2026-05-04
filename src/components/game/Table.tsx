@@ -168,7 +168,7 @@ export function Table() {
                         hand={hand}
                         label={seat.hands.length > 1 ? `Hand ${index + 1}` : 'You'}
                         showValue={true}
-                        isActive={seat.currentHandIndex === index && phase === 'playing'}
+                        isActive={seat.currentHandIndex === index && phase === 'playerTurns'}
                       />
                     </motion.div>
                   ))}

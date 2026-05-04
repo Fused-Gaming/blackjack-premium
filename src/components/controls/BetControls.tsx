@@ -6,11 +6,11 @@ import { Chip } from '../ui/Chip';
 const CHIP_VALUES = [1, 5, 10, 25, 50, 100] as const;
 
 export function BetControls() {
-  const { phase, balance, placeBet, startGame } = useGameStore();
+  const { phase, balance, placeBet, lockBets, playerSeats } = useGameStore();
   const [selectedChip, setSelectedChip] = useState<number>(25);
   const [currentBet, setCurrentBet] = useState(0);
 
-  if (phase === 'playing' || phase === 'dealerTurn' || phase === 'complete') {
+  if (phase === 'playerTurns' || phase === 'dealerTurn' || phase === 'complete' || phase === 'settlement') {
     return null;
   }
 
@@ -134,10 +134,10 @@ export function BetControls() {
           </motion.button>
         )}
 
-        {phase === 'betting' && (
+        {phase === 'bettingOpen' && Object.values(playerSeats).some(s => s.active && s.hands[0]?.bet > 0) && (
           <motion.button
             key="deal"
-            onClick={startGame}
+            onClick={lockBets}
             initial={{ opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.92 }}

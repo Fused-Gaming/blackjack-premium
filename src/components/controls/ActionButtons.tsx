@@ -52,7 +52,7 @@ export function ActionButtons() {
     );
   }
 
-  if (phase !== 'playing' || !activeSeatId) return null;
+  if (phase !== 'playerTurns' || !activeSeatId) return null;
 
   const seat = playerSeats[activeSeatId];
   const currentHand = seat?.hands[seat.currentHandIndex];
