@@ -54,52 +54,6 @@ jobs:
             core.setOutput('check_run_id', check.id);
 
       - name: Run pre-deployment validation
-        id: validate
         run: |
           chmod +x scripts/pre-deploy-validate.sh
           ./scripts/pre-deploy-validate.sh
-        continue-on-error: true
-
-      - name: Update status check - Success
-        if: steps.validate.outcome == 'success' && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const checkRunId = ${{ steps.status-check.outputs.check_run_id }};
-            if (checkRunId) {
-              await github.rest.checks.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                check_run_id: checkRunId,
-                status: 'completed',
-                conclusion: 'success',
-                output: {
-                  title: 'Pre-deployment Validation - PASSED',
-                  summary: 'All pre-deployment checks passed. Ready for Vercel deployment.'
-                }
-              });
-            }
-
-      - name: Update status check - Failure
-        if: steps.validate.outcome == 'failure' && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const checkRunId = ${{ steps.status-check.outputs.check_run_id }};
-            if (checkRunId) {
-              await github.rest.checks.update({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                check_run_id: checkRunId,
-                status: 'completed',
-                conclusion: 'failure',
-                output: {
-                  title: 'Pre-deployment Validation - FAILED',
-                  summary: 'Pre-deployment checks failed. Review logs and fix issues before deployment.'
-                }
-              });
-            }
-
-      - name: Fail if validation failed
-        if: steps.validate.outcome == 'failure'
-        run: exit 1
