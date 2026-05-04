@@ -1,0 +1,102 @@
+name: Pre-deployment Validation
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  push:
+    branches: [main, develop]
+
+permissions:
+  checks: write
+  pull-requests: read
+  contents: read
+
+jobs:
+  pre-deploy-validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Create status check
+        id: status-check
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: check } = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Pre-deployment Validation',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'in_progress',
+              output: {
+                title: 'Pre-deployment Validation',
+                summary: 'Running pre-deployment checks (TypeScript, tests, build)...'
+              }
+            });
+            core.setOutput('check_run_id', check.id);
+
+      - name: Run pre-deployment validation
+        id: validate
+        run: |
+          chmod +x scripts/pre-deploy-validate.sh
+          ./scripts/pre-deploy-validate.sh
+        continue-on-error: true
+
+      - name: Update status check - Success
+        if: steps.validate.outcome == 'success' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const checkRunId = ${{ steps.status-check.outputs.check_run_id }};
+            if (checkRunId) {
+              await github.rest.checks.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                check_run_id: checkRunId,
+                status: 'completed',
+                conclusion: 'success',
+                output: {
+                  title: 'Pre-deployment Validation - PASSED',
+                  summary: 'All pre-deployment checks passed. Ready for Vercel deployment.'
+                }
+              });
+            }
+
+      - name: Update status check - Failure
+        if: steps.validate.outcome == 'failure' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const checkRunId = ${{ steps.status-check.outputs.check_run_id }};
+            if (checkRunId) {
+              await github.rest.checks.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                check_run_id: checkRunId,
+                status: 'completed',
+                conclusion: 'failure',
+                output: {
+                  title: 'Pre-deployment Validation - FAILED',
+                  summary: 'Pre-deployment checks failed. Review logs and fix issues before deployment.'
+                }
+              });
+            }
+
+      - name: Fail if validation failed
+        if: steps.validate.outcome == 'failure'
+        run: exit 1

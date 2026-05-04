@@ -4,6 +4,7 @@
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": "vite",
   "outputDirectory": "dist",
+  "nodeVersion": "18.x",
   "headers": [
     {
       "source": "/social/(.*)",
