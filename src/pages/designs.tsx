@@ -138,16 +138,16 @@ export default function DesignsPage() {
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden relative">
       {/* Left GitHub Icon */}
-      <div className="fixed left-4 top-1/2 transform -translate-y-1/2 text-amber-400/40 hover:text-amber-400/80 transition-colors duration-300 cursor-pointer z-40">
-        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block">
-          <GitHubIcon size={40} />
+      <div className="fixed left-6 top-6 text-amber-400/30 hover:text-amber-400/70 transition-colors duration-300 cursor-pointer z-40">
+        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block hover:scale-110 transition-transform duration-300">
+          <GitHubIcon size={36} />
         </a>
       </div>
 
       {/* Right GitHub Icon */}
-      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 text-amber-400/40 hover:text-amber-400/80 transition-colors duration-300 cursor-pointer z-40">
-        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block">
-          <GitHubIcon size={40} />
+      <div className="fixed right-6 top-6 text-amber-400/30 hover:text-amber-400/70 transition-colors duration-300 cursor-pointer z-40">
+        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block hover:scale-110 transition-transform duration-300">
+          <GitHubIcon size={36} />
         </a>
       </div>
 

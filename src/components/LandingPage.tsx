@@ -92,9 +92,9 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
   return (
     <div className={`${styles.container} ${isEntering ? styles.entering : ''}`}>
       {/* Left GitHub Icon */}
-      <div className="absolute left-8 top-1/2 transform -translate-y-1/2 text-amber-400/40 hover:text-amber-400/80 transition-colors duration-300 cursor-pointer z-10">
-        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block">
-          <GitHubIcon size={48} />
+      <div className="absolute left-6 top-6 text-amber-400/30 hover:text-amber-400/70 transition-colors duration-300 cursor-pointer z-10">
+        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block hover:scale-110 transition-transform duration-300">
+          <GitHubIcon size={40} />
         </a>
       </div>
 
@@ -254,9 +254,9 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
       )}
 
       {/* Right GitHub Icon */}
-      <div className="absolute right-8 top-1/2 transform -translate-y-1/2 text-amber-400/40 hover:text-amber-400/80 transition-colors duration-300 cursor-pointer z-10">
-        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block">
-          <GitHubIcon size={48} />
+      <div className="absolute right-6 top-6 text-amber-400/30 hover:text-amber-400/70 transition-colors duration-300 cursor-pointer z-10">
+        <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block hover:scale-110 transition-transform duration-300">
+          <GitHubIcon size={40} />
         </a>
       </div>
 
