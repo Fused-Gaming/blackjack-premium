@@ -14,68 +14,148 @@ import { calculatePayout } from '../engine/payouts';
 
 const BLACKJACK_CHECK_DELAY = 100;
 
+// 21+3 side bet evaluation (Flush, Straight, Three of a Kind, Pair)
+const evaluateHandForTwentyOneThree = (cards: Card[]) => {
+  if (cards.length !== 3) return { result: 'loss' as const, payout: 0 };
+
+  const ranks = cards.map(c => c.rank);
+  const suits = cards.map(c => c.suit);
+
+  // Check for three of a kind (triple)
+  if (ranks[0] === ranks[1] && ranks[1] === ranks[2]) {
+    return { result: 'win' as const, payout: 100 };
+  }
+
+  // Check for straight (consecutive ranks)
+  const rankOrder = {
+    A: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, J: 11, Q: 12, K: 13,
+  } as const;
+  const sortedRanks = ranks.map(r => rankOrder[r]).sort((a, b) => a - b);
+  const isStraight = (sortedRanks[2] - sortedRanks[1] === 1 && sortedRanks[1] - sortedRanks[0] === 1) ||
+                     (sortedRanks[0] === 1 && sortedRanks[1] === 12 && sortedRanks[2] === 13); // A-K-Q
+
+  // Check for flush (all same suit)
+  const isFlush = suits[0] === suits[1] && suits[1] === suits[2];
+
+  if (isStraight && isFlush) {
+    return { result: 'win' as const, payout: 40 }; // Straight flush
+  }
+  if (ranks[0] === ranks[1] || ranks[1] === ranks[2] || ranks[0] === ranks[2]) {
+    return { result: 'win' as const, payout: 15 }; // Pair
+  }
+  if (isStraight) {
+    return { result: 'win' as const, payout: 10 }; // Straight
+  }
+  if (isFlush) {
+    return { result: 'win' as const, payout: 5 }; // Flush
+  }
+
+  return { result: 'loss' as const, payout: 0 };
+};
+
 interface GameStore extends GameState {
   // Public Actions
-  placeBet: (seatId: string, amount: number) => void;
+  setNumPlayers: (num: number) => void;
+  initializeSeats: (num: number) => void;
+  placeBet: (seatId: string, amount: number, sideBetAmount?: number) => void;
+  lockBets: () => void;
+  distributeCards: () => void;
   startGame: () => void;
   hit: () => void;
   stand: () => void;
   double: () => void;
   split: () => void;
+  moveToNextTurn: () => void;
   placeInsurance: (seatId: string) => void;
   declineInsurance: () => void;
   resetGame: () => void;
   setMessage: (message: string) => void;
 
   // Internal Helper Methods
+  evaluateSideBets: () => void;
   checkForBlackjacks: () => void;
-  settleBets: () => void;
   moveToNextHand: () => void;
+  settleBets: () => void;
   playDealerTurn: () => void;
 }
 
 const INITIAL_BALANCE = 10000;
+
+const SEAT_IDS = ['seat1', 'seat2', 'seat3', 'seat4', 'seat5'] as const;
+
+const createInitialSeats = (numPlayers: number) => {
+  const seats: Record<string, any> = {};
+  for (let i = 0; i < numPlayers; i++) {
+    const seatId = SEAT_IDS[i];
+    seats[seatId] = {
+      id: seatId,
+      hands: [createHand()],
+      active: false,
+      currentHandIndex: 0,
+      betLocked: false,
+      balance: INITIAL_BALANCE,
+    };
+  }
+  return seats;
+};
 
 export const useGameStore = create<GameStore>((set, get) => ({
   // Initial state
   phase: 'idle',
   deck: [],
   dealerHand: [],
-  playerSeats: {
-    seat1: {
-      id: 'seat1',
-      hands: [createHand()],
-      active: false,
-      currentHandIndex: 0,
-    },
-  },
+  playerSeats: createInitialSeats(1),
+  numPlayers: 1,
   activeSeatId: null,
   insuranceBets: {},
   balance: INITIAL_BALANCE,
   message: 'Place your bets',
+  turnQueue: [],
+  currentTurnIndex: 0,
 
   // Actions
-  placeBet: (seatId: string, amount: number) => {
+  placeBet: (seatId: string, amount: number, sideBetAmount?: number) => {
     const state = get();
+    const seat = state.playerSeats[seatId];
 
-    if (state.balance < amount) {
+    if (!seat) {
+      set({ message: 'Invalid seat' });
+      return;
+    }
+
+    const totalCost = amount + (sideBetAmount || 0);
+    const availableBalance = seat.balance + state.balance; // Total available
+
+    if (availableBalance < totalCost) {
       set({ message: 'Insufficient balance' });
       return;
     }
 
-    set(state => ({
-      playerSeats: {
-        ...state.playerSeats,
-        [seatId]: {
-          ...state.playerSeats[seatId],
-          hands: [createHand(amount)],
-          active: true,
+    const hand = createHand(amount);
+    if (sideBetAmount && sideBetAmount > 0) {
+      hand.sideBets = [{ type: 'twentyOneThree', amount: sideBetAmount }];
+    }
+
+    set(state => {
+      const seatBalance = state.playerSeats[seatId].balance;
+      const deductFromSeat = Math.min(totalCost, seatBalance);
+      const deductFromGlobal = totalCost - deductFromSeat;
+
+      return {
+        playerSeats: {
+          ...state.playerSeats,
+          [seatId]: {
+            ...state.playerSeats[seatId],
+            hands: [hand],
+            active: true,
+            balance: seatBalance - deductFromSeat,
+          },
         },
-      },
-      balance: state.balance - amount,
-      phase: 'betting',
-      message: 'Bet placed. Click Deal to start',
-    }));
+        balance: state.balance - deductFromGlobal,
+        phase: 'bettingOpen',
+        message: 'Bet placed',
+      };
+    });
   },
 
   startGame: () => {
@@ -93,6 +173,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     let deck = shuffleDeck(createShoe(6));
     let dealerHand: Card[] = [];
     const updatedSeats = { ...state.playerSeats };
+    const turnQueue: Array<{ seatId: string; handIndex: number }> = [];
 
     // Deal initial cards - 2 to each active seat, 2 to dealer
     for (const seatId of Object.keys(updatedSeats)) {
@@ -104,6 +185,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
           addCardToHand(updatedSeats[seatId].hands[0], result1.card),
           result2.card
         );
+
+        // Add to turn queue for sequential play
+        turnQueue.push({ seatId, handIndex: 0 });
 
         deck = result2.remainingDeck;
       }
@@ -122,15 +206,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
       deck,
       dealerHand,
       playerSeats: updatedSeats,
-      phase: shouldOfferInsurance ? 'insurance' : 'playing',
-      activeSeatId: Object.keys(updatedSeats).find(id => updatedSeats[id].active) || null,
-      message: shouldOfferInsurance ? 'Dealer showing Ace. Insurance?' : 'Your turn',
+      turnQueue,
+      currentTurnIndex: -1, // Will be incremented before first turn
+      phase: shouldOfferInsurance ? 'insurance' : 'sideBetEvaluation',
+      message: shouldOfferInsurance ? 'Dealer showing Ace. Insurance?' : 'Evaluating side bets...',
     });
 
-    // Auto-proceed if no insurance offered
+    // Auto-proceed to side bet evaluation
     if (!shouldOfferInsurance) {
       setTimeout(() => {
-        get().checkForBlackjacks();
+        get().evaluateSideBets();
       }, BLACKJACK_CHECK_DELAY);
     }
   },
@@ -173,7 +258,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (dealerHasBlackjack) {
       set({
         playerSeats: updatedSeats,
-        phase: 'complete',
+        phase: 'settlement',
         message: hasAnyPlayerBlackjack ? 'Blackjack push on matching hands' : 'Dealer Blackjack!',
       });
       get().settleBets();
@@ -184,22 +269,27 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({
         playerSeats: updatedSeats,
         balance: state.balance + blackjackPayoutTotal,
-        phase: hasAnyPlayableHand ? 'playing' : 'complete',
+        phase: hasAnyPlayableHand ? 'playerTurns' : 'settlement',
         message: hasAnyPlayableHand ? 'Blackjack paid (3:2). Continue playing.' : 'Blackjack paid (3:2)!',
       });
 
       if (!hasAnyPlayableHand) {
         get().settleBets();
+        return;
       }
-      return;
+    } else {
+      set({ phase: 'playerTurns' });
     }
 
-    set({ phase: 'playing', message: 'Choose Hit or Stand' });
+    // Start turn sequence
+    setTimeout(() => {
+      get().moveToNextTurn();
+    }, 500);
   },
 
   hit: () => {
     const state = get();
-    if (state.phase !== 'playing' || !state.activeSeatId) return;
+    if (state.phase !== 'playerTurns' || !state.activeSeatId) return;
 
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
@@ -239,7 +329,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   stand: () => {
     const state = get();
-    if (state.phase !== 'playing' || !state.activeSeatId) return;
+    if (state.phase !== 'playerTurns' || !state.activeSeatId) return;
 
     const seat = state.playerSeats[state.activeSeatId];
     const updatedHand = { ...seat.hands[seat.currentHandIndex], status: 'stand' as const };
@@ -260,7 +350,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   double: () => {
     const state = get();
-    if (state.phase !== 'playing' || !state.activeSeatId) return;
+    if (state.phase !== 'playerTurns' || !state.activeSeatId) return;
 
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
@@ -294,7 +384,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   split: () => {
     const state = get();
-    if (state.phase !== 'playing' || !state.activeSeatId) return;
+    if (state.phase !== 'playerTurns' || !state.activeSeatId) return;
 
     const seat = state.playerSeats[state.activeSeatId];
     const currentHand = seat.hands[seat.currentHandIndex];
@@ -370,16 +460,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       insuranceBets: { ...state.insuranceBets, [seatId]: insuranceAmount },
       balance: state.balance - insuranceAmount,
-      phase: 'playing',
+      phase: 'sideBetEvaluation',
       message: 'Insurance placed',
     });
 
-    get().checkForBlackjacks();
+    get().evaluateSideBets();
   },
 
   declineInsurance: () => {
     set({
-      phase: 'playing',
+      phase: 'sideBetEvaluation',
       message: 'Insurance declined',
     });
 
@@ -407,8 +497,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    // All hands complete, move to dealer turn
-    get().playDealerTurn();
+    // All hands for this seat complete, move to next player turn
+    get().moveToNextTurn();
   },
 
   playDealerTurn: () => {
@@ -478,23 +568,196 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   resetGame: () => {
+    const state = get();
     set({
-      phase: 'idle',
+      phase: 'bettingOpen',
       deck: [],
       dealerHand: [],
-      playerSeats: {
-        seat1: {
-          id: 'seat1',
-          hands: [createHand()],
-          active: false,
-          currentHandIndex: 0,
-        },
-      },
+      playerSeats: createInitialSeats(state.numPlayers),
       activeSeatId: null,
       insuranceBets: {},
+      turnQueue: [],
+      currentTurnIndex: 0,
       message: 'Place your bets',
     });
   },
 
   setMessage: (message: string) => set({ message }),
+
+  setNumPlayers: (num: number) => {
+    const validNum = Math.max(1, Math.min(5, num));
+    set({
+      numPlayers: validNum,
+      playerSeats: createInitialSeats(validNum),
+      phase: 'idle',
+      message: 'Select player seats and place bets',
+    });
+  },
+
+  initializeSeats: (num: number) => {
+    const validNum = Math.max(1, Math.min(5, num));
+    const seats = createInitialSeats(validNum);
+    set({
+      numPlayers: validNum,
+      playerSeats: seats,
+    });
+  },
+
+  lockBets: () => {
+    const state = get();
+    const hasActiveBets = Object.values(state.playerSeats).some(
+      seat => seat.active && seat.hands[0].bet > 0
+    );
+
+    if (!hasActiveBets) {
+      set({ message: 'Please place at least one bet' });
+      return;
+    }
+
+    const updatedSeats = { ...state.playerSeats };
+    Object.keys(updatedSeats).forEach(seatId => {
+      if (updatedSeats[seatId].active) {
+        updatedSeats[seatId].betLocked = true;
+      }
+    });
+
+    set({
+      playerSeats: updatedSeats,
+      phase: 'dealing',
+      message: 'Dealing cards...',
+    });
+
+    // Wait for dealing animation to complete, then distribute cards
+    const animationDuration = (state.numPlayers * 4 + 2) * 200 + 500; // Time for all cards + final delay
+    setTimeout(() => {
+      get().distributeCards();
+    }, animationDuration);
+  },
+
+  distributeCards: () => {
+    const state = get();
+
+    // Check if any bets placed
+    const hasActiveBets = Object.values(state.playerSeats).some(seat => seat.active && seat.hands[0].bet > 0);
+
+    if (!hasActiveBets) {
+      set({ message: 'Please place a bet first' });
+      return;
+    }
+
+    // Create and shuffle new deck
+    let deck = shuffleDeck(createShoe(6));
+    let dealerHand: Card[] = [];
+    const updatedSeats = { ...state.playerSeats };
+    const turnQueue: Array<{ seatId: string; handIndex: number }> = [];
+
+    // Deal initial cards - 2 to each active seat, 2 to dealer
+    for (const seatId of Object.keys(updatedSeats)) {
+      if (updatedSeats[seatId].active) {
+        const result1 = dealCard(deck, true);
+        const result2 = dealCard(result1.remainingDeck, true);
+
+        updatedSeats[seatId].hands[0] = addCardToHand(
+          addCardToHand(updatedSeats[seatId].hands[0], result1.card),
+          result2.card
+        );
+
+        // Add to turn queue for sequential play
+        turnQueue.push({ seatId, handIndex: 0 });
+
+        deck = result2.remainingDeck;
+      }
+    }
+
+    // Deal dealer cards (1 up, 1 down)
+    const dealerCard1 = dealCard(deck, true);
+    const dealerCard2 = dealCard(dealerCard1.remainingDeck, false);
+    dealerHand = [dealerCard1.card, dealerCard2.card];
+    deck = dealerCard2.remainingDeck;
+
+    // Check for dealer ace (insurance opportunity)
+    const shouldOfferInsurance = dealerHand[0].rank === 'A';
+
+    set({
+      deck,
+      dealerHand,
+      playerSeats: updatedSeats,
+      turnQueue,
+      currentTurnIndex: -1, // Will be incremented before first turn
+      phase: shouldOfferInsurance ? 'insurance' : 'sideBetEvaluation',
+      message: shouldOfferInsurance ? 'Dealer showing Ace. Insurance?' : 'Evaluating side bets...',
+    });
+
+    // Auto-proceed to side bet evaluation
+    if (!shouldOfferInsurance) {
+      setTimeout(() => {
+        get().checkForBlackjacks();
+      }, BLACKJACK_CHECK_DELAY);
+    }
+  },
+
+  evaluateSideBets: () => {
+    const state = get();
+    const dealerCards = state.dealerHand.slice(0, 1); // Just upcard for evaluation
+
+    const updatedSeats = { ...state.playerSeats };
+
+    Object.keys(updatedSeats).forEach(seatId => {
+      const seat = updatedSeats[seatId];
+      if (!seat.active) return;
+
+      seat.hands = seat.hands.map(hand => {
+        if (!hand.sideBets || hand.sideBets.length === 0) return hand;
+
+        const updatedSideBets = hand.sideBets.map(bet => {
+          if (bet.type === 'twentyOneThree') {
+            // 21+3 uses player's 2 cards + dealer's upcard
+            const threeCards = [...hand.cards.slice(0, 2), ...dealerCards];
+            if (threeCards.length === 3) {
+              const result = evaluateHandForTwentyOneThree(threeCards);
+              return {
+                ...bet,
+                result: result.result,
+                payout: result.payout * bet.amount,
+              };
+            }
+          }
+          return bet;
+        });
+
+        return { ...hand, sideBets: updatedSideBets };
+      });
+    });
+
+    set({ playerSeats: updatedSeats, phase: 'sideBetEvaluation' });
+
+    setTimeout(() => {
+      get().checkForBlackjacks();
+    }, 500);
+  },
+
+  moveToNextTurn: () => {
+    const state = get();
+    const nextIndex = state.currentTurnIndex + 1;
+
+    if (nextIndex >= state.turnQueue.length) {
+      // All turns complete, move to dealer
+      get().playDealerTurn();
+      return;
+    }
+
+    const nextEntry = state.turnQueue[nextIndex];
+    set({
+      currentTurnIndex: nextIndex,
+      activeSeatId: nextEntry.seatId,
+      playerSeats: {
+        ...state.playerSeats,
+        [nextEntry.seatId]: {
+          ...state.playerSeats[nextEntry.seatId],
+          currentHandIndex: nextEntry.handIndex,
+        },
+      },
+      message: `${nextEntry.seatId}'s turn`,
+    });
+  },
 }));

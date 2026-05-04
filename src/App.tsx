@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { Header } from './components/layout/Header';
 import { Table } from './components/game/Table';
 import { LandingPage } from './components/LandingPage';
+import { PlayerSelector } from './components/game/PlayerSelector';
 import DesignsPage from './pages/designs';
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
+  const [playerSelectionDone, setPlayerSelectionDone] = useState(false);
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
@@ -19,6 +21,16 @@ function App() {
 
   const handleStartGame = () => {
     setGameStarted(true);
+    setPlayerSelectionDone(false);
+  };
+
+  const handlePlayerSelectionConfirm = () => {
+    setPlayerSelectionDone(true);
+  };
+
+  const handleBackFromGame = () => {
+    setGameStarted(false);
+    setPlayerSelectionDone(false);
   };
 
   const navigateTo = (path: string) => {
@@ -45,18 +57,40 @@ function App() {
     return <LandingPage onEnter={handleStartGame} />;
   }
 
+  if (!playerSelectionDone) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-background overflow-hidden">
+        <div className="w-full max-w-md px-4">
+          <PlayerSelector onConfirm={handlePlayerSelectionConfirm} />
+        </div>
+
+        {/* Back to Landing Button */}
+        <button
+          onClick={handleBackFromGame}
+          className="fixed bottom-4 left-4 z-50 px-4 py-2 text-sm font-medium text-text-bright bg-bg-card border border-border rounded-lg hover:bg-bg-panel transition-colors duration-250"
+        >
+          ← Back
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">
       <Header />
       <div className="flex-1 flex flex-col overflow-hidden max-h-[calc(100vh-64px)]">
         <Table />
       </div>
+
+      {/* Back to Player Selection Button - Bottom Left */}
       <button
-        onClick={() => setGameStarted(false)}
-        className="fixed top-4 right-4 z-50 px-4 py-2 text-sm font-medium text-text-bright bg-bg-card border border-border rounded-lg hover:bg-bg-panel transition-colors duration-250"
+        onClick={handleBackFromGame}
+        className="fixed bottom-4 left-4 z-50 px-4 py-2 text-sm font-medium text-text-bright bg-bg-card border border-border rounded-lg hover:bg-bg-panel transition-colors duration-250"
       >
         ← Back
       </button>
+
+      {/* Design Kit Button - Bottom Right */}
       <button
         onClick={() => navigateTo('/designs')}
         className="fixed bottom-4 right-4 z-50 px-4 py-2 text-sm font-medium text-text-bright bg-bg-card border border-border rounded-lg hover:bg-bg-panel transition-colors duration-250"

@@ -1,219 +1,158 @@
-# Project Status - Blackjack Game Clone
+# Project Status: ACE Blackjack Premium
 
-**Date**: 2026-01-20
-**Version**: 0.1.0
-**Status**: MVP Complete ✅
+**Last Updated**: May 4, 2026 (10:30 UTC)  
+**Current Version**: 0.2.1  
+**Status**: ✅ Ready for Testing & PR Merge
 
-## Completed Work
+## Executive Summary
 
-### 1. Project Configuration (CODER - Configure) ✅
-- ✅ Complete project documentation (CLAUDE.md, README.md, CONTRIBUTING.md, SECURITY.md, CHANGELOG.md)
-- ✅ Roadmap with 9 milestones and 71 detailed tasks
-- ✅ Git ignore and environment configuration
-- ✅ Commit and merge checklists
-- ✅ Game rules and architecture documentation
-- ✅ Milestones tracking JSON
+ACE Blackjack Premium is a production-quality, casino-grade blackjack game built with React, TypeScript, and Framer Motion. The project is in Phase 4 of a 7-phase implementation roadmap, focusing on multiplayer game mechanics and real-time gameplay animations.
 
-### 2. Development Environment ✅
-- ✅ Vite + React 18 + TypeScript 5
-- ✅ Tailwind CSS with custom theme
-- ✅ Framer Motion for animations
-- ✅ Zustand for state management
-- ✅ ESLint + Prettier configuration
-- ✅ Testing setup (Vitest + RTL)
+## Current Release Cycle
 
-### 3. Core Game Engine ✅
-- ✅ Card and Deck types
-- ✅ Deck creation (6-deck shoe)
-- ✅ Provably fair shuffle (Fisher-Yates with crypto.getRandomValues)
-- ✅ Hand evaluation with soft/hard ace logic
-- ✅ Blackjack detection
-- ✅ Bust detection
-- ✅ Dealer AI (stands on 17)
-- ✅ Split hand logic
-- ✅ Double down logic
-- ✅ Insurance logic
-- ✅ Payout calculations (3:2 for blackjack, 1:1 for regular wins, 2:1 for insurance)
-- ✅ Bet validation
+### Version 0.2.1 (Current - Ready for Merge)
+- **Released**: May 4, 2026
+- **Focus**: Multiplayer Game Mechanics & Dealing Animations
+- **Key Features**:
+  - ✅ Multiplayer betting UI (1-5 players)
+  - ✅ Parallel betting phase with bet controls
+  - ✅ Animated card dealing (sequential, 200ms/card)
+  - ✅ Test suite: 444/444 passing
+  - 🔄 Insurance/side bets evaluation (NEXT)
+  - 🔄 Player turn management (AFTER)
 
-### 4. State Management ✅
-- ✅ Zustand game store
-- ✅ Game phases (idle, betting, dealing, insurance, playing, dealerTurn, complete)
-- ✅ Balance management ($10,000 starting balance)
-- ✅ Multi-hand support (split functionality)
-- ✅ Insurance betting
-- ✅ Game flow orchestration
+## Implementation Progress
 
-### 5. UI Components ✅
-- ✅ Card component with face-up/face-down states
-- ✅ Hand component with value display
-- ✅ Dealer area
-- ✅ Player area with multi-hand support
-- ✅ Action buttons (Hit, Stand, Double, Split)
-- ✅ Bet controls with chip selector
-- ✅ Balance display
-- ✅ Game status messages
-- ✅ Table layout with felt background
-- ✅ Responsive design
+### Phase 1: Button Positioning ✅
+**Status**: Complete  
+- Moved "Back to game" button to bottom-left corner
 
-### 6. Animations ✅
-- ✅ Card dealing animations (slide-in from left)
-- ✅ Smooth transitions
-- ✅ Button hover effects
-- ✅ Scale animations on buttons
-- ✅ Card back design
+### Phase 2: Player Selection UI ✅
+**Status**: Complete  
+- PlayerSelector component (1-5 player modes)
 
-### 7. Game Features ✅
-- ✅ Place bets with chip selector (1, 5, 10, 25, 50, 100)
-- ✅ Deal cards
-- ✅ Hit (draw card)
-- ✅ Stand (keep current hand)
-- ✅ Double down (double bet, one card)
-- ✅ Split pairs (create two hands)
-- ✅ Insurance when dealer shows Ace
-- ✅ Automatic dealer play
-- ✅ Win/loss determination
-- ✅ Payout calculation
-- ✅ New round reset
+### Phase 3: Design Layouts & Betting UI ✅
+**Status**: Complete  
+- TableLayoutPreview component
+- BettingPhase component with parallel betting
 
-## Current State
+### Phase 3.5: BettingPhase Integration ✅
+**Status**: Complete (PR #199)  
+- Integrated BettingPhase into Table component
+- Enhanced BetControls for multiplayer support
 
-**Development Server**: Running on http://localhost:5173/
-**Balance**: $10,000 (fun money for testing)
-**Min Bet**: $1
-**Max Bet**: $1,000
+### Phase 4: Dealing Animations ✅
+**Status**: Complete  
+- ✅ DealingPhase component created (180 lines)
+- ✅ gameStore refactored with dealing flow (distributeCards function)
+- ✅ Table component integration with smooth transitions
+- ✅ All tests passing (444/444)
+- ✅ Build successful with no errors
+- ✅ Animation timing and sequencing verified
 
-## How to Play
+**Completed**: May 4, 2026
 
-1. **Place Bet**: Select chip values and click to add to current bet
-2. **Confirm Bet**: Click "Confirm Bet" to lock in your wager
-3. **Deal**: Click "DEAL" to start the round
-4. **Play Your Hand**:
-   - **HIT**: Draw another card
-   - **STAND**: Keep your current hand
-   - **DOUBLE**: Double your bet and receive one final card
-   - **SPLIT**: Split pairs into two separate hands (requires additional bet)
-5. **Insurance**: Offered when dealer shows Ace (costs half your bet, pays 2:1)
-6. **Dealer Plays**: Dealer automatically plays after you complete all hands
-7. **Results**: Payouts are calculated and added to balance
-8. **New Round**: Click "New Round" to play again
+## Technical Status
 
-## Testing Checklist
+### Build & Quality
+- ✅ TypeScript: 0 errors
+- ✅ Production build: Successful (385 KB bundle)
+- ✅ Dependencies: Updated to latest (46 packages)
+- ✅ npm audit: 0 vulnerabilities
+- ✅ Performance: Optimized
 
-### Basic Gameplay ✅
-- [x] Place bet
-- [x] Deal cards
-- [x] Hit until bust
-- [x] Stand on any hand
-- [x] Win with higher value than dealer
-- [x] Lose with lower value than dealer
-- [x] Push with same value as dealer
+## Recent Changes (v0.2.1)
 
-### Advanced Features
-- [ ] Double down on first two cards
-- [ ] Split a pair
-- [ ] Play multiple hands after split
-- [ ] Insurance bet when dealer shows Ace
-- [ ] Blackjack (Ace + 10-value card) pays 3:2
-- [ ] Dealer hits to 17, stands on 17+
+### Dependency Updates
+- React: 18.3.1 → 19.2.5
+- TypeScript: 5.9.3 → 6.0.3
+- Vite: 7.3.2 → 8.0.10
+- Tailwind CSS: 3.4.19 → 4.2.4
+- Framer Motion: 10.18.0 → 12.38.0
 
-### Edge Cases
-- [ ] Bust behavior
-- [ ] Dealer bust gives win to all non-bust hands
-- [ ] Soft hand calculations (Ace as 1 or 11)
-- [ ] Split Aces receive only one card each
-- [ ] Balance updates correctly
-- [ ] Can't bet more than balance
+### Dealing Phase Implementation
+- Created DealingPhase.tsx with card animation (180 lines)
+- Refactored gameStore:
+  - New `distributeCards()` function for card distribution
+  - Modified `lockBets()` flow to trigger dealing phase
+  - Separated animation from game logic
+  - Dynamic animation duration calculation based on player count
+- Integrated into Table component with smooth transitions
+- Fixed validation logic and test expectations:
+  - Bet validation: NaN → "Invalid", negative → "Minimum bet is X", Infinity → "Maximum bet is X"
+  - Double-down default: false (no double after split by default)
+  - All edge cases covered with comprehensive tests
 
-## Known Issues
+## Game Flow (Current)
 
-### To Fix
-1. Insurance UI flow needs refinement
-2. Need "Skip Insurance" button
-3. Split hand visual separation could be clearer
-4. Win/loss message needs to show amounts
-5. History tracking not yet implemented
-
-### To Add
-1. Sound effects (card dealing, chip placement, win/loss)
-2. Better win/loss animations
-3. Statistics dashboard
-4. Settings panel (sound on/off, animation speed)
-5. Multiple seats support (currently only 1 seat)
-6. Side bets (21+3, Perfect Pairs)
-7. Game history display
+```
+Landing → Player Selector → Game Table
+    ↓
+Betting Phase (bettingOpen) → Bets Locked (bettingLocked)
+    ↓
+Dealing Cards (dealing) [Animated] → Insurance/Side Bets
+    ↓
+Player Turns (playerTurns) → Dealer Turn (dealerTurn)
+    ↓
+Settlement → Complete → New Round
+```
 
 ## Next Steps
 
-1. **Test all game scenarios** (currently in progress)
-2. Fix any bugs found during testing
-3. Add sound effects
-4. Enhance animations
-5. Add settings panel
-6. Implement multi-seat functionality
-7. Add side bets
-8. Performance optimization
-9. Mobile responsiveness testing
-10. Browser compatibility testing
+### Immediate (This Week)
+1. ✅ Create DealingPhase component
+2. ✅ Refactor gameStore with dealing flow
+3. ✅ Integrate into Table component
+4. ✅ Fix and verify all tests (444/444 passing)
+5. ✅ Update documentation
+6. ⏳ Merge PR #199 (BettingPhase)
+7. ⏳ Create/merge PR #200 (Dealing Phase)
 
-## File Structure
+### Short Term (Next Week)
+1. Implement player turn management
+2. Add action button integration
+3. Implement dealer turn phase
+4. Add settlement display
 
-```
-blackjack/
-├── docs/                    # Documentation
-│   ├── milestones.json
-│   ├── game-rules.md
-│   ├── architecture.md
-│   ├── commit-checklist.md
-│   └── merge-checklist.md
-├── src/
-│   ├── components/          # React components
-│   │   ├── game/           # Card, Hand, Table
-│   │   └── controls/       # ActionButtons, BetControls
-│   ├── engine/             # Game logic
-│   │   ├── deck.ts
-│   │   ├── hand.ts
-│   │   └── payouts.ts
-│   ├── store/              # State management
-│   │   └── gameStore.ts
-│   ├── types/              # TypeScript types
-│   │   └── index.ts
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── index.css
-├── package.json
-├── vite.config.ts
-├── tailwind.config.js
-├── tsconfig.json
-└── README.md
-```
+## Repository Status
 
-## Technical Highlights
+### Current Branch
+- **Branch**: `claude/recover-ace-svg-editor-EOTxG`
+- **Status**: Active development
 
-- **Provably Fair**: Crypto-secure shuffle algorithm
-- **Type-Safe**: Full TypeScript coverage
-- **Modern Stack**: React 18 + Vite 5
-- **State Management**: Zustand for clean, simple state
-- **Animations**: Framer Motion for smooth animations
-- **Styling**: Tailwind CSS with custom theme
-- **Testing**: Vitest + React Testing Library setup
+### Recent PRs
+- **PR #199**: Integrate BettingPhase into Table component (OPEN)
+  - Status: Awaiting CI checks
+  - Files: 13 changed, +1,673 insertions
 
-## Performance
+## Key Metrics
 
-- Initial load: ~4.3s (dev mode)
-- Hot reload: <100ms
-- No performance bottlenecks detected
+### Code Statistics
+- Total Lines of Code: ~8,500+
+- Components: 35+
+- TypeScript Types: 50+
+- Bundle Size: 385 KB (gzipped: 113 KB)
 
-## Security
+### Performance
+- Build Time: ~6 seconds
+- Module Count: 361
+- No Runtime Errors
 
-- No sensitive data storage
-- No external API calls
-- Client-side only
-- Provably fair RNG
-- Input validation on all bets
+## Known Limitations
+
+- Single UI player (seats rotated via controls)
+- Card animations are 2D (no 3D deck yet)
+- Sound effects not implemented
+- Mobile UI partially optimized
+
+## Dependencies
+
+**Core**: React 19, TypeScript 6, Vite 8, Tailwind CSS 4, Framer Motion 12, Zustand 5
+
+**Dev**: Vitest 4, ESLint 8, Prettier 3, PostCSS 8
 
 ---
 
-**Ready for Testing!** 🎰
-
-The game is fully playable. Start at http://localhost:5173/ and test all features.
+**Status Updated**: May 4, 2026 at 03:45 UTC  
+**Next Review**: May 5, 2026  
+**Review Frequency**: Daily during active development

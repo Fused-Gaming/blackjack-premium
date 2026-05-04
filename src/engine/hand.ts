@@ -84,10 +84,10 @@ export function canSplit(
 /**
  * Check if a hand can double down
  * @param hand - The hand to check
- * @param allowDoubleAfterSplit - Whether doubling is allowed after split (default: true)
+ * @param allowDoubleAfterSplit - Whether doubling is allowed after split (default: false)
  * @returns True if the hand can be doubled down
  */
-export function canDouble(hand: Hand, allowDoubleAfterSplit: boolean = true): boolean {
+export function canDouble(hand: Hand, allowDoubleAfterSplit: boolean = false): boolean {
   if (hand.cards.length !== 2) return false;
   if (hand.isDouble) return false;
   if (hand.isSplit && !allowDoubleAfterSplit) return false;
@@ -202,10 +202,10 @@ export function splitHand(
 /**
  * Double down a hand (double bet, will receive exactly one more card)
  * @param hand - The hand to double down
- * @param allowDoubleAfterSplit - Whether doubling is allowed after split (default: true)
+ * @param allowDoubleAfterSplit - Whether doubling is allowed after split (default: false)
  * @returns A new Hand object with doubled bet
  */
-export function doubleDownHand(hand: Hand, allowDoubleAfterSplit: boolean = true): Hand {
+export function doubleDownHand(hand: Hand, allowDoubleAfterSplit: boolean = false): Hand {
   if (!canDouble(hand, allowDoubleAfterSplit)) {
     throw new Error('Cannot double down this hand');
   }
