@@ -89,19 +89,29 @@ export default function DesignsPage() {
 
   const layoutOptions: LayoutOption[] = [
     {
-      name: 'Single Seat',
-      description: 'Desktop view optimized for single player',
-      className: 'single-seat',
+      name: '1 Player',
+      description: 'Single player vs dealer. Linear flow, fast gameplay.',
+      className: '1p-table',
     },
     {
-      name: 'Multi-Seat',
-      description: 'Up to 5 player positions around virtual table',
-      className: 'multi-seat',
+      name: '2 Players',
+      description: 'Two seats with parallel betting and sequential turns.',
+      className: '2p-table',
     },
     {
-      name: 'Landscape',
-      description: 'Wide displays with extended betting area',
-      className: 'landscape',
+      name: '3 Players',
+      description: 'Three seats arranged horizontally with shared dealer.',
+      className: '3p-table',
+    },
+    {
+      name: '4 Players',
+      description: 'Four seats in 2x2 grid with turn queue system.',
+      className: '4p-table',
+    },
+    {
+      name: '5 Players',
+      description: 'Full table with five players and complete seat coverage.',
+      className: '5p-table',
     },
   ];
 
@@ -235,15 +245,15 @@ export default function DesignsPage() {
               {activeTab === 'layouts' && (
                 <div className="space-y-2">
                   <h3 className="text-xs font-semibold uppercase text-slate-400 px-2">
-                    Preview
+                    Player Count
                   </h3>
                   {layoutOptions.map(layout => (
                     <button
                       key={layout.className}
                       onClick={() => setSelectedLayout(layout.className)}
-                      className={`w-full text-left px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                         selectedLayout === layout.className
-                          ? 'bg-amber-400/20 text-amber-400'
+                          ? 'bg-amber-400/20 text-amber-400 border border-amber-400/50'
                           : 'text-slate-300 hover:bg-slate-700/50'
                       }`}
                     >
@@ -952,40 +962,138 @@ export default function DesignsPage() {
 
             {activeTab === 'layouts' && (
               <section className="space-y-8 max-w-6xl">
-                <h2 className="text-3xl font-bold text-amber-400">Layout Configurations</h2>
+                <div>
+                  <h2 className="text-3xl font-bold text-amber-400 mb-2">Layout Configurations</h2>
+                  <p className="text-slate-300">Interactive previews of ACE Blackjack tables for 1–5 players</p>
+                </div>
 
-                <div className="space-y-6">
+                {/* Layout Selection */}
+                <div className="flex gap-2 flex-wrap">
                   {layoutOptions.map(layout => (
-                    <div
+                    <button
                       key={layout.className}
-                      className={`border-2 rounded-lg p-6 transition-colors ${
+                      onClick={() => setSelectedLayout(layout.className)}
+                      className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
                         selectedLayout === layout.className
-                          ? 'border-amber-400 bg-amber-400/10'
-                          : 'border-slate-700 bg-slate-800/50'
+                          ? 'bg-amber-400 text-slate-900 font-semibold'
+                          : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
                       }`}
                     >
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                        <div className="w-full bg-slate-900/50 rounded border border-slate-600 overflow-hidden">
-                          <img
-                            src="/layouts/table.svg"
-                            alt={`${layout.name} Layout Preview`}
-                            className="w-full h-auto object-contain"
-                          />
-                        </div>
-                        <div className="lg:col-span-2 space-y-3">
-                          <h3 className="text-lg font-semibold text-amber-400">
-                            {layout.name}
-                          </h3>
-                          <p className="text-slate-300">{layout.description}</p>
-                          {selectedLayout === layout.className && (
-                            <div className="mt-4 p-3 bg-amber-400/10 border border-amber-400/30 rounded text-sm text-amber-200">
-                              ✓ Currently previewing this layout
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                      {layout.name}
+                    </button>
                   ))}
+                </div>
+
+                {/* Active Layout Preview */}
+                {layoutOptions.find(l => l.className === selectedLayout) && (
+                  <div className="space-y-6">
+                    {layoutOptions.map(layout =>
+                      selectedLayout === layout.className && (
+                        <div key={layout.className} className="space-y-6">
+                          {/* Info Card */}
+                          <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-4">
+                            <div>
+                              <h3 className="text-2xl font-bold text-amber-400">{layout.name}</h3>
+                              <p className="text-slate-300 mt-2">{layout.description}</p>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-700">
+                              <div>
+                                <p className="text-xs text-slate-400 uppercase tracking-widest mb-1">Betting</p>
+                                <p className="text-sm text-slate-200">Parallel across all seats</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-slate-400 uppercase tracking-widest mb-1">Turns</p>
+                                <p className="text-sm text-slate-200">{layout.className === '1p-table' ? 'N/A - Single player' : 'Sequential turn order'}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-slate-400 uppercase tracking-widest mb-1">Settlement</p>
+                                <p className="text-sm text-slate-200">Independent per seat</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Table Preview */}
+                          <div className="bg-gradient-to-b from-slate-900/50 to-slate-800/50 rounded-lg p-8 border border-slate-700">
+                            <div
+                              className="rounded-3xl p-8 flex flex-col items-center justify-center max-w-2xl mx-auto"
+                              style={{
+                                background: 'radial-gradient(ellipse at 50% 35%, #0F5132 0%, #0A3D26 45%, #073520 100%)',
+                                boxShadow: '0 0 0 3px rgba(255,215,0,0.12), 0 0 0 5px rgba(0,0,0,0.4), inset 0 0 80px rgba(0,0,0,0.5)',
+                              }}
+                            >
+                              {/* Dealer Zone */}
+                              <div className="flex flex-col items-center gap-3 mb-8 p-6 rounded-lg border-2 border-amber-400/40 bg-amber-400/5">
+                                <div className="text-sm font-mono text-amber-400 uppercase tracking-widest">Dealer</div>
+                                <div className="flex gap-2">
+                                  <div className="w-10 h-14 rounded border border-amber-400/60 bg-slate-900 flex items-center justify-center text-sm">🂠</div>
+                                  <div className="w-10 h-14 rounded border border-slate-500 bg-slate-800 flex items-center justify-center text-xs opacity-50">🂠</div>
+                                </div>
+                                <div className="text-xs font-mono text-amber-300">Showing: 10</div>
+                              </div>
+
+                              {/* Player Seats Grid */}
+                              <div className={`grid ${
+                                layout.className === '1p-table' ? 'grid-cols-1' :
+                                layout.className === '2p-table' ? 'grid-cols-2 gap-6' :
+                                layout.className === '3p-table' ? 'grid-cols-3 gap-4' :
+                                layout.className === '4p-table' ? 'grid-cols-2 gap-6' :
+                                'grid-cols-5 gap-3'
+                              } w-full`}>
+                                {Array.from({ length: parseInt(layout.className[0]) }).map((_, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-slate-600 bg-slate-700/30"
+                                  >
+                                    <div className="text-xs font-mono text-slate-400 uppercase tracking-widest">seat{idx + 1}</div>
+                                    <div className="flex gap-1">
+                                      <div className="w-8 h-12 rounded border border-slate-500 bg-slate-800 flex items-center justify-center text-xs">🂡</div>
+                                      <div className="w-8 h-12 rounded border border-slate-500 bg-slate-800 flex items-center justify-center text-xs">🂬</div>
+                                    </div>
+                                    <div className="text-xs font-mono text-slate-300">Total: 20</div>
+                                    <div className="text-xs text-slate-400">{idx === 0 ? '● ACTIVE' : '○ WAITING'}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+
+                {/* Feature Comparison */}
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold text-amber-400">Features by Layout</h3>
+                  <div className="overflow-x-auto rounded-lg border border-slate-700">
+                    <table className="w-full text-xs">
+                      <thead className="bg-slate-800/50 border-b border-slate-700">
+                        <tr>
+                          <th className="text-left px-4 py-2 text-amber-400">Feature</th>
+                          <th className="text-center px-2 py-2 text-amber-400">1P</th>
+                          <th className="text-center px-2 py-2 text-amber-400">2P</th>
+                          <th className="text-center px-2 py-2 text-amber-400">3P</th>
+                          <th className="text-center px-2 py-2 text-amber-400">4P</th>
+                          <th className="text-center px-2 py-2 text-amber-400">5P</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-700">
+                        {['Parallel Betting', 'Sequential Turns', 'Side Bets', 'Split Hands', 'Responsive'].map(feature => (
+                          <tr key={feature} className="bg-slate-900/30 hover:bg-slate-800/50">
+                            <td className="px-4 py-2 text-slate-300">{feature}</td>
+                            {[1, 2, 3, 4, 5].map(count => (
+                              <td key={count} className="text-center px-2 py-2">
+                                {(feature === 'Sequential Turns' && count === 1) ?
+                                  <span className="text-slate-500">—</span> :
+                                  <span className="text-green-400">✓</span>
+                                }
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </section>
             )}

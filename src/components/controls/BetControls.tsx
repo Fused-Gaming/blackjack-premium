@@ -6,13 +6,17 @@ import { Chip } from '../ui/Chip';
 const CHIP_VALUES = [1, 5, 10, 25, 50, 100] as const;
 
 export function BetControls() {
-  const { phase, balance, placeBet, lockBets, playerSeats } = useGameStore();
+  const { phase, balance, placeBet, lockBets, playerSeats, numPlayers } = useGameStore();
   const [selectedChip, setSelectedChip] = useState<number>(25);
   const [currentBet, setCurrentBet] = useState(0);
 
   if (phase === 'playerTurns' || phase === 'dealerTurn' || phase === 'complete' || phase === 'settlement') {
     return null;
   }
+
+  // Determine which seat needs a bet next (for multiplayer)
+  const seatIds = ['seat1', 'seat2', 'seat3', 'seat4', 'seat5'].slice(0, numPlayers);
+  const currentSeatId = seatIds.find(id => !playerSeats[id]?.hands[0]?.bet || playerSeats[id].hands[0].bet === 0) || 'seat1';
 
   const canAdd = balance >= selectedChip && currentBet + selectedChip <= balance;
 
@@ -29,7 +33,7 @@ export function BetControls() {
 
   const handlePlaceBet = () => {
     if (currentBet > 0 && currentBet <= balance) {
-      placeBet('seat1', currentBet);
+      placeBet(currentSeatId, currentBet);
       setCurrentBet(0);
     }
   };
@@ -40,6 +44,13 @@ export function BetControls() {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center gap-4"
     >
+      {/* ── Current seat indicator (multiplayer) ── */}
+      {numPlayers > 1 && phase === 'bettingOpen' && (
+        <div className="text-xs font-mono text-text-muted uppercase tracking-widest">
+          Betting for: <span className="text-brand font-bold">{currentSeatId.toUpperCase()}</span>
+        </div>
+      )}
+
       {/* ── Chip selector ── */}
       <div className="flex flex-wrap gap-2 justify-center">
         {CHIP_VALUES.map(value => (

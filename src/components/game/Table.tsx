@@ -5,6 +5,7 @@ import { useGameStore } from '../../store/gameStore';
 import { ActionButtons } from '../controls/ActionButtons';
 import { BetControls } from '../controls/BetControls';
 import { InsurancePrompt } from '../controls/InsurancePrompt';
+import { BettingPhase } from './BettingPhase';
 import { evaluateHand, compareHands } from '../../engine/hand';
 import { calculatePayout } from '../../engine/payouts';
 
@@ -102,151 +103,174 @@ export function Table() {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-3 md:py-4 overflow-y-auto min-h-0">
         <div className="w-full max-w-2xl xl:max-w-3xl flex flex-col flex-shrink-0">
 
-          {/* ─── Felt Table ─── */}
-          <div
-            className="relative rounded-[2.5rem]"
-            style={{
-              background: 'radial-gradient(ellipse at 50% 35%, #0F5132 0%, #0A3D26 45%, #073520 100%)',
-              boxShadow: [
-                'inset 0 0 80px rgba(0,0,0,0.5)',
-                '0 0 0 3px rgba(255,215,0,0.12)',
-                '0 0 0 5px rgba(0,0,0,0.4)',
-                '0 24px 64px rgba(0,0,0,0.5)',
-              ].join(', '),
-            }}
-          >
-            <div className="p-4 md:p-6 lg:p-8">
+          {/* ─── Betting Phase (Parallel betting) ─── */}
+          <AnimatePresence mode="wait">
+            {phase === 'bettingOpen' && (
+              <motion.div
+                key="betting"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <BettingPhase />
+              </motion.div>
+            )}
 
-              {/* ── Dealer Zone ── */}
-              <div className="mb-4 md:mb-6">
-                <div className="flex flex-col items-center gap-2">
-                  <Hand
-                    hand={{ cards: dealerHand, bet: 0, status: 'playing', isDouble: false, isSplit: false }}
-                    label="Dealer"
-                    showValue={showDealerValue}
-                  />
-                  {!showDealerValue && dealerFaceCard && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-xs font-mono text-felt-glow/60"
-                    >
-                      Showing: {evaluateHand([dealerFaceCard]).value}
-                    </motion.div>
-                  )}
-                </div>
-              </div>
-
-              {/* ── Center divider with betting ring ── */}
-              <div className="relative flex items-center justify-center mb-4 md:mb-6">
-                <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+            {/* ─── Felt Table ─── */}
+            {phase !== 'bettingOpen' && (
+              <motion.div
+                key="felt"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
                 <div
-                  className="relative z-10 w-16 h-16 rounded-full flex items-center justify-center"
+                  className="relative rounded-[2.5rem]"
                   style={{
-                    border: '1.5px dashed rgba(255,215,0,0.28)',
-                    boxShadow: '0 0 20px rgba(255,215,0,0.05)',
+                    background: 'radial-gradient(ellipse at 50% 35%, #0F5132 0%, #0A3D26 45%, #073520 100%)',
+                    boxShadow: [
+                      'inset 0 0 80px rgba(0,0,0,0.5)',
+                      '0 0 0 3px rgba(255,215,0,0.12)',
+                      '0 0 0 5px rgba(0,0,0,0.4)',
+                      '0 24px 64px rgba(0,0,0,0.5)',
+                    ].join(', '),
                   }}
                 >
-                  <AnimatePresence mode="wait">
-                    {(() => {
-                      const totalBets = activeSeatIds.reduce((sum, id) => sum + (playerSeats[id].hands[0]?.bet ?? 0), 0);
-                      return totalBets > 0 ? (
-                        <motion.div
-                          key="bet"
-                          initial={{ scale: 0, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0, opacity: 0 }}
-                          className="flex flex-col items-center"
-                        >
-                          <span className="text-xs font-bold font-mono text-brand leading-none">
-                            ${totalBets}
-                          </span>
-                          <span className="text-[10px] text-text-muted/50 leading-none mt-0.5">total</span>
-                        </motion.div>
-                      ) : (
-                        <motion.span
-                          key="empty"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className="text-lg"
-                          style={{ color: 'rgba(255,215,0,0.15)' }}
-                        >
-                          ◈
-                        </motion.span>
-                      );
-                    })()}
-                  </AnimatePresence>
-                </div>
-              </div>
+                  <div className="p-4 md:p-6 lg:p-8">
 
-              {/* ── Player Zone ── */}
-              <div className={`grid ${LAYOUT_GRIDS[seatCount as keyof typeof LAYOUT_GRIDS] || LAYOUT_GRIDS[1]} w-full`}>
-                <AnimatePresence>
-                  {activeSeatIds.map((seatId) => {
-                    const playerSeat = playerSeats[seatId];
-                    const isCurrentTurn = turnQueue[currentTurnIndex]?.seatId === seatId;
-
-                    return (
-                      <motion.div
-                        key={seatId}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        className="flex flex-col items-center gap-3"
-                      >
-                        {/* Seat label and turn indicator */}
-                        <div className="text-xs font-mono text-felt-glow/60 uppercase tracking-widest">
-                          {seatId}
-                          {isCurrentTurn && <span className="ml-2 text-brand">●</span>}
-                        </div>
-
-                        {/* Player hands */}
-                        {playerSeat.hands.map((hand, handIndex) => (
+                    {/* ── Dealer Zone ── */}
+                    <div className="mb-4 md:mb-6">
+                      <div className="flex flex-col items-center gap-2">
+                        <Hand
+                          hand={{ cards: dealerHand, bet: 0, status: 'playing', isDouble: false, isSplit: false }}
+                          label="Dealer"
+                          showValue={showDealerValue}
+                        />
+                        {!showDealerValue && dealerFaceCard && (
                           <motion.div
-                            key={handIndex}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            className={`rounded-lg p-3 ${isCurrentTurn ? 'ring-2 ring-brand/40' : ''}`}
-                            style={{
-                              background: isCurrentTurn ? 'rgba(251, 191, 36, 0.05)' : 'rgba(255,255,255,0.02)',
-                            }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-xs font-mono text-felt-glow/60"
                           >
-                            <Hand
-                              hand={hand}
-                              label={playerSeat.hands.length > 1 ? `Hand ${handIndex + 1}` : seatId}
-                              showValue={true}
-                              isActive={isCurrentTurn && playerSeat.currentHandIndex === handIndex && phase === 'playerTurns'}
-                            />
+                            Showing: {evaluateHand([dealerFaceCard]).value}
                           </motion.div>
-                        ))}
-
-                        {/* Side bet indicators */}
-                        {playerSeat.hands[0].sideBets && playerSeat.hands[0].sideBets.length > 0 && (
-                          <div className="text-xs font-mono text-felt-glow/50">
-                            21+3: ${playerSeat.hands[0].sideBets[0].amount}
-                          </div>
                         )}
-                      </motion.div>
-                    );
-                  })}
-                </AnimatePresence>
-              </div>
+                      </div>
+                    </div>
 
-              {/* Empty state */}
-              {seatCount === 0 && (
-                <div className="py-10 text-sm font-mono tracking-widest text-center uppercase"
-                  style={{ color: 'rgba(26, 107, 84, 0.5)' }}>
-                  Place your bet to begin
+                    {/* ── Center divider with betting ring ── */}
+                    <div className="relative flex items-center justify-center mb-4 md:mb-6">
+                      <div className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+                      <div
+                        className="relative z-10 w-16 h-16 rounded-full flex items-center justify-center"
+                        style={{
+                          border: '1.5px dashed rgba(255,215,0,0.28)',
+                          boxShadow: '0 0 20px rgba(255,215,0,0.05)',
+                        }}
+                      >
+                        <AnimatePresence mode="wait">
+                          {(() => {
+                            const totalBets = activeSeatIds.reduce((sum, id) => sum + (playerSeats[id].hands[0]?.bet ?? 0), 0);
+                            return totalBets > 0 ? (
+                              <motion.div
+                                key="bet"
+                                initial={{ scale: 0, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0, opacity: 0 }}
+                                className="flex flex-col items-center"
+                              >
+                                <span className="text-xs font-bold font-mono text-brand leading-none">
+                                  ${totalBets}
+                                </span>
+                                <span className="text-[10px] text-text-muted/50 leading-none mt-0.5">total</span>
+                              </motion.div>
+                            ) : (
+                              <motion.span
+                                key="empty"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="text-lg"
+                                style={{ color: 'rgba(255,215,0,0.15)' }}
+                              >
+                                ◈
+                              </motion.span>
+                            );
+                          })()}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+
+                    {/* ── Player Zone ── */}
+                    <div className={`grid ${LAYOUT_GRIDS[seatCount as keyof typeof LAYOUT_GRIDS] || LAYOUT_GRIDS[1]} w-full`}>
+                      <AnimatePresence>
+                        {activeSeatIds.map((seatId) => {
+                          const playerSeat = playerSeats[seatId];
+                          const isCurrentTurn = turnQueue[currentTurnIndex]?.seatId === seatId;
+
+                          return (
+                            <motion.div
+                              key={seatId}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              className="flex flex-col items-center gap-3"
+                            >
+                              {/* Seat label and turn indicator */}
+                              <div className="text-xs font-mono text-felt-glow/60 uppercase tracking-widest">
+                                {seatId}
+                                {isCurrentTurn && <span className="ml-2 text-brand">●</span>}
+                              </div>
+
+                              {/* Player hands */}
+                              {playerSeat.hands.map((hand, handIndex) => (
+                                <motion.div
+                                  key={handIndex}
+                                  initial={{ opacity: 0, y: 8 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: -8 }}
+                                  className={`rounded-lg p-3 ${isCurrentTurn ? 'ring-2 ring-brand/40' : ''}`}
+                                  style={{
+                                    background: isCurrentTurn ? 'rgba(251, 191, 36, 0.05)' : 'rgba(255,255,255,0.02)',
+                                  }}
+                                >
+                                  <Hand
+                                    hand={hand}
+                                    label={playerSeat.hands.length > 1 ? `Hand ${handIndex + 1}` : seatId}
+                                    showValue={true}
+                                    isActive={isCurrentTurn && playerSeat.currentHandIndex === handIndex && phase === 'playerTurns'}
+                                  />
+                                </motion.div>
+                              ))}
+
+                              {/* Side bet indicators */}
+                              {playerSeat.hands[0].sideBets && playerSeat.hands[0].sideBets.length > 0 && (
+                                <div className="text-xs font-mono text-felt-glow/50">
+                                  21+3: ${playerSeat.hands[0].sideBets[0].amount}
+                                </div>
+                              )}
+                            </motion.div>
+                          );
+                        })}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Empty state */}
+                    {seatCount === 0 && (
+                      <div className="py-10 text-sm font-mono tracking-widest text-center uppercase"
+                        style={{ color: 'rgba(26, 107, 84, 0.5)' }}>
+                        Place your bet to begin
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-            </div>
-          </div>
 
-          {/* ── Outcome banner ── */}
-          <AnimatePresence>
-            {(phase === 'settlement' || phase === 'complete') && (
-              <OutcomeBanner activeSeatIds={activeSeatIds} seats={playerSeats} dealerHand={dealerHand} />
+                {/* ── Outcome banner ── */}
+                <AnimatePresence>
+                  {(phase === 'settlement' || phase === 'complete') && (
+                    <OutcomeBanner activeSeatIds={activeSeatIds} seats={playerSeats} dealerHand={dealerHand} />
+                  )}
+                </AnimatePresence>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
