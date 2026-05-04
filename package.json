@@ -17,7 +17,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "type-check": "tsc --noEmit",
     "init-swarm": "sh scripts/init-swarm.sh",
-    "postinstall": "sh scripts/init-swarm.sh"
+    "postinstall": "bash scripts/init-swarm.sh"
   },
   "dependencies": {
     "@h4shed/mcp-cli": "^1.0.11",
