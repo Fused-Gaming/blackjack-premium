@@ -34,6 +34,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify environment
+        run: |
+          echo "Node version:"
+          node --version
+          echo "pnpm version:"
+          pnpm --version
+          echo "bash version:"
+          bash --version
+
       - name: Create status check
         id: status-check
         if: github.event_name == 'pull_request'
