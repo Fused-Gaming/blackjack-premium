@@ -135,7 +135,7 @@ export function calculateInsurancePayout(insuranceBet: number, dealerCards: Card
  * Checks all conditions required for placing insurance:
  * - Dealer must show an Ace
  * - Player must have a bet placed
- * - Player must have sufficient balance for at least minimum insurance
+ * - Player must have sufficient balance for the maximum insurance bet
  *
  * @param dealerUpCard - The dealer's visible card
  * @param hand - The player's hand
@@ -160,7 +160,7 @@ export function canPlaceInsurance(dealerUpCard: Card, hand: Hand, balance: numbe
     return false;
   }
 
-  // Must have enough balance for at least the maximum insurance bet
+  // Must have enough balance for the maximum insurance bet (half of original bet)
   const maxInsuranceBet = getMaxInsuranceBet(hand);
   if (balance < maxInsuranceBet) {
     return false;

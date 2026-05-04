@@ -142,6 +142,11 @@ export function validateBet(
     return { valid: false, error: `Maximum bet is ${maxBet}` };
   }
 
+  // Check for zero (after bounds to let min check catch negatives)
+  if (amount <= 0) {
+    return { valid: false, error: 'Invalid bet amount' };
+  }
+
   if (amount > balance) {
     return { valid: false, error: 'Insufficient balance' };
   }

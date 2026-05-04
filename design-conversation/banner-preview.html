@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACE Banner - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #050a0f;
+            color: #e5e7eb;
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .preview-container {
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f24 100%);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .banner-full {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .banner-responsive {
+            width: 100%;
+            height: auto;
+            max-width: 1920px;
+        }
+
+        .dimensions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dimension-card {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .dimension-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .dimension-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        .banner-small {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+
+        .banner-medium {
+            width: 100%;
+            max-width: 1000px;
+            height: auto;
+        }
+
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .use-case {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .use-case-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 1rem;
+        }
+
+        .use-case-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .use-case-list li {
+            font-size: 14px;
+            color: #d1d5db;
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .use-case-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+        }
+
+        .code-section {
+            background: #0f1419;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 6px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .code-title {
+            font-size: 14px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #fbbf24;
+            line-height: 1.6;
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 3px solid #f59e0b;
+            border-radius: 4px;
+            padding: 1rem 1.5rem;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        @media (max-width: 768px) {
+            .banner-full {
+                max-width: 100%;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .preview-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Full Width Banner -->
+    <div class="section">
+        <h1 class="section-title">Full Width Banner with Interactive Spade (1920x400)</h1>
+        <p style="color: #9ca3af; margin-bottom: 1rem; font-size: 14px;">💡 Hover over the spade next to "ACE" to see the interactive highlight effect!</p>
+        <div class="preview-container">
+            <svg width="100%" viewBox="0 0 1920 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
+                <defs>
+                    <linearGradient id="bannerBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#050a0f;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#0f1419;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1a1f24;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1a1f24;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#050a0f;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.6" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.3" />
+                    </linearGradient>
+                    <linearGradient id="spadeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:0.9" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.8" />
+                    </linearGradient>
+                    <linearGradient id="spadeHighlightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:0.8" />
+                        <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:0.6" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.4" />
+                    </linearGradient>
+                    <filter id="logoGlow">
+                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <filter id="spadeGlow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <filter id="spadeHighlight">
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                        <feMerge>
+                            <feMergeNode in="coloredBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <filter id="softShadow">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+                        <feOffset dx="0" dy="2" result="offsetblur"/>
+                        <feComponentTransfer>
+                            <feFuncA type="linear" slope="0.3"/>
+                        </feComponentTransfer>
+                        <feMerge>
+                            <feMergeNode/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                    <pattern id="dotPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <circle cx="20" cy="20" r="1" fill="#f59e0b" opacity="0.08"/>
+                    </pattern>
+                    <linearGradient id="shineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0" />
+                        <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0.05" />
+                        <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+                    </linearGradient>
+                </defs>
+                <rect width="1920" height="400" fill="url(#bannerBgGradient)"/>
+                <rect width="1920" height="400" fill="url(#dotPattern)"/>
+                <line x1="0" y1="0" x2="1920" y2="0" stroke="#f59e0b" stroke-width="2" opacity="0.3"/>
+                <line x1="0" y1="400" x2="1920" y2="400" stroke="#f59e0b" stroke-width="2" opacity="0.3"/>
+                <rect x="0" y="0" width="8" height="400" fill="url(#accentGradient)"/>
+                <line x1="960" y1="80" x2="960" y2="320" stroke="#f59e0b" stroke-width="1" opacity="0.2"/>
+                <g transform="translate(200, 200)">
+                    <g filter="url(#softShadow)">
+                        <rect x="-80" y="-80" width="160" height="160" rx="12" fill="url(#logoGradient)" stroke="#f59e0b" stroke-width="1" opacity="0.5"/>
+                        <rect x="-80" y="-80" width="160" height="160" rx="12" fill="none" stroke="#f59e0b" stroke-width="0.5" opacity="0.3"/>
+                        <g filter="url(#logoGlow)">
+                            <text x="0" y="35" font-family="Georgia, serif" font-size="100" fill="#f59e0b" text-anchor="middle" font-weight="bold">♠</text>
+                        </g>
+                        <circle cx="-65" cy="-65" r="3" fill="#f59e0b" opacity="0.6"/>
+                        <circle cx="65" cy="65" r="3" fill="#f59e0b" opacity="0.6"/>
+                        <circle cx="-65" cy="65" r="2" fill="#fbbf24" opacity="0.4"/>
+                        <circle cx="65" cy="-65" r="2" fill="#fbbf24" opacity="0.4"/>
+                    </g>
+                </g>
+                <g transform="translate(960, 200)">
+                    <g>
+                        <g>
+                            <g class="spade-group" style="cursor: pointer; transition: filter 0.3s ease;">
+                                <text x="-120" y="-25" font-family="Georgia, serif" font-size="85" fill="#f59e0b" text-anchor="middle" font-weight="bold" opacity="0.3" filter="url(#spadeGlow)">♠</text>
+                                <text x="-120" y="-25" font-family="Georgia, serif" font-size="85" fill="url(#spadeGradient)" text-anchor="middle" font-weight="bold" filter="url(#spadeGlow)">♠</text>
+                                <g class="spade-highlight" style="opacity: 0; transition: opacity 0.3s ease;">
+                                    <text x="-120" y="-25" font-family="Georgia, serif" font-size="85" fill="url(#spadeHighlightGradient)" text-anchor="middle" font-weight="bold" filter="url(#spadeHighlight)">♠</text>
+                                </g>
+                            </g>
+                            <text x="30" y="-30" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="72" font-weight="700" fill="url(#textGradient)" text-anchor="middle" letter-spacing="4">ACE</text>
+                        </g>
+                        <line x1="-140" y1="10" x2="140" y2="10" stroke="#f59e0b" stroke-width="2" opacity="0.4"/>
+                        <text x="0" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="48" font-weight="600" fill="#e5e7eb" text-anchor="middle" letter-spacing="2">BLACKJACK</text>
+                        <text x="0" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="36" font-weight="500" fill="#9ca3af" text-anchor="middle" letter-spacing="1.5">PREMIUM</text>
+                        <circle cx="-15" cy="130" r="2" fill="#f59e0b" opacity="0.6"/>
+                        <circle cx="0" cy="130" r="2" fill="#f59e0b" opacity="0.6"/>
+                        <circle cx="15" cy="130" r="2" fill="#f59e0b" opacity="0.6"/>
+                    </g>
+                </g>
+                <rect x="1912" y="0" width="8" height="400" fill="url(#accentGradient)"/>
+                <rect width="1920" height="400" fill="url(#shineGradient)"/>
+                <script type="text/javascript">
+                    <![CDATA[
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const spadeGroup = document.querySelector('.spade-group');
+                            const spadeHighlight = document.querySelector('.spade-highlight');
+                            
+                            if (spadeGroup && spadeHighlight) {
+                                spadeGroup.addEventListener('mouseover', function() {
+                                    spadeHighlight.style.opacity = '1';
+                                    spadeGroup.style.filter = 'brightness(1.2)';
+                                });
+                                
+                                spadeGroup.addEventListener('mouseout', function() {
+                                    spadeHighlight.style.opacity = '0';
+                                    spadeGroup.style.filter = 'brightness(1)';
+                                });
+                                
+                                spadeGroup.addEventListener('click', function() {
+                                    spadeHighlight.style.opacity = '1';
+                                    setTimeout(() => {
+                                        spadeHighlight.style.opacity = '0';
+                                    }, 200);
+                                });
+                            }
+                        });
+                    ]]>
+                </script>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Specifications -->
+    <div class="section">
+        <h2 class="section-title">Specifications</h2>
+        <div class="dimensions">
+            <div class="dimension-card">
+                <div class="dimension-label">Native Resolution</div>
+                <div class="dimension-value">1920 × 400 px</div>
+            </div>
+            <div class="dimension-card">
+                <div class="dimension-label">Aspect Ratio</div>
+                <div class="dimension-value">4.8:1 (Wide)</div>
+            </div>
+            <div class="dimension-card">
+                <div class="dimension-label">Format</div>
+                <div class="dimension-value">Scalable SVG</div>
+            </div>
+            <div class="dimension-card">
+                <div class="dimension-label">File Size</div>
+                <div class="dimension-value">&lt; 5 KB</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Design Elements Stats -->
+    <div class="section">
+        <h2 class="section-title">Design Elements</h2>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">Color Palette</div>
+                <div class="stat-value">6 Colors</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Gradients</div>
+                <div class="stat-value">5 Linear</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Filters</div>
+                <div class="stat-value">2 Applied</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Responsive</div>
+                <div class="stat-value">100%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Use Cases -->
+    <div class="section">
+        <h2 class="section-title">Use Cases</h2>
+        <div class="use-cases">
+            <div class="use-case">
+                <div class="use-case-title">Website Header</div>
+                <ul class="use-case-list">
+                    <li>Hero section</li>
+                    <li>Page header</li>
+                    <li>Navigation bar background</li>
+                    <li>Above-the-fold content</li>
+                </ul>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Marketing Materials</div>
+                <ul class="use-case-list">
+                    <li>Email headers</li>
+                    <li>Social media covers</li>
+                    <li>LinkedIn banner</li>
+                    <li>Presentation slides</li>
+                </ul>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Digital Assets</div>
+                <ul class="use-case-list">
+                    <li>Dashboard header</li>
+                    <li>Report covers</li>
+                    <li>API documentation</li>
+                    <li>Design system page</li>
+                </ul>
+            </div>
+            <div class="use-case">
+                <div class="use-case-title">Responsive Variants</div>
+                <ul class="use-case-list">
+                    <li>Desktop (1920px)</li>
+                    <li>Tablet (1024px)</li>
+                    <li>Mobile (480px)</li>
+                    <li>Scalable to any size</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Implementation -->
+    <div class="section">
+        <h2 class="section-title">Implementation</h2>
+        
+        <div class="code-section">
+            <div class="code-title">HTML Image Tag</div>
+            <code>&lt;img src="banner.svg" alt="ACE Blackjack Premium Banner" style="width: 100%; height: auto;" /&gt;</code>
+        </div>
+
+        <div class="code-section" style="margin-top: 1.5rem;">
+            <div class="code-title">CSS Background</div>
+            <code>.banner {
+  background-image: url('banner.svg');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 400px;
+}</code>
+        </div>
+
+        <div class="code-section" style="margin-top: 1.5rem;">
+            <div class="code-title">Inline SVG</div>
+            <code>&lt;svg viewBox="0 0 1920 400" width="100%" height="auto"&gt;
+  &lt;!-- SVG content --&gt;
+&lt;/svg&gt;</code>
+        </div>
+
+        <div class="code-section" style="margin-top: 1.5rem;">
+            <div class="code-title">SVG as Picture Element (Responsive)</div>
+            <code>&lt;picture&gt;
+  &lt;source media="(max-width: 768px)" srcset="banner-mobile.svg"&gt;
+  &lt;img src="banner.svg" alt="ACE Blackjack Banner"&gt;
+&lt;/picture&gt;</code>
+        </div>
+    </div>
+
+    <!-- Color Reference -->
+    <div class="section">
+        <h2 class="section-title">Color Palette</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+            <div style="background: #050a0f; border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 1rem; text-align: center;">
+                <div style="color: #9ca3af; font-size: 12px; margin-bottom: 0.5rem;">Dark BG</div>
+                <div style="color: #f59e0b; font-weight: 600;">#050A0F</div>
+            </div>
+            <div style="background: #0f1419; border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 1rem; text-align: center;">
+                <div style="color: #9ca3af; font-size: 12px; margin-bottom: 0.5rem;">Dark Mid</div>
+                <div style="color: #f59e0b; font-weight: 600;">#0F1419</div>
+            </div>
+            <div style="background: #1a1f24; border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 1rem; text-align: center;">
+                <div style="color: #9ca3af; font-size: 12px; margin-bottom: 0.5rem;">Dark Light</div>
+                <div style="color: #f59e0b; font-weight: 600;">#1A1F24</div>
+            </div>
+            <div style="background: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 1rem; text-align: center;">
+                <div style="color: #050a0f; font-size: 12px; margin-bottom: 0.5rem;">Primary</div>
+                <div style="color: #050a0f; font-weight: 600;">#F59E0B</div>
+            </div>
+            <div style="background: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 1rem; text-align: center;">
+                <div style="color: #050a0f; font-size: 12px; margin-bottom: 0.5rem;">Light Gold</div>
+                <div style="color: #050a0f; font-weight: 600;">#FBBF24</div>
+            </div>
+            <div style="background: #d97706; border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 4px; padding: 1rem; text-align: center;">
+                <div style="color: #fff; font-size: 12px; margin-bottom: 0.5rem;">Dark Gold</div>
+                <div style="color: #fff; font-weight: 600;">#D97706</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(245, 158, 11, 0.2); text-align: center; color: #9ca3af;">
+        <p>ACE Blackjack Premium Banner • SVG Format • Fully Responsive • Dark Theme Optimized</p>
+    </div>
+</body>
+</html>

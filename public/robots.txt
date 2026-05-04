@@ -1,0 +1,42 @@
+# ACE Premium Blackjack - Robots.txt
+# Allow all bots to crawl
+
+User-agent: *
+Allow: /
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /.git/
+
+# Crawl rate
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://ace-blackjack.example/sitemap.xml
+# ACE Premium Blackjack - Crawling Rules
+User-agent: *
+Allow: /
+Allow: /og-preview.html
+Allow: /social/
+
+# Specific bot rules
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Discordbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Disallow bot traffic during peak hours (optional)
+# User-agent: *
+# Crawl-delay: 1
+
+# Sitemap
+Sitemap: /sitemap.xml
