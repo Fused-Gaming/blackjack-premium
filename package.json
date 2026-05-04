@@ -15,14 +15,12 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@ant-design/web3-icons": "^1.16.0",
     "@h4shed/mcp-cli": "^1.0.11",
     "@h4shed/mcp-core": "^1.0.11",
     "@h4shed/skill-style-dictionary-system": "^1.0.1",
     "@h4shed/skill-syncpulse": "^0.1.7",
     "@h4shed/tool-commander": "^11.0.1",
     "framer-motion": "^10.16.16",
-    "lucide-react": "^1.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zustand": "^4.4.7"
