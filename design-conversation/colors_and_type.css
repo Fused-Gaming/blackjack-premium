@@ -1,0 +1,316 @@
+/* =============================================================================
+   ACE / Blackjack Premium — Colors & Type
+   Source of truth: tailwind.config.js + src/index.css from Fused-Gaming/blackjack-premium
+   ============================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ───────────── BRAND — Amber Gold ───────────── */
+  --brand:           #F59E0B;
+  --brand-light:     #FBBF24;
+  --brand-dark:      #D97706;
+  --brand-glow:      #FCD34D;
+
+  /* Gold accent (used on rims, dividers, BJ payout) */
+  --gold:            #FFD700;
+  --gold-light:      #FFED4E;
+  --gold-dark:       #DAA520;
+  --gold-amber:      #F59E0B;
+
+  /* ───────────── SURFACE — Deep Navy ───────────── */
+  --bg:              #050A0F;  /* page */
+  --bg-dark:         #02050A;  /* deepest */
+  --bg-card:         #0D1B2A;
+  --bg-panel:        #111F30;
+  --bg-elevated:     #162840;
+
+  /* Page background — radial wash applied on body */
+  --bg-radial:
+    radial-gradient(ellipse at 30% 20%, #0D1B2A 0%, #050A0F 60%, #02050A 100%);
+
+  /* ───────────── BORDERS ───────────── */
+  --border:          #1E3A5F;
+  --border-subtle:   #132538;
+  --border-bright:   #2A4F80;
+
+  /* ───────────── FELT TABLE — Classic Casino Green ───────────── */
+  --felt:            #0A3D26;
+  --felt-light:      #0F5132;
+  --felt-dark:       #073520;
+  --felt-glow:       #1A6B54;
+  --felt-rim:        #0C4530;
+
+  /* Felt radial — used as table background */
+  --felt-radial:
+    radial-gradient(ellipse at 50% 35%, #0F5132 0%, #0A3D26 45%, #073520 100%);
+
+  /* ───────────── OUTCOME — Win / Loss / Push ───────────── */
+  --win:             #10B981;
+  --win-glow:        #34D399;
+  --win-dark:        #059669;
+  --win-muted:       #064E3B;
+
+  --loss:            #EF4444;
+  --loss-glow:       #F87171;
+  --loss-dark:       #DC2626;
+  --loss-muted:      #450A0A;
+
+  --push:            #F59E0B;
+  --push-muted:      #451A03;
+
+  /* ───────────── SECONDARY (action button blue) ───────────── */
+  --primary:         #3B82F6;
+  --primary-dark:    #2563EB;
+  --primary-light:   #60A5FA;
+
+  /* ───────────── CHIPS — denomination colors ───────────── */
+  --chip-1:    #6B7280;  /* $1   gray  */
+  --chip-5:    #EF4444;  /* $5   red   */
+  --chip-10:   #3B82F6;  /* $10  blue  */
+  --chip-25:   #F59E0B;  /* $25  amber */
+  --chip-50:   #10B981;  /* $50  green */
+  --chip-100:  #1A1A1A;  /* $100 black */
+  --chip-500:  #7C3AED;  /* $500 purple */
+
+  /* ───────────── TEXT ───────────── */
+  --text:            #E2E8F0;
+  --text-bright:     #F8FAFC;
+  --text-muted:      #64748B;
+  --text-subtle:     #475569;
+  --text-gold:       #F59E0B;
+  --text-mono:       #94A3B8;
+
+  /* Semantic text */
+  --fg1:             var(--text-bright);
+  --fg2:             var(--text);
+  --fg3:             var(--text-muted);
+  --fg4:             var(--text-subtle);
+
+  /* ───────────── TYPOGRAPHY ───────────── */
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --font-serif:   Georgia, 'Times New Roman', serif; /* used on cards */
+
+  /* Static type scale (tailwind defaults + 2xs custom) */
+  --text-2xs: 0.625rem;   /* 10px */
+  --text-xs:  0.75rem;    /* 12px */
+  --text-sm:  0.875rem;   /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg:  1.125rem;   /* 18px */
+  --text-xl:  1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+
+  /* Clamped type scale — preferred for responsive surfaces (mobile→desktop) */
+  --text-clamp-xs:   clamp(10px, 1.2vw, 12px);  /* labels, badge text */
+  --text-clamp-sm:   clamp(12px, 1.5vw, 14px);  /* secondary, help */
+  --text-clamp-base: clamp(14px, 1.8vw, 16px);  /* body */
+  --text-clamp-lg:   clamp(16px, 2.2vw, 20px);  /* section labels */
+  --text-clamp-xl:   clamp(20px, 2.8vw, 28px);  /* component headers */
+  --text-clamp-2xl:  clamp(24px, 3.5vw, 36px);  /* major headers */
+  --text-clamp-3xl:  clamp(30px, 4.5vw, 48px);  /* page titles */
+
+  /* Font weights */
+  --fw-light:     300;
+  --fw-normal:    400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+  --fw-black:     900;
+
+  /* Clamped spacing scale — 4px base unit, viewport-responsive */
+  --sp-clamp-xs:  clamp(4px,  0.5vw, 8px);   /* micro spacing */
+  --sp-clamp-sm:  clamp(8px,  1vw,   12px);  /* extra small */
+  --sp-clamp-md:  clamp(12px, 1.5vw, 20px);  /* small */
+  --sp-clamp-lg:  clamp(16px, 2.5vw, 32px);  /* medium */
+  --sp-clamp-xl:  clamp(24px, 4vw,   48px);  /* large */
+  --sp-clamp-2xl: clamp(32px, 5vw,   64px);  /* extra large */
+
+  /* ───────────── ELEVATION / SHADOWS ───────────── */
+  --shadow-card:        0 4px 16px rgba(0,0,0,0.45), 0 1px 4px rgba(0,0,0,0.3);
+  --shadow-card-hover:  0 8px 24px rgba(0,0,0,0.5);
+  --shadow-chip:        0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.18);
+  --shadow-button:      0 4px 14px rgba(0,0,0,0.3);
+  --shadow-panel:       0 8px 32px rgba(0,0,0,0.4);
+  --shadow-modal:       0 24px 64px rgba(0,0,0,0.7);
+  --shadow-felt:        inset 0 0 60px rgba(0,0,0,0.5);
+  --shadow-felt-rim:    0 0 0 3px rgba(255,215,0,0.12), inset 0 0 80px rgba(0,0,0,0.4);
+  --shadow-inner-glow:  inset 0 0 24px rgba(255,255,255,0.06);
+
+  --glow-win:    0 0 24px rgba(16,185,129,0.5),  0 0 50px rgba(16,185,129,0.2);
+  --glow-loss:   0 0 24px rgba(239,68,68,0.5),   0 0 50px rgba(239,68,68,0.2);
+  --glow-gold:   0 0 24px rgba(245,158,11,0.6),  0 0 50px rgba(245,158,11,0.3);
+  --glow-brand:  0 0 20px rgba(245,158,11,0.45);
+
+  /* ───────────── RADII ───────────── */
+  --r-sm:   0.375rem;   /*  6px */
+  --r-md:   0.5rem;     /*  8px */
+  --r-lg:   0.75rem;    /* 12px — buttons */
+  --r-xl:   1rem;       /* 16px — panels */
+  --r-2xl:  1.25rem;    /* 20px — cards */
+  --r-3xl:  1.5rem;     /* 24px — modals */
+  --r-4xl:  2rem;       /* 32px */
+  --r-5xl:  2.5rem;     /* 40px — felt table */
+  --r-pill: 9999px;
+
+  /* ───────────── SPACING (tailwind 4px base) ───────────── */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  20px;
+  --s-6:  24px;
+  --s-8:  32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+
+  /* ───────────── MOTION ───────────── */
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);   /* card deal, modal-in */
+  --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-flip:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  --d-fast:    150ms;
+  --d-base:    250ms;
+  --d-slow:    500ms;
+  --d-card-flip: 600ms;
+  --d-card-deal: 500ms;
+}
+
+/* =============================================================================
+   SEMANTIC TYPE STYLES
+   ============================================================================= */
+
+body {
+  font-family: var(--font-sans);
+  color: var(--fg2);
+  background: var(--bg-radial);
+  background-color: var(--bg);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.h1, h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--fg1);
+}
+
+.h2, h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--fg1);
+}
+
+.h3, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  color: var(--fg1);
+}
+
+.display, .display-bj {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--fg3);
+}
+
+.eyebrow-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.p, p {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--fg2);
+}
+
+.small {
+  font-size: var(--text-sm);
+  color: var(--fg3);
+  line-height: 1.5;
+}
+
+.code, code, .num, .num-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--fg3);
+}
+
+.balance {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg1);
+}
+
+.outcome-win  { color: var(--win); }
+.outcome-loss { color: var(--loss); }
+.outcome-push { color: var(--push); }
+
+.text-brand-gradient {
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #D97706 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* =============================================================================
+   GLASS / PANEL UTILITIES
+   ============================================================================= */
+.glass {
+  background: rgba(13, 27, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 58, 95, 0.5);
+}
+.glass-light {
+  background: rgba(22, 40, 64, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(42, 79, 128, 0.35);
+}

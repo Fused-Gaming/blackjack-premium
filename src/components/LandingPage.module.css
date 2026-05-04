@@ -1,0 +1,574 @@
+/* Landing Page Component Styles */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  padding: clamp(16px, 3vw, 24px);
+  text-align: center;
+  background: var(--bg-radial);
+  animation: fadeInPage var(--d-slow) var(--ease-out);
+  overflow: hidden;
+}
+
+.contentGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 32px);
+  max-height: 90vh;
+  max-width: 100%;
+  animation: fadeInPage var(--d-slow) var(--ease-out);
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Page Entrance Animation */
+/* ─────────────────────────────────────────────────────────────── */
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Logo Section */
+/* ─────────────────────────────────────────────────────────────── */
+
+.logoWrapper {
+  width: clamp(100px, 28vw, 200px);
+  aspect-ratio: 100 / 160;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: logoFloatIn 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+.logoWrapper:hover {
+  transform: scale(1.02);
+  filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.4));
+}
+
+.logoWrapper:active {
+  transform: scale(0.98);
+}
+
+@keyframes logoFloatIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.logoSvg {
+  width: 100%;
+  height: 100%;
+  animation: logoCardPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoCardPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1.02;
+  }
+}
+
+.logoSvg:hover {
+  animation: logoCardHover 0.6s ease-in-out forwards;
+}
+
+@keyframes logoCardHover {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1.05;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Card Group - Subtle Reactionary Animation */
+/* ─────────────────────────────────────────────────────────────── */
+
+.logoWrapper.interacting .cardGroup {
+  animation: cardReaction 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes cardReaction {
+  0% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.008) translateY(-1px);
+    opacity: 1.01;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Brandmark Typography */
+/* ─────────────────────────────────────────────────────────────── */
+
+.brandmark {
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 800;
+  letter-spacing: clamp(2.5px, 0.4vw, 4px);
+  color: var(--brand);
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  animation: brandmarkFadeIn 1.8s var(--ease-out);
+  line-height: 1.2;
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+}
+
+@keyframes brandmarkFadeIn {
+  from {
+    opacity: 0;
+    letter-spacing: 8px;
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 3px;
+  }
+}
+
+.brandmark::after {
+  content: '';
+  display: block;
+  width: clamp(80px, 25vw, 120px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  margin: clamp(8px, 1.5vw, 14px) auto 0;
+  animation: brandmarkUnderline 2s var(--ease-out);
+}
+
+@keyframes brandmarkUnderline {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 60px;
+    opacity: 1;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────── */
+/* CTA Button Section */
+/* ─────────────────────────────────────────────────────────────── */
+
+.ctaWrapper {
+  animation: ctaFadeIn 2.2s var(--ease-out);
+  flex-shrink: 0;
+}
+
+@keyframes ctaFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* CTA Button Styling */
+/* ─────────────────────────────────────────────────────────────── */
+
+.ctaButton {
+  padding: clamp(10px, 1.8vw, 14px) clamp(24px, 5vw, 40px);
+  font-size: clamp(11px, 1.6vw, 13px);
+  font-weight: 600;
+  letter-spacing: clamp(0.5px, 0.15vw, 1.5px);
+  color: var(--bg);
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
+  border: 2px solid var(--brand);
+  border-radius: var(--r-lg);
+  cursor: pointer;
+  transition: all var(--d-base) cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-button);
+  font-family: var(--font-display);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ctaButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: left 0.5s var(--ease-out);
+  z-index: 1;
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+  letter-spacing: 3px;
+}
+
+.ctaButton:hover::before {
+  left: 100%;
+}
+
+.ctaButton:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3),
+    inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Button Text and Arrow */
+/* ─────────────────────────────────────────────────────────────── */
+
+.buttonText {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.buttonText::after {
+  content: '→';
+  display: inline-block;
+  transition: transform var(--d-base) var(--ease-out);
+  font-size: 18px;
+}
+
+.ctaButton:hover .buttonText::after {
+  transform: translateX(6px);
+}
+
+.ctaButton:active .buttonText::after {
+  transform: translateX(3px);
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Keyboard Navigation Focus States */
+/* ─────────────────────────────────────────────────────────────── */
+
+.ctaButton:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.ctaButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Responsive Design */
+/* ─────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .ctaWrapper {
+    margin-top: 0;
+  }
+
+  .buttonText::after {
+    font-size: clamp(14px, 1.5vw, 18px);
+  }
+}
+
+@media (max-width: 480px) {
+  .buttonText {
+    gap: clamp(6px, 1vw, 8px);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Accessibility - Reduced Motion Support */
+/* ─────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Dark Theme Support (Already applied via CSS variables) */
+/* ─────────────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: var(--bg-radial);
+    color: var(--text);
+  }
+
+  .ctaButton {
+    color: var(--bg);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+/* Entrance Sequence - Smoke & Greeting */
+/* ─────────────────────────────────────────────────────────────── */
+
+.container.entering {
+  transition: background 1.5s ease-out;
+}
+
+.smokeContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.smokeParticle {
+  position: absolute;
+  width: clamp(40px, 8vw, 120px);
+  height: clamp(40px, 8vw, 120px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  filter: blur(25px);
+  animation: smokeRise 3s ease-out forwards;
+}
+
+@keyframes smokeRise {
+  0% {
+    opacity: 0;
+    transform: translateY(100px) translateX(0) scale(0.5);
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-500px) translateX(var(--drift)) scale(1.5);
+  }
+}
+
+.smokeParticle:nth-child(1) {
+  --drift: 80px;
+}
+.smokeParticle:nth-child(2) {
+  --drift: -60px;
+}
+.smokeParticle:nth-child(3) {
+  --drift: 100px;
+}
+.smokeParticle:nth-child(4) {
+  --drift: -80px;
+}
+.smokeParticle:nth-child(5) {
+  --drift: 120px;
+}
+.smokeParticle:nth-child(6) {
+  --drift: -100px;
+}
+.smokeParticle:nth-child(7) {
+  --drift: 60px;
+}
+.smokeParticle:nth-child(8) {
+  --drift: -120px;
+}
+.smokeParticle:nth-child(9) {
+  --drift: 90px;
+}
+.smokeParticle:nth-child(10) {
+  --drift: -70px;
+}
+.smokeParticle:nth-child(11) {
+  --drift: 110px;
+}
+.smokeParticle:nth-child(12) {
+  --drift: -90px;
+}
+
+.greetingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  animation: greetingFadeIn 0.8s ease-out forwards;
+  z-index: 100;
+}
+
+@keyframes greetingFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+.greetingContent {
+  text-align: center;
+  animation: greetingScaleUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  padding: clamp(20px, 5vw, 40px);
+  position: relative;
+  z-index: 102;
+}
+
+@keyframes greetingScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.greetingTitle {
+  font-size: clamp(42px, 8vw, 72px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: var(--brand);
+  margin: 0;
+  font-family: var(--font-display);
+  text-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+  animation: titleReveal 0.6s ease-out 0.1s both;
+}
+
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.greetingMessage {
+  font-size: clamp(16px, 3vw, 24px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: clamp(12px, 2vw, 20px) 0;
+  letter-spacing: 1px;
+  font-family: var(--font-display);
+  animation: messageReveal 0.6s ease-out 0.2s both;
+}
+
+@keyframes messageReveal {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.greetingDivider {
+  width: clamp(60px, 15vw, 120px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  margin: clamp(16px, 2vw, 24px) auto;
+  animation: dividerExpand 0.6s ease-out 0.3s both;
+}
+
+@keyframes dividerExpand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 120px;
+    opacity: 1;
+  }
+}
+
+.greetingSubtext {
+  font-size: clamp(13px, 2.2vw, 18px);
+  color: rgba(255, 255, 255, 0.7);
+  margin: clamp(12px, 2vw, 18px) 0 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  animation: subtextReveal 0.6s ease-out 0.4s both;
+}
+
+@keyframes subtextReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.greetingOverlay {
+  animation: greetingFadeOut 0.4s ease-in 1.6s both;
+}
+
+@keyframes greetingFadeOut {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+}
+

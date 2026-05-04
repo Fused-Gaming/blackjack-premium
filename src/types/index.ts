@@ -15,6 +15,8 @@ export interface Hand {
   status: 'playing' | 'stand' | 'bust' | 'blackjack' | 'complete';
   isDouble: boolean;
   isSplit: boolean;
+  splitFromAces?: boolean; // True if this hand was created from splitting Aces
+  canHit?: boolean; // False for split Aces (can only receive one card)
 }
 
 export interface PlayerSeat {
