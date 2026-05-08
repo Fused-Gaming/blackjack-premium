@@ -1,0 +1,201 @@
+name: Deploy Production Build
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'tsconfig.json'
+      - 'vite.config.ts'
+      - 'vercel.json'
+      - '.github/workflows/deploy-production.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-verify:
+    name: Build & Verify Production Image
+    runs-on: ubuntu-latest
+
+    outputs:
+      dist-exists: ${{ steps.verify.outputs.dist-exists }}
+      build-time: ${{ steps.timestamp.outputs.build-time }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: Enable corepack and install pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.x --activate
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          CI: true
+
+      - name: Generate timestamp
+        id: timestamp
+        run: echo "build-time=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_OUTPUT
+
+      - name: Build production image
+        run: pnpm run build
+        env:
+          VITE_BUILD_ENV: production
+
+      - name: Verify build output
+        id: verify
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "❌ Build failed - dist directory not created"
+            exit 1
+          fi
+          echo "dist-exists=true" >> $GITHUB_OUTPUT
+          echo "✅ Production build successful"
+          echo "📦 Build artifacts:"
+          du -sh dist/
+          ls -lh dist/ | grep -E "index|assets" | head -10
+
+      - name: Generate build manifest
+        run: |
+          cat > dist/.build-manifest.json << EOF
+          {
+            "version": "${{ github.ref }}",
+            "commit": "${{ github.sha }}",
+            "timestamp": "${{ steps.timestamp.outputs.build-time }}",
+            "branch": "${{ github.ref_name }}",
+            "workflow": "deploy-production",
+            "actor": "${{ github.actor }}"
+          }
+          EOF
+          cat dist/.build-manifest.json
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build
+          path: dist/
+          retention-days: 30
+          if-no-files-found: error
+
+  publish-production:
+    name: Publish Production Deployment
+    runs-on: ubuntu-latest
+    needs: build-and-verify
+    if: needs.build-and-verify.outputs.dist-exists == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: production-build
+          path: dist/
+
+      - name: Verify build integrity
+        run: |
+          if [ ! -f "dist/index.html" ]; then
+            echo "❌ index.html not found in production build"
+            exit 1
+          fi
+          echo "✅ Build integrity verified"
+          echo "📋 Build contents:"
+          find dist -type f | wc -l
+          echo "files in production image"
+
+      - name: Create deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.ref,
+              environment: 'production',
+              description: 'Production build from main branch',
+              auto_merge: false,
+              required_contexts: []
+            });
+
+            console.log('✅ Deployment created:', deployment.data.id);
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success',
+              description: 'Production build ready for deployment',
+              environment_url: 'https://demo.vln.gg/'
+            });
+
+      - name: Trigger Vercel deployment
+        run: |
+          echo "📦 Production build published"
+          echo "🚀 Vercel will automatically deploy from main branch"
+          echo "⏱️  Build timestamp: ${{ needs.build-and-verify.outputs.build-time }}"
+          echo "🔗 Deployment: https://demo.vln.gg/"
+
+      - name: Report production status
+        run: |
+          echo "✅ Production deployment workflow completed"
+          echo ""
+          echo "📊 Deployment Summary:"
+          echo "  • Branch: main"
+          echo "  • Commit: ${{ github.sha }}"
+          echo "  • Environment: production"
+          echo "  • Status: Ready for deployment"
+          echo "  • URL: https://demo.vln.gg/"
+          echo ""
+          echo "🎯 Next steps:"
+          echo "  • Vercel CI/CD will handle deployment"
+          echo "  • Changes will be live within 1-2 minutes"
+          echo "  • Check Vercel dashboard for deployment status"
+
+  notify-deployment:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    needs: [build-and-verify, publish-production]
+    if: always()
+
+    steps:
+      - name: Check deployment status
+        run: |
+          if [ "${{ needs.publish-production.result }}" == "success" ]; then
+            echo "✅ Production deployment initiated"
+            echo "🎉 Build ${{ github.sha }} is now deploying to production"
+            echo "📍 Live at: https://demo.vln.gg/"
+          else
+            echo "❌ Deployment failed"
+            exit 1
+          fi
