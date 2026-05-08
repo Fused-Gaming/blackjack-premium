@@ -799,6 +799,204 @@ export default function DesignsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Open Graph Standards Section */}
+                <div className="border-t border-slate-700 pt-12 space-y-8">
+                  <div className="space-y-4">
+                    <h2 className="text-3xl font-bold text-amber-400">Open Graph Standards</h2>
+                    <p className="text-slate-300">Dynamic social media preview generation using ACE Card branding and design tokens.</p>
+                  </div>
+
+                  {/* OG Image Specifications */}
+                  <div className="bg-gradient-to-br from-amber-900/20 to-slate-900/20 border border-amber-600/40 rounded-lg p-8 space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-amber-300 mb-4">OG Image Specifications</h3>
+                      <div className="space-y-3 text-slate-300">
+                        <p><span className="text-amber-400 font-semibold">Dimensions:</span> 1200×630 pixels (16:9 aspect ratio)</p>
+                        <p><span className="text-amber-400 font-semibold">Format:</span> SVG (scalable, lightweight) or PNG (3x compression)</p>
+                        <p><span className="text-amber-400 font-semibold">File Size:</span> SVG &lt;10KB optimal, PNG &lt;50KB</p>
+                        <p><span className="text-amber-400 font-semibold">Color Space:</span> sRGB (web standard)</p>
+                        <p><span className="text-amber-400 font-semibold">Safe Area:</span> Content within 60-1140px horizontal, 30-600px vertical</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Design Token Framework */}
+                  <div className="bg-gradient-to-br from-cyan-900/20 to-slate-900/20 border border-cyan-600/40 rounded-lg p-8 space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-cyan-300 mb-4">Design Token Framework</h3>
+                      <p className="text-slate-300 mb-4">Reference design located at <code className="bg-slate-900/50 px-2 py-1 rounded text-cyan-200 font-mono text-sm">/public/og-image.svg</code></p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-amber-300">Primary Colors</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>• Background: #050A0F (slate-950)</p>
+                            <p>• Accent: #FFC107 to #FFA500 (gold gradient)</p>
+                            <p>• Text: #FFFFFF (white)</p>
+                            <p>• Secondary: #E5E7EB (light gray)</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-amber-300">Typography</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>• Display: Outfit (900 weight)</p>
+                            <p>• Headlines: Outfit (700 weight)</p>
+                            <p>• Body: Inter (500 weight)</p>
+                            <p>• Letter spacing: -1.5px to 6px</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-amber-300">Card Elements</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>• Shape: Rounded corners (40px radius)</p>
+                            <p>• Border: 5px gold stroke with glow</p>
+                            <p>• Center: Large spade symbol (♠)</p>
+                            <p>• Branding: ACE BLACKJACK PREMIUM</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-amber-300">Effects</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>• Glow: Gaussian blur 4px</p>
+                            <p>• Shadow: Drop shadow 20px offset</p>
+                            <p>• Pattern: Subtle horizontal lines</p>
+                            <p>• Depth: Bottom gradient overlay</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dynamic Generation Guidelines */}
+                  <div className="bg-gradient-to-br from-emerald-900/20 to-slate-900/20 border border-emerald-600/40 rounded-lg p-8 space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-emerald-300 mb-4">Dynamic Generation Guidelines</h3>
+
+                      <div className="space-y-6">
+                        <div className="bg-slate-900/50 rounded-lg p-4">
+                          <p className="font-semibold text-emerald-300 mb-3">SVG-Based Generation (Recommended)</p>
+                          <p className="text-slate-300 text-sm mb-3">Generate OG images dynamically using SVG templates with design tokens:</p>
+                          <ul className="space-y-2 text-sm text-slate-400 ml-4">
+                            <li>✓ Use <code className="bg-slate-800 px-1 rounded text-emerald-200 font-mono">og-image.svg</code> as the base template</li>
+                            <li>✓ Replace gradients with design token colors</li>
+                            <li>✓ Inject dynamic text (title, description) into SVG</li>
+                            <li>✓ Maintain consistent card layout and spade symbol</li>
+                            <li>✓ Apply filters and effects from design system</li>
+                          </ul>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4">
+                          <p className="font-semibold text-emerald-300 mb-3">Image Generation Tools</p>
+                          <p className="text-slate-300 text-sm mb-3">For server-side generation:</p>
+                          <ul className="space-y-2 text-sm text-slate-400 ml-4">
+                            <li>• Node.js: <code className="bg-slate-800 px-1 rounded text-emerald-200 font-mono">node-canvas</code> + <code className="bg-slate-800 px-1 rounded text-emerald-200 font-mono">svg2png</code></li>
+                            <li>• Playwright: Headless browser for rendering</li>
+                            <li>• Sharp: High-performance image processing</li>
+                            <li>• API: Serverless functions (Vercel Edge Functions)</li>
+                          </ul>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4">
+                          <p className="font-semibold text-emerald-300 mb-3">Metadata Structure</p>
+                          <p className="text-slate-300 text-sm mb-3">Standard Open Graph tags for all platforms:</p>
+                          <div className="bg-slate-950 rounded p-3 font-mono text-xs text-slate-300 overflow-auto">
+{`<meta property="og:type" content="website" />
+<meta property="og:title" content="ACE — Premium Blackjack" />
+<meta property="og:description" content="Provably fair blackjack..." />
+<meta property="og:image" content="https://demo.vln.gg/og/image.svg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://demo.vln.gg/" />`}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Platform-Specific Adjustments */}
+                  <div className="bg-gradient-to-br from-purple-900/20 to-slate-900/20 border border-purple-600/40 rounded-lg p-8 space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-purple-300 mb-4">Platform-Specific Adjustments</h3>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-purple-300">Twitter/X</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>Use <code className="bg-slate-800 px-1 rounded font-mono">twitter:card</code> = "summary_large_image"</p>
+                            <p>Dimensions: 1200×630 (same as OG)</p>
+                            <p>Include <code className="bg-slate-800 px-1 rounded font-mono">twitter:creator</code> tag</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-purple-300">Facebook</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>Include <code className="bg-slate-800 px-1 rounded font-mono">og:site_name</code></p>
+                            <p>Set <code className="bg-slate-800 px-1 rounded font-mono">og:type</code> = "website"</p>
+                            <p>Image alt text recommended</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-purple-300">Telegram</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>Use <code className="bg-slate-800 px-1 rounded font-mono">telegram:</code> prefixed tags</p>
+                            <p>Same 1200×630 image format</p>
+                            <p>Optimized for mobile viewing</p>
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-2">
+                          <p className="font-semibold text-purple-300">Discord</p>
+                          <div className="space-y-2 text-sm text-slate-300">
+                            <p>Reads standard OG tags</p>
+                            <p>Favors PNG over SVG for embeds</p>
+                            <p>Max 1:1 to 16:9 aspect ratios</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Best Practices */}
+                  <div className="bg-gradient-to-br from-blue-900/20 to-slate-900/20 border border-blue-600/40 rounded-lg p-8 space-y-4">
+                    <h3 className="text-2xl font-bold text-blue-300 mb-4">Best Practices</h3>
+                    <ul className="space-y-3 text-slate-300">
+                      <li className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>Keep text hierarchy clear: Title → Subtitle → Body (max 3 text layers)</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>Maintain 20px padding on all sides to avoid platform crop</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>Use SVG for branding consistency, PNG for compatibility</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>Test on all platforms using debuggers (Facebook, Twitter)</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>Cache-bust dynamic images with URL parameters or timestamps</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>Always include descriptive <code className="bg-slate-800 px-1 rounded font-mono text-sm">og:image:alt</code> text</span>
+                      </li>
+                      <li className="flex gap-3">
+                        <span className="text-blue-400 font-bold">•</span>
+                        <span>Ensure ACE branding (card, spade symbol, gold gradient) visible in all designs</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </section>
             )}
 
