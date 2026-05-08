@@ -33,7 +33,7 @@ function OutcomeBanner({
 
   // For multiplayer, show summary of all seats
   let totalPayout = 0;
-  let outcomeCount = { win: 0, loss: 0, push: 0 };
+  const outcomeCount = { win: 0, loss: 0, push: 0 };
 
   for (const seatId of activeSeatIds) {
     const seat = seats[seatId];

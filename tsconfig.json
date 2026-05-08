@@ -19,7 +19,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    /* Paths */
+    /* Paths - required for TypeScript to resolve imports during compilation */
+    /* Note: baseUrl and paths are deprecated in TS 7.0+ but required for module resolution */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],

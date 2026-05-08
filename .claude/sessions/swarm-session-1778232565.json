@@ -1,0 +1,17 @@
+{
+  "sessionId": "session-1778232565",
+  "timestamp": "2026-05-08T09:29:25Z",
+  "packages": {
+    "@h4shed/skill-syncpulse": "0.1.7",
+    "@h4shed/mcp-core": "1.0.11 deduped",
+    "@h4shed/mcp-cli": "1.0.11",
+    "@h4shed/tool-commander": "11.0.1",
+    "@h4shed/skill-style-dictionary-system": "1.0.1"
+  },
+  "status": "initialized",
+  "orchestrator": {
+    "enabled": true,
+    "type": "swarm",
+    "topology": "hierarchical-mesh"
+  }
+}

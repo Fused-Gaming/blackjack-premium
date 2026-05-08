@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { GameState, Card } from '../types';
+import type { GameState, Card, PlayerSeat } from '../types';
 import { createShoe, shuffleDeck, dealCard } from '../engine/deck';
 import {
   createHand,
@@ -84,7 +84,7 @@ const INITIAL_BALANCE = 10000;
 const SEAT_IDS = ['seat1', 'seat2', 'seat3', 'seat4', 'seat5'] as const;
 
 const createInitialSeats = (numPlayers: number) => {
-  const seats: Record<string, any> = {};
+  const seats: Record<string, PlayerSeat> = {};
   for (let i = 0; i < numPlayers; i++) {
     const seatId = SEAT_IDS[i];
     seats[seatId] = {

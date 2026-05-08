@@ -5,7 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased - 0.4.0]
+
+### Planned
+
+- Wallet integration for betting
+- Social metadata optimization
+- Game assets implementation
+- Audio implementation and sound effects
+- Multi-seat gameplay polish
+- Game statistics tracking
+- Settings persistence
+- Social sharing features
+
+## [0.3.0] - 2026-05-08
 
 ### Added
 
@@ -30,6 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Back button repositioned to top-right to prevent overlap with logo
   - Fixed viewport constraints to eliminate unwanted scrolling
 
+- **Design Kit Tab System**
+  - Fairness Receipt moved from separate `/fairness-receipt` page to Design Kit tab
+  - Consolidated design documentation under `/designs` route
+  - Improved information architecture
+
 - **Open Graph Endpoint** 
   - `/public/og-preview.html`: Dedicated OG preview endpoint for rich social media sharing
   - Updated index.html with enhanced Open Graph and Twitter Card metadata
@@ -50,16 +68,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - TypeScript CSS module import errors
 - Vercel deployment build configuration
-
-### Planned
-
-- Multi-seat gameplay (up to 3 seats)
-- Side bet options
-- Sound effects and music
-- Additional animation polish
-- Game statistics tracking
-- Settings persistence
-- Social sharing features
+- ESLint violations (prefer-const, no-explicit-any)
+- IP-address transitive dependency vulnerability (ip-address@10.1.0 → 10.2.0)
+- pnpm-lock.yaml synchronization with package.json
+- Security audit failures in CI/CD pipeline
 
 ## [0.2.0] - 2026-01-25
 

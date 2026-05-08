@@ -1,7 +1,7 @@
 {
   "name": "blackjack-game",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -46,5 +46,10 @@
     "typescript": "^5.3.3",
     "vite": "^7.3.1",
     "vitest": "^4.0.18"
+  },
+  "pnpm": {
+    "overrides": {
+      "ip-address": ">=10.1.1"
+    }
   }
 }

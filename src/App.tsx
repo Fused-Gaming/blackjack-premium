@@ -54,7 +54,7 @@ function App() {
   }
 
   if (!gameStarted) {
-    return <LandingPage onEnter={handleStartGame} />;
+    return <LandingPage onEnter={handleStartGame} onNavigate={navigateTo} />;
   }
 
   if (!playerSelectionDone) {
