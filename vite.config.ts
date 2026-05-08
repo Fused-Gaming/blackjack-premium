@@ -1,8 +1,27 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { execSync } from 'child_process';
+
+const getGitInfo = () => {
+  try {
+    const commit = execSync('git rev-parse --short HEAD', { encoding: 'utf-8' }).trim();
+    const branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' }).trim();
+    return { commit, branch };
+  } catch {
+    return { commit: 'unknown', branch: 'unknown' };
+  }
+};
+
+const gitInfo = getGitInfo();
+const buildTime = new Date().toISOString();
 
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_COMMIT_SHA': JSON.stringify(gitInfo.commit),
+    'import.meta.env.VITE_BUILD_TIME': JSON.stringify(buildTime),
+    'import.meta.env.VITE_BRANCH': JSON.stringify(gitInfo.branch),
+  },
   plugins: [react()],
   resolve: {
     alias: {

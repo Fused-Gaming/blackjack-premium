@@ -3,7 +3,7 @@ import AnimationShowcase from '../components/kit/AnimationShowcase';
 import NotificationGallery from '../components/kit/NotificationGallery';
 import TableLayoutPreview from '../components/kit/TableLayoutPreview';
 import Footer from '../components/Footer';
-import { DESIGN_KIT_VERSION } from '../data/designKitVersion';
+import { DESIGN_KIT_VERSION, BUILD_INFO } from '../data/designKitVersion';
 import { colorTokens } from '../data/colorTokens';
 import { spacingTokens } from '../data/spacingTokens';
 import { interfaceComponents } from '../data/interfaceComponents';
@@ -160,9 +160,11 @@ export default function DesignsPage() {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-amber-400 font-display">
-              ACE Blackjack Premium
+              ACE Blackjack Premium Design System v{BUILD_INFO.version}
             </h1>
-            <p className="text-slate-400 text-sm">Design System Explorer</p>
+            <p className="text-slate-400 text-sm">
+              Build: <span className="font-mono text-xs text-cyan-400">{BUILD_INFO.commit}</span> • {new Date(BUILD_INFO.timestamp).toLocaleDateString()} • {BUILD_INFO.branch}
+            </p>
           </div>
         </div>
       </header>
