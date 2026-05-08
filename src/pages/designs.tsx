@@ -807,6 +807,51 @@ export default function DesignsPage() {
                     <p className="text-slate-300">Dynamic social media preview generation using ACE Card branding and design tokens.</p>
                   </div>
 
+                  {/* OG Image Preview */}
+                  <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-8 space-y-6">
+                    <div className="space-y-3">
+                      <h3 className="text-2xl font-bold text-amber-300">ACE Card Design Reference</h3>
+                      <p className="text-slate-400 text-sm">Production OG image showing proper ACE branding with design tokens (1200×630)</p>
+                    </div>
+
+                    <div className="bg-slate-950 rounded-lg p-6 flex items-center justify-center min-h-96 border border-slate-700">
+                      <img
+                        src="/og-image.svg"
+                        alt="ACE Premium Blackjack Open Graph Card"
+                        className="max-w-full h-auto rounded"
+                        style={{ maxHeight: '400px' }}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="bg-slate-800/50 rounded-lg p-4">
+                        <p className="text-xs text-slate-500 mb-1">Width</p>
+                        <p className="text-lg font-bold text-amber-300">1200px</p>
+                      </div>
+                      <div className="bg-slate-800/50 rounded-lg p-4">
+                        <p className="text-xs text-slate-500 mb-1">Height</p>
+                        <p className="text-lg font-bold text-amber-300">630px</p>
+                      </div>
+                      <div className="bg-slate-800/50 rounded-lg p-4">
+                        <p className="text-xs text-slate-500 mb-1">Format</p>
+                        <p className="text-lg font-bold text-amber-300">SVG</p>
+                      </div>
+                      <div className="bg-slate-800/50 rounded-lg p-4">
+                        <p className="text-xs text-slate-500 mb-1">File Size</p>
+                        <p className="text-lg font-bold text-amber-300">~5.3KB</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-800/30 border border-amber-600/30 rounded-lg p-4">
+                      <p className="text-sm text-slate-300">
+                        <span className="text-amber-400 font-semibold">File Location:</span> <code className="bg-slate-900 px-2 py-1 rounded text-amber-200 font-mono text-xs ml-2">/public/og-image.svg</code>
+                      </p>
+                      <p className="text-sm text-slate-300 mt-2">
+                        <span className="text-amber-400 font-semibold">Live URL:</span> <code className="bg-slate-900 px-2 py-1 rounded text-amber-200 font-mono text-xs ml-2">https://demo.vln.gg/og-image.svg</code>
+                      </p>
+                    </div>
+                  </div>
+
                   {/* OG Image Specifications */}
                   <div className="bg-gradient-to-br from-amber-900/20 to-slate-900/20 border border-amber-600/40 rounded-lg p-8 space-y-6">
                     <div>
