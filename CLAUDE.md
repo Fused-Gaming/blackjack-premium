@@ -77,17 +77,27 @@ This project follows the **CODER methodology**:
 - Manual testing for UX and animations
 
 ## Current Status
-Version: 0.1.0 (Initial Setup)
-Last Updated: 2026-01-20
+Version: 0.3.0 (Premium Branding & Design System)
+Last Updated: 2026-05-08
+
+**Completed Milestones:**
+- ✅ Core blackjack engine with full game logic
+- ✅ Responsive UI with animations
+- ✅ Design system with 161 tokens
+- ✅ Landing page with ACE branding
+- ✅ Design Kit tab system for documentation
+- ✅ Fairness Receipt moved to Design Kit
+- ✅ Security fixes (ip-address vulnerability resolved)
+- ✅ ESLint and TypeScript strict compliance
+- ✅ 444 passing tests across 12 test files
 
 ## Next Steps
-1. Initialize React + TypeScript project
-2. Set up Tailwind CSS and dependencies
-3. Create card components and deck logic
-4. Implement game engine
-5. Build UI components
-6. Add animations and polish
-7. Local testing and iteration
+1. Wallet integration for betting
+2. Social metadata optimization
+3. Game assets and audio implementation
+4. Multi-seat gameplay polish
+5. Production deployment preparation (0.4.0)
+6. Launch preparation (1.0.0)
 
 ## Social Metadata Notes
 - Primary demo endpoint is `https://demo.vln.gg/`.
