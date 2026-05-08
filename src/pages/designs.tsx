@@ -33,7 +33,7 @@ interface LayoutOption {
 }
 
 export default function DesignsPage() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('fairness-receipt');
   const [selectedCategory, setSelectedCategory] = useState('colors');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedLayout, setSelectedLayout] = useState('single-seat');
