@@ -25,7 +25,7 @@ export function DealingPhase() {
   useEffect(() => {
     if (phase !== 'dealing') return;
 
-    let cardQueue: CardDealAnimation[] = [];
+    const cardQueue: CardDealAnimation[] = [];
 
     // Build deal sequence: dealer card 1, then each player card 1, then dealer card 2, then each player card 2
     cardQueue.push({ seatId: 'dealer', cardIndex: 0, isDealer: true });
@@ -49,7 +49,7 @@ export function DealingPhase() {
         // which is called after animation completes
       }, index * CARD_DEAL_DELAY);
     });
-  }, [phase, activeSeatIds.length]);
+  }, [phase, activeSeatIds]);
 
   // Layout grid based on player count
   const gridClass = {
