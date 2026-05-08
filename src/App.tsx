@@ -4,6 +4,7 @@ import { Table } from './components/game/Table';
 import { LandingPage } from './components/LandingPage';
 import { PlayerSelector } from './components/game/PlayerSelector';
 import DesignsPage from './pages/designs';
+import FairnessReceiptPage from './pages/fairness-receipt';
 
 function App() {
   const [gameStarted, setGameStarted] = useState(false);
@@ -39,6 +40,20 @@ function App() {
   };
 
   // Routes
+  if (currentPath === '/fairness-receipt') {
+    return (
+      <div className="w-full">
+        <FairnessReceiptPage />
+        <button
+          onClick={() => navigateTo('/')}
+          className="fixed top-4 right-4 z-50 px-4 py-2 text-sm font-medium text-white bg-slate-700 border border-slate-600 rounded-lg hover:bg-slate-600 transition-colors duration-250"
+        >
+          ← Back to Game
+        </button>
+      </div>
+    );
+  }
+
   if (currentPath === '/designs') {
     return (
       <div className="w-full">
@@ -54,7 +69,7 @@ function App() {
   }
 
   if (!gameStarted) {
-    return <LandingPage onEnter={handleStartGame} />;
+    return <LandingPage onEnter={handleStartGame} onNavigate={navigateTo} />;
   }
 
   if (!playerSelectionDone) {

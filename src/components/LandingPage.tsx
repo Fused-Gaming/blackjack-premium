@@ -3,6 +3,7 @@ import styles from './LandingPage.module.css';
 
 interface LandingPageProps {
   onEnter?: () => void;
+  onNavigate?: (path: string) => void;
 }
 
 const GREETINGS = [
@@ -52,7 +53,7 @@ const GitHubIcon = ({ size = 48 }) => (
   </svg>
 );
 
-export const LandingPage = ({ onEnter }: LandingPageProps) => {
+export const LandingPage = ({ onEnter, onNavigate }: LandingPageProps) => {
   const [isInteracting, setIsInteracting] = React.useState(false);
   const [isEntering, setIsEntering] = React.useState(false);
   const [showGreeting, setShowGreeting] = React.useState(false);
@@ -91,6 +92,22 @@ export const LandingPage = ({ onEnter }: LandingPageProps) => {
 
   return (
     <div className={`${styles.container} ${isEntering ? styles.entering : ''}`}>
+      {/* Navigation Bar */}
+      <div className="absolute top-6 right-6 z-20 flex gap-2">
+        <button
+          onClick={() => onNavigate?.('/fairness-receipt')}
+          className="px-4 py-2 rounded-lg text-sm font-medium text-amber-300 border border-amber-400/30 hover:border-amber-400/70 hover:bg-amber-400/10 transition-all duration-300"
+        >
+          📋 Fairness Receipt
+        </button>
+        <button
+          onClick={() => onNavigate?.('/designs')}
+          className="px-4 py-2 rounded-lg text-sm font-medium text-purple-300 border border-purple-400/30 hover:border-purple-400/70 hover:bg-purple-400/10 transition-all duration-300"
+        >
+          🎨 Design Kit
+        </button>
+      </div>
+
       {/* Left GitHub Icon */}
       <div className="absolute left-6 top-6 text-amber-400/30 hover:text-amber-400/70 transition-colors duration-300 cursor-pointer z-10">
         <a href="https://github.com/Fused-Gaming/blackjack-premium" target="_blank" rel="noopener noreferrer" className="block hover:scale-110 transition-transform duration-300">
