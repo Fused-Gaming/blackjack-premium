@@ -1,7 +1,11 @@
 function readPackage(pkg, context) {
-  // Override ip-address to use patched version
-  if (pkg.name === 'express-rate-limit' && pkg.version === '8.4.1') {
-    pkg.dependencies['ip-address'] = '10.1.1';
+  // Force ip-address to use non-vulnerable version
+  if (pkg.name === 'express-rate-limit') {
+    if (!pkg.dependencies) {
+      pkg.dependencies = {};
+    }
+    // Override to a patched version that's compatible
+    pkg.dependencies['ip-address'] = '>=10.1.1';
   }
   return pkg;
 }
