@@ -42,7 +42,7 @@ jobs:
       - name: Enable corepack and install pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@latest --activate
+          corepack prepare pnpm@10.x --activate
 
       - name: Get pnpm store directory
         id: pnpm-cache
@@ -102,7 +102,7 @@ jobs:
       - name: Enable corepack and install pnpm
         run: |
           corepack enable
-          corepack prepare pnpm@latest --activate
+          corepack prepare pnpm@10.x --activate
 
       - name: Get pnpm store directory
         id: pnpm-cache
