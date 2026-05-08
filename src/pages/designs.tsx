@@ -486,6 +486,125 @@ export default function DesignsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Funding Opportunities - ACE Protocol */}
+                <div className="space-y-8 border-t border-slate-700 pt-12">
+                  <div className="space-y-4">
+                    <h2 className="text-3xl font-bold text-amber-400">Funding Opportunities</h2>
+                    <p className="text-slate-300">ACE Protocol: Blockchain-Integrated Proof-of-Play Settlement Framework</p>
+                  </div>
+
+                  {/* Funding Request Overview */}
+                  <div className="bg-gradient-to-br from-emerald-900/20 to-blue-900/20 border-2 border-emerald-500/50 rounded-lg p-8 space-y-6">
+                    <div className="flex items-baseline justify-between">
+                      <div>
+                        <p className="text-sm text-emerald-400 font-semibold uppercase tracking-widest mb-2">Total Funding Request</p>
+                        <p className="text-5xl font-bold text-emerald-400">$350,000 USD</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-blue-400 font-semibold uppercase tracking-widest mb-2">Target Network</p>
+                        <p className="text-2xl font-bold text-blue-400">Monad</p>
+                      </div>
+                    </div>
+
+                    {/* Funding Allocation */}
+                    <div className="space-y-3 border-t border-emerald-500/30 pt-6">
+                      <p className="text-sm text-slate-400 uppercase tracking-widest font-semibold">Allocation by Category</p>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center p-3 bg-slate-900/30 rounded">
+                          <span className="text-slate-300">Smart Contract Engineering</span>
+                          <span className="font-bold text-emerald-400">$110,000</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-slate-900/30 rounded">
+                          <span className="text-slate-300">Multiplayer Infrastructure</span>
+                          <span className="font-bold text-blue-400">$65,000</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-slate-900/30 rounded">
+                          <span className="text-slate-300">Proof-of-Payout Verification</span>
+                          <span className="font-bold text-purple-400">$55,000</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-slate-900/30 rounded">
+                          <span className="text-slate-300">Security Audits & Testing</span>
+                          <span className="font-bold text-red-400">$45,000</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-slate-900/30 rounded">
+                          <span className="text-slate-300">UX & Wallet Integration</span>
+                          <span className="font-bold text-cyan-400">$35,000</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-slate-900/30 rounded">
+                          <span className="text-slate-300">Testnet Incentives</span>
+                          <span className="font-bold text-amber-400">$25,000</span>
+                        </div>
+                        <div className="flex justify-between items-center p-3 bg-slate-900/30 rounded">
+                          <span className="text-slate-300">Infrastructure / DevOps</span>
+                          <span className="font-bold text-slate-300">$15,000</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Protocol Objectives */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-slate-800/50 border border-emerald-500/30 rounded-lg p-6 space-y-4">
+                      <h3 className="text-lg font-bold text-emerald-400">Deterministic Settlement</h3>
+                      <p className="text-sm text-slate-300">Every outcome independently reproducible from public transaction hash, block metadata, and signed player actions.</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-emerald-500/30 rounded-lg p-6 space-y-4">
+                      <h3 className="text-lg font-bold text-blue-400">Cryptographic Fairness</h3>
+                      <p className="text-sm text-slate-300">No centralized authority may alter card sequencing, side-bet results, or payout calculations after execution commitment.</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-emerald-500/30 rounded-lg p-6 space-y-4">
+                      <h3 className="text-lg font-bold text-purple-400">Replay Resistance</h3>
+                      <p className="text-sm text-slate-300">Settlement derivation prevents duplicate execution, transaction replay, and manipulated entropy reuse.</p>
+                    </div>
+                    <div className="bg-slate-800/50 border border-emerald-500/30 rounded-lg p-6 space-y-4">
+                      <h3 className="text-lg font-bold text-cyan-400">Low-Latency Multiplayer</h3>
+                      <p className="text-sm text-slate-300">Casino-grade responsiveness with &lt;100ms local feedback and &lt;1s multiplayer synchronization.</p>
+                    </div>
+                  </div>
+
+                  {/* Core Components */}
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-semibold text-amber-400">Smart Contract Architecture</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-4 space-y-2">
+                        <p className="font-bold text-emerald-400">Round Commitment</p>
+                        <p className="text-xs text-slate-400">Commit player states, lock wagers, anchor entropy source</p>
+                      </div>
+                      <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 space-y-2">
+                        <p className="font-bold text-blue-400">Settlement Engine</p>
+                        <p className="text-xs text-slate-400">Derive outcomes, validate bets, compute payouts</p>
+                      </div>
+                      <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4 space-y-2">
+                        <p className="font-bold text-purple-400">Treasury Router</p>
+                        <p className="text-xs text-slate-400">Distribute payouts, protect liquidity, handle jackpots</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Next Steps */}
+                  <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 space-y-4">
+                    <h3 className="text-lg font-bold text-amber-400">Next Steps</h3>
+                    <ul className="space-y-2 text-slate-300 text-sm">
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-400 mt-1">✓</span>
+                        <span>Review ACE Protocol specification (GitHub Issue #206)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-400 mt-1">✓</span>
+                        <span>Engage with funding partners (Monad, Game3 Foundation)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-400 mt-1">✓</span>
+                        <span>Finalize smart contract specifications</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-emerald-400 mt-1">✓</span>
+                        <span>Begin testnet implementation and audits</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </section>
             )}
 
