@@ -1,76 +1,97 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">VLN Demo — Provably Fair Engine</title>
-  <desc id="desc">Security-grade live interactive blackjack demo with transparent RNG verification.</desc>
+  <title id="title">ACE — Premium Blackjack. Provably Fair. Cryptographically Verified.</title>
+  <desc id="desc">Premium provably-fair blackjack where every hand is verifiable, every shuffle transparent, and every outcome auditable. No server manipulation. 100% cryptographic fairness.</desc>
 
   <defs>
+    <!-- Dark gradient background matching design tokens -->
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#050A16" />
-      <stop offset="1" stop-color="#0B1022" />
+      <stop stop-color="#050A0F" />
+      <stop offset="1" stop-color="#0B1116" />
     </linearGradient>
-    <linearGradient id="accent" x1="184" y1="0" x2="628" y2="0" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#5AE0FF" />
-      <stop offset="1" stop-color="#7DE6FF" />
+
+    <!-- Golden accent matching design tokens -->
+    <linearGradient id="goldAccent" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F59E0B" />
+      <stop offset="1" stop-color="#D97706" />
     </linearGradient>
-    <linearGradient id="badge" x1="0" y1="0" x2="230" y2="0" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D9B56E" />
-      <stop offset="1" stop-color="#8A6A33" />
+
+    <!-- Cyan accent for fairness -->
+    <linearGradient id="cyanAccent" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06B6D4" />
+      <stop offset="1" stop-color="#00D9FF" />
     </linearGradient>
-    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(850 380) rotate(90) scale(220 300)">
-      <stop stop-color="#3CCEFF" stop-opacity="0.45" />
-      <stop offset="1" stop-color="#3CCEFF" stop-opacity="0" />
+
+    <!-- Glow effect -->
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(900 300) rotate(90) scale(250 350)">
+      <stop stop-color="#F59E0B" stop-opacity="0.25" />
+      <stop offset="1" stop-color="#F59E0B" stop-opacity="0" />
     </radialGradient>
-    <filter id="softShadow" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000814" flood-opacity="0.5" />
+
+    <!-- Shadow filter -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000000" flood-opacity="0.6" />
     </filter>
+
+    <!-- Subtle grid pattern -->
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M0,0 L60,0 M0,0 L0,60" stroke="#1F2937" stroke-width="0.5" />
+    </pattern>
   </defs>
 
+  <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#grid)" />
   <rect width="1200" height="630" fill="url(#glow)" />
 
-  <!-- Circuit/grid texture -->
-  <g opacity="0.24" stroke="#6E88C6" stroke-width="1">
-    <path d="M0 84H1200M0 168H1200M0 252H1200M0 336H1200M0 420H1200M0 504H1200" />
-    <path d="M140 0V630M280 0V630M420 0V630M560 0V630M700 0V630M840 0V630M980 0V630" />
+  <!-- Main Content Container -->
+  <g filter="url(#shadow)">
+    <!-- ACE Logo/Title -->
+    <text x="60" y="140" fill="#F59E0B" font-size="96" font-family="Outfit, sans-serif" font-weight="900" letter-spacing="-2">ACE</text>
+
+    <!-- Subtitle -->
+    <text x="60" y="210" fill="#FFFFFF" font-size="52" font-family="Inter, sans-serif" font-weight="700" letter-spacing="-0.5">Premium Blackjack</text>
+
+    <!-- Key messaging -->
+    <text x="60" y="270" fill="url(#cyanAccent)" font-size="40" font-family="Inter, sans-serif" font-weight="600">Provably Fair</text>
+    <text x="60" y="320" fill="url(#cyanAccent)" font-size="40" font-family="Inter, sans-serif" font-weight="600">Cryptographically Verified</text>
   </g>
 
-  <!-- Left content -->
-  <g filter="url(#softShadow)">
-    <text x="92" y="258" fill="#F6FAFF" font-size="84" font-family="Inter, Arial, sans-serif" font-weight="800" letter-spacing="-1.5">VLN Demo</text>
-    <text x="92" y="324" fill="url(#accent)" font-size="60" font-family="Inter, Arial, sans-serif" font-weight="700" letter-spacing="-1">Provably Fair Engine</text>
-    <line x1="92" y1="358" x2="628" y2="358" stroke="#2A3A63" stroke-width="2" />
-    <text x="92" y="412" fill="#B9C7E4" font-size="44" font-family="Inter, Arial, sans-serif" font-weight="500">Live Interactive Security Demo</text>
+  <!-- Divider line -->
+  <line x1="60" y1="360" x2="540" y2="360" stroke="url(#goldAccent)" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Trust messaging -->
+  <g filter="url(#shadow)">
+    <text x="60" y="410" fill="#E5E7EB" font-size="32" font-family="Inter, sans-serif" font-weight="500">Every hand auditable</text>
+    <text x="60" y="455" fill="#E5E7EB" font-size="32" font-family="Inter, sans-serif" font-weight="500">Every shuffle transparent</text>
+    <text x="60" y="500" fill="#E5E7EB" font-size="32" font-family="Inter, sans-serif" font-weight="500">Zero server manipulation</text>
   </g>
 
-  <!-- Security badge -->
-  <g transform="translate(890 86)">
-    <path d="M0 14C0 6.26801 6.26801 0 14 0H218L230 52H14C6.26801 52 0 45.732 0 38V14Z" fill="#0D152D" stroke="url(#badge)" stroke-width="3" />
-    <text x="26" y="35" fill="#F9FCFF" font-size="36" font-family="Inter, Arial, sans-serif" font-weight="800">SECURITY-GRADE</text>
+  <!-- Right side: Card showcase -->
+  <g filter="url(#shadow)">
+    <!-- Ace of Spades -->
+    <g transform="translate(750, 100)">
+      <rect width="200" height="280" rx="20" fill="#FFFFFF" />
+      <rect width="200" height="280" rx="20" fill="#FFFFFF" stroke="#F59E0B" stroke-width="3" />
+
+      <!-- Card content -->
+      <text x="20" y="50" fill="#000000" font-size="72" font-family="Outfit, sans-serif" font-weight="900">A</text>
+      <text x="20" y="110" fill="#000000" font-size="48" font-family="Georgia, serif" font-weight="bold">♠</text>
+
+      <!-- Center: Spade symbol -->
+      <text x="100" y="170" text-anchor="middle" fill="#000000" font-size="80" font-family="Georgia, serif">♠</text>
+
+      <!-- Bottom (rotated) -->
+      <text x="180" y="250" text-anchor="end" fill="#000000" font-size="72" font-family="Outfit, sans-serif" font-weight="900" transform="rotate(180 180 250)">A</text>
+    </g>
+
+    <!-- Verification badge -->
+    <g transform="translate(750, 420)">
+      <rect width="200" height="80" rx="12" fill="#10B981" fill-opacity="0.15" stroke="#10B981" stroke-width="2" />
+      <text x="100" y="35" text-anchor="middle" fill="#10B981" font-size="24" font-family="Inter, sans-serif" font-weight="700">✓ VERIFIED</text>
+      <text x="100" y="60" text-anchor="middle" fill="#6EE7B7" font-size="14" font-family="Inter, sans-serif" font-weight="500">Cryptographically Fair</text>
+    </g>
   </g>
 
-  <!-- Cards -->
-  <g filter="url(#softShadow)">
-    <rect x="700" y="190" width="180" height="250" rx="20" fill="#FDFEFF" transform="rotate(-8 700 190)" />
-    <text x="748" y="262" fill="#141B2D" font-size="62" font-family="Inter, Arial, sans-serif" font-weight="700">A♠</text>
-    <rect x="826" y="176" width="180" height="250" rx="20" fill="#FDFEFF" transform="rotate(7 826 176)" />
-    <text x="864" y="244" fill="#C3313B" font-size="62" font-family="Inter, Arial, sans-serif" font-weight="700">J♥</text>
-  </g>
-
-  <!-- RNG Hex -->
-  <g transform="translate(840 372)">
-    <polygon points="0,64 37,0 111,0 148,64 111,128 37,128" fill="#101C34" stroke="#64DCFF" stroke-width="4" />
-    <text x="39" y="79" fill="#F8FDFF" font-size="64" font-family="Inter, Arial, sans-serif" font-weight="800">RNG</text>
-  </g>
-
-  <!-- Chips -->
-  <g filter="url(#softShadow)">
-    <ellipse cx="730" cy="500" rx="84" ry="26" fill="#0A1020" opacity="0.5" />
-    <ellipse cx="840" cy="520" rx="84" ry="26" fill="#0A1020" opacity="0.5" />
-    <circle cx="728" cy="468" r="72" fill="#1A253D" stroke="#9FB7E3" stroke-width="8" />
-    <circle cx="728" cy="468" r="52" fill="#111A2D" />
-    <text x="680" y="488" fill="#FFFFFF" font-size="64" font-family="Inter, Arial, sans-serif" font-weight="800">100</text>
-
-    <circle cx="842" cy="490" r="72" fill="#1D5B4B" stroke="#B8DCCF" stroke-width="8" />
-    <circle cx="842" cy="490" r="52" fill="#144538" />
-    <text x="805" y="510" fill="#FFFFFF" font-size="64" font-family="Inter, Arial, sans-serif" font-weight="800">25</text>
-  </g>
+  <!-- Bottom branding -->
+  <text x="1200" y="615" text-anchor="end" fill="#6B7280" font-size="12" font-family="Inter, sans-serif" font-weight="500">demo.vln.gg</text>
 </svg>
