@@ -1007,6 +1007,99 @@ export default function DesignsPage() {
                     </div>
                   </div>
 
+                  {/* Telegram Meta Tags Section */}
+                  <div className="bg-gradient-to-br from-cyan-900/20 to-slate-900/20 border border-cyan-600/40 rounded-lg p-8 space-y-6">
+                    <div>
+                      <h3 className="text-2xl font-bold text-cyan-300 mb-4">Telegram Meta Tags for Link Endpoints</h3>
+                      <p className="text-slate-300 mb-6">Telegram uses Open Graph tags to generate rich preview cards when links are shared. Proper configuration ensures your OG image displays correctly in Telegram chats.</p>
+
+                      <div className="space-y-6">
+                        {/* Tag Structure */}
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-3">
+                          <p className="font-semibold text-cyan-300 mb-3">Standard Telegram OG Tags</p>
+                          <div className="bg-slate-950 rounded p-3 font-mono text-xs text-slate-300 overflow-auto">
+{`<!-- Telegram uses standard OG tags -->
+<meta property="og:title" content="ACE — Premium Blackjack" />
+<meta property="og:description" content="Provably fair blackjack..." />
+<meta property="og:image" content="https://demo.vln.gg/og-image.svg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://demo.vln.gg/" />
+<meta property="og:type" content="website" />`}
+                          </div>
+                        </div>
+
+                        {/* Telegram-Specific Tags */}
+                        <div className="bg-slate-900/50 rounded-lg p-4 space-y-3">
+                          <p className="font-semibold text-cyan-300 mb-3">Optional Telegram-Specific Tags</p>
+                          <div className="bg-slate-950 rounded p-3 font-mono text-xs text-slate-300 overflow-auto">
+{`<!-- Optional: Telegram-specific tags for enhanced control -->
+<meta property="telegram:title" content="ACE — Premium Blackjack" />
+<meta property="telegram:description" content="Premium provably-fair blackjack..." />
+<meta property="telegram:image" content="https://demo.vln.gg/og-image.svg" />
+<meta property="telegram:url" content="https://demo.vln.gg/" />`}
+                          </div>
+                        </div>
+
+                        {/* Implementation Notes */}
+                        <div className="space-y-3">
+                          <p className="font-semibold text-cyan-300">Implementation Notes</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-slate-800/50 rounded-lg p-4 space-y-2">
+                              <p className="font-semibold text-emerald-300">Image Format Support</p>
+                              <ul className="space-y-1 text-sm text-slate-300">
+                                <li>✓ SVG (recommended, scalable)</li>
+                                <li>✓ PNG (best compatibility)</li>
+                                <li>✓ JPEG (avoid, lower quality)</li>
+                                <li>✓ WebP (newer Telegram clients)</li>
+                              </ul>
+                            </div>
+
+                            <div className="bg-slate-800/50 rounded-lg p-4 space-y-2">
+                              <p className="font-semibold text-emerald-300">Telegram Preview Behavior</p>
+                              <ul className="space-y-1 text-sm text-slate-300">
+                                <li>• Fetches OG tags on link share</li>
+                                <li>• Caches preview for 24 hours</li>
+                                <li>• Respects 1200×630 dimensions</li>
+                                <li>• Mobile-optimized display</li>
+                              </ul>
+                            </div>
+
+                            <div className="bg-slate-800/50 rounded-lg p-4 space-y-2">
+                              <p className="font-semibold text-emerald-300">Title & Description</p>
+                              <ul className="space-y-1 text-sm text-slate-300">
+                                <li>• Title: max 200 characters</li>
+                                <li>• Description: max 300 characters</li>
+                                <li>• Keep text concise and engaging</li>
+                                <li>• Include call-to-action hints</li>
+                              </ul>
+                            </div>
+
+                            <div className="bg-slate-800/50 rounded-lg p-4 space-y-2">
+                              <p className="font-semibold text-emerald-300">Testing & Debugging</p>
+                              <ul className="space-y-1 text-sm text-slate-300">
+                                <li>• Telegram doesn't cache-bust easily</li>
+                                <li>• Use different URL params for testing</li>
+                                <li>• Clear Telegram app cache if needed</li>
+                                <li>• Test in both groups and private chats</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Current Implementation */}
+                        <div className="bg-slate-800/30 border border-cyan-600/30 rounded-lg p-4">
+                          <p className="text-sm text-slate-300 mb-2">
+                            <span className="text-cyan-400 font-semibold">Current Implementation:</span> Using standard OG tags with optional Telegram-specific tags for enhanced compatibility.
+                          </p>
+                          <p className="text-sm text-slate-300">
+                            <span className="text-cyan-400 font-semibold">Image Location:</span> <code className="bg-slate-900 px-2 py-1 rounded text-cyan-200 font-mono text-xs ml-2">/public/og-image.svg</code>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Best Practices */}
                   <div className="bg-gradient-to-br from-blue-900/20 to-slate-900/20 border border-blue-600/40 rounded-lg p-8 space-y-4">
                     <h3 className="text-2xl font-bold text-blue-300 mb-4">Best Practices</h3>
