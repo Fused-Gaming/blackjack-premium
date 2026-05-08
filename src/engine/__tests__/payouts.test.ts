@@ -209,7 +209,7 @@ describe('Payout Calculations', () => {
       const result = validateBet(0, 1000, 10, 500);
 
       expect(result.valid).toBe(false);
-      expect(result.error).toBe('Invalid bet amount');
+      expect(result.error).toBe('Minimum bet is 10');
     });
 
     it('should reject NaN bet', () => {
